@@ -1,4 +1,5 @@
 import type {LinksFunction} from '@remix-run/node'
+import {ClientOnly} from 'remix-utils'
 import {Studio} from 'sanity'
 
 import {config} from '~/sanity/config'
@@ -10,5 +11,5 @@ export const links: LinksFunction = () => {
 }
 
 export default function StudioPage() {
-  return <Studio config={config} />
+  return <ClientOnly>{() => <Studio config={config} />}</ClientOnly>
 }

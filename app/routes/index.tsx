@@ -2,6 +2,8 @@ import type {LoaderFunction} from '@remix-run/node'
 import {Link, useLoaderData} from '@remix-run/react'
 import SanityClient from '@sanity/client'
 
+import Layout from '~/components/Layout'
+
 const client = new SanityClient({
   projectId: '6h1mv88x',
   dataset: 'production',
@@ -19,19 +21,22 @@ export default function Index() {
   const {products} = useLoaderData()
 
   return (
-    <div className="bg-green-100 p-12 min-h-screen">
-      <h1 className="text-2xl mb-6 font-bold">Welcome to Remix</h1>
+    <Layout>
+      <h1 className="mb-6 text-2xl font-bold">Welcome to Remix</h1>
       {products.length > 0 ? (
-        <ul>
+        <ul className="grid grid-cols-1 gap-6">
           {products.map((product) => (
-            <li key={product._id}>
-              <Link to={product?.slug?.current} className="text-green-600 underline">
+            <li key={product._id} className="rounded bg-white p-6 shadow md:p-12">
+              <Link
+                to={product?.slug?.current}
+                className="text-xl font-bold text-green-600 underline hover:text-green-400"
+              >
                 {product.title}
               </Link>
             </li>
           ))}
         </ul>
       ) : null}
-    </div>
+    </Layout>
   )
 }

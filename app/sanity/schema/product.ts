@@ -19,7 +19,7 @@ export default defineType({
     defineField({
       name: 'content',
       type: 'array' as const,
-      of: [{type: 'block'}],
+      of: [{type: 'block'}, {type: 'image'}],
     }),
   ],
 })

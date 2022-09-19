@@ -1,5 +1,13 @@
 import type {MetaFunction, LinksFunction} from '@remix-run/node'
-import {Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration} from '@remix-run/react'
+import {
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+  useLocation,
+} from '@remix-run/react'
 
 import styles from './styles/app.css'
 
@@ -14,14 +22,17 @@ export const meta: MetaFunction = () => ({
 })
 
 export default function App() {
+  const {pathname} = useLocation()
+  const isStudioRoute = pathname.startsWith('/studio')
+
   return (
     <html lang="en">
       <head>
         <Meta />
         <Links />
-        {typeof document === 'undefined' ? '__STYLES__' : null}
+        {isStudioRoute && typeof document === 'undefined' ? '__STYLES__' : null}
       </head>
-      <body>
+      <body className="min-h-screen bg-green-50">
         <Outlet />
         <ScrollRestoration />
         <Scripts />

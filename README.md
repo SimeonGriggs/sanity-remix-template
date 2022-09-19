@@ -3,6 +3,17 @@
 - [Sanity Studio v3 Docs](https://beta.sanity.io)
 - [Remix Docs](https://remix.run/docs)
 
+## Includes:
+
+- Sanity Studio v3 embedded in the `/studio` route
+- Styled Components SSR support for the `/studio` route
+- Example Sanity Studio config and schema
+- Example Portable Text Component
+- Example Image Builder Component
+- eslint and Prettier
+- Tailwind CSS for the front-end
+- Tailwind Prose and Prettier plugins
+
 ## Development
 
 From your terminal:
