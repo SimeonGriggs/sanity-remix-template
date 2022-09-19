@@ -5,6 +5,7 @@ import SanityClient from '@sanity/client'
 const client = new SanityClient({
   projectId: '6h1mv88x',
   dataset: 'production',
+  apiVersion: `2022-09-19`,
   useCdn: true,
 })
 

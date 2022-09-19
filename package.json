@@ -17,13 +17,15 @@
     "prettier": "^2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sanity": "^3.0.0-dev-preview.17"
+    "sanity": "^3.0.0-dev-preview.17",
+    "styled-components": "^5.3.5"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.7.0",
     "@remix-run/eslint-config": "^1.7.0",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
+    "@types/styled-components": "^5.1.26",
     "autoprefixer": "^10.4.11",
     "concurrently": "^7.4.0",
     "eslint": "^8.20.0",
