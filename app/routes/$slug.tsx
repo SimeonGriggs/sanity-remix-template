@@ -5,6 +5,7 @@ import groq from 'groq'
 import Layout from '~/components/Layout'
 
 import SanityContent from '~/components/SanityContent'
+import type {ProductDocument} from '~/sanity/types/Product'
 
 const client = new SanityClient({
   projectId: '6h1mv88x',
@@ -27,15 +28,18 @@ export const loader: LoaderFunction = async ({params}) => {
 }
 
 export default function Product() {
-  const {product} = useLoaderData()
-  console.log(product)
+  const {product} = useLoaderData<{product: ProductDocument}>()
 
   return (
     <Layout>
-      <h1 className="mb-6 text-2xl font-bold text-green-700 md:mb-12 md:text-4xl">
-        {product.title}
-      </h1>
-      {product?.content?.length > 0 ? <SanityContent value={product.content} /> : null}
+      {product?.title ? (
+        <h1 className="mb-6 text-2xl font-bold text-green-700 md:mb-12 md:text-4xl">
+          {product.title}
+        </h1>
+      ) : null}
+      {product?.content && product.content?.length > 0 ? (
+        <SanityContent value={product.content} />
+      ) : null}
     </Layout>
   )
 }

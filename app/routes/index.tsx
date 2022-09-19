@@ -1,8 +1,10 @@
 import type {LoaderFunction} from '@remix-run/node'
 import {Link, useLoaderData} from '@remix-run/react'
 import SanityClient from '@sanity/client'
+import groq from 'groq'
 
 import Layout from '~/components/Layout'
+import type {ProductDocument} from '~/sanity/types/Product'
 
 const client = new SanityClient({
   projectId: '6h1mv88x',
@@ -12,13 +14,13 @@ const client = new SanityClient({
 })
 
 export const loader: LoaderFunction = async () => {
-  const products = await client.fetch(`*[_type == "product"]`)
+  const products = await client.fetch(groq`*[_type == "product"]{ _id, title, slug }`)
 
   return {products}
 }
 
 export default function Index() {
-  const {products} = useLoaderData()
+  const {products} = useLoaderData<{products: ProductDocument[]}>()
 
   return (
     <Layout>
@@ -27,12 +29,16 @@ export default function Index() {
         <ul className="grid grid-cols-1 gap-6">
           {products.map((product) => (
             <li key={product._id} className="rounded bg-white p-6 shadow md:p-12">
-              <Link
-                to={product?.slug?.current}
-                className="text-xl font-bold text-green-600 underline hover:text-green-400"
-              >
-                {product.title}
-              </Link>
+              {product?.slug?.current ? (
+                <Link
+                  to={product?.slug?.current}
+                  className="text-xl font-bold text-green-600 underline hover:text-green-400"
+                >
+                  {product.title}
+                </Link>
+              ) : (
+                <span className="text-xl font-bold">{product.title}</span>
+              )}
             </li>
           ))}
         </ul>
