@@ -1,16 +1,10 @@
 import type {LoaderFunction} from '@remix-run/node'
 import {Link, useLoaderData} from '@remix-run/react'
-import SanityClient from '@sanity/client'
 import groq from 'groq'
 
 import Layout from '~/components/Layout'
-import {projectDetails} from '~/sanity/config'
+import {client} from '~/sanity/client'
 import type {ProductDocument} from '~/sanity/types/Product'
-
-const client = new SanityClient({
-  ...projectDetails,
-  useCdn: true,
-})
 
 export const loader: LoaderFunction = async () => {
   const products = await client.fetch(groq`*[_type == "product"]{ _id, title, slug }`)
@@ -30,6 +24,7 @@ export default function Index() {
             <li key={product._id} className="rounded bg-white p-6 shadow md:p-12">
               {product?.slug?.current ? (
                 <Link
+                  prefetch="render"
                   to={product?.slug?.current}
                   className="text-xl font-bold text-green-600 underline hover:text-green-400"
                 >

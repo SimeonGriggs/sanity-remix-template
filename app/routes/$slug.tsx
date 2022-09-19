@@ -1,17 +1,11 @@
 import type {LoaderFunction} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
-import SanityClient from '@sanity/client'
 import groq from 'groq'
 import Layout from '~/components/Layout'
 
 import SanityContent from '~/components/SanityContent'
+import {client} from '~/sanity/client'
 import type {ProductDocument} from '~/sanity/types/Product'
-
-const client = new SanityClient({
-  projectId: '6h1mv88x',
-  dataset: 'production',
-  useCdn: true,
-})
 
 export const loader: LoaderFunction = async ({params}) => {
   const {slug} = params

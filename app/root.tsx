@@ -1,4 +1,5 @@
 import type {MetaFunction, LinksFunction} from '@remix-run/node'
+import {json} from '@remix-run/node'
 import {
   Links,
   LiveReload,
@@ -6,9 +7,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
   useLocation,
 } from '@remix-run/react'
 
+import {projectDetails} from '~/sanity/config'
 import styles from './styles/app.css'
 
 export const links: LinksFunction = () => {
@@ -17,11 +20,17 @@ export const links: LinksFunction = () => {
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
-  title: 'New Remix App',
+  title: 'New Remix + Sanity Studio v3 App',
   viewport: 'width=device-width,initial-scale=1',
 })
 
+export async function loader() {
+  return json({ENV: projectDetails})
+}
+
 export default function App() {
+  const data = useLoaderData()
+
   const {pathname} = useLocation()
   const isStudioRoute = pathname.startsWith('/studio')
 
@@ -35,6 +44,13 @@ export default function App() {
       <body className="min-h-screen bg-green-50">
         <Outlet />
         <ScrollRestoration />
+        {isStudioRoute ? (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
+            }}
+          />
+        ) : null}
         <Scripts />
         <LiveReload />
       </body>
