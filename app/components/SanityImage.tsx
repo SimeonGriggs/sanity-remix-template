@@ -3,6 +3,7 @@ import urlBuilder from '@sanity/image-url'
 import {getImageDimensions} from '@sanity/asset-utils'
 import type {SanityImageSource} from '@sanity/asset-utils'
 import type {PortableTextComponentProps} from '@portabletext/react'
+import {projectDetails} from '~/sanity/config'
 
 type SanityImageAssetWithAlt = SanityImageSource & {alt?: string}
 
@@ -13,10 +14,7 @@ export default function SanityImage(props: PortableTextComponentProps<SanityImag
   return (
     <img
       className="not-prose h-auto w-full"
-      src={urlBuilder({
-        projectId: `6h1mv88x`,
-        dataset: `production`,
-      })
+      src={urlBuilder({...projectDetails})
         .image(value)
         .width(isInline ? 100 : 800)
         .fit('max')

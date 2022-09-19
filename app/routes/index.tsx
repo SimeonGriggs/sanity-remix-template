@@ -4,12 +4,11 @@ import SanityClient from '@sanity/client'
 import groq from 'groq'
 
 import Layout from '~/components/Layout'
+import {projectDetails} from '~/sanity/config'
 import type {ProductDocument} from '~/sanity/types/Product'
 
 const client = new SanityClient({
-  projectId: '6h1mv88x',
-  dataset: 'production',
-  apiVersion: `2022-09-19`,
+  ...projectDetails,
   useCdn: true,
 })
 
@@ -24,7 +23,7 @@ export default function Index() {
 
   return (
     <Layout>
-      <h1 className="mb-6 text-2xl font-bold">Welcome to Remix</h1>
+      <h1 className="mb-6 text-2xl font-bold">Welcome to Remix with Sanity Studio v3</h1>
       {products.length > 0 ? (
         <ul className="grid grid-cols-1 gap-6">
           {products.map((product) => (
