@@ -9,11 +9,21 @@ export const projectDetails = {
   apiVersion: typeof process !== 'undefined' ? process.env.SANITY_API_VERSION ?? `2022-09-19` : ``,
 }
 
+const projectId = () => {
+  return typeof window !== "undefined" ? window.ENV.projectId ?? `` : ``;
+};
+const dataset = () => {
+  return typeof window !== "undefined" ? window.ENV.dataset ?? `` : ``;
+};
+const apiVersion = () => {
+  return typeof window !== "undefined" ? window.ENV.apiVersion ?? `` : ``;
+};
+
 const projectDetailsBrowser = {
-  projectId: typeof document !== 'undefined' ? window.ENV.projectId ?? `` : ``,
-  dataset: typeof document !== 'undefined' ? window.ENV.dataset ?? `` : ``,
-  apiVersion: typeof document !== 'undefined' ? window.ENV.apiVersion ?? `` : ``,
-}
+  projectId: projectId(),
+  dataset: dataset(),
+  apiVersion: apiVersion(),
+};
 
 export const config = createConfig({
   ...projectDetailsBrowser,
