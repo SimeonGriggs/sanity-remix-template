@@ -25,7 +25,7 @@ export const meta: MetaFunction = () => ({
 })
 
 export async function loader() {
-  return json({ENV: projectDetails})
+  return json({ENV: projectDetails()})
 }
 
 export default function App() {

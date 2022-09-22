@@ -3,20 +3,16 @@ import {deskTool} from 'sanity/desk'
 
 import schema from './schema'
 
-export const projectDetails = {
-  projectId: typeof process !== 'undefined' ? process.env.SANITY_PROJECT_ID ?? `` : ``,
-  dataset: typeof process !== 'undefined' ? process.env.SANITY_DATASET ?? `` : ``,
-  apiVersion: typeof process !== 'undefined' ? process.env.SANITY_API_VERSION ?? `2022-09-19` : ``,
-}
-
-const projectDetailsBrowser = {
-  projectId: typeof document !== 'undefined' ? window.ENV.projectId ?? `` : ``,
-  dataset: typeof document !== 'undefined' ? window.ENV.dataset ?? `` : ``,
-  apiVersion: typeof document !== 'undefined' ? window.ENV.apiVersion ?? `` : ``,
-}
+export const projectDetails = () => ({
+  projectId:
+    typeof document === 'undefined' ? process.env.SANITY_PROJECT_ID : window?.ENV?.projectId,
+  dataset: typeof document === 'undefined' ? process.env.SANITY_DATASET : window?.ENV?.dataset,
+  apiVersion:
+    typeof document === 'undefined' ? process.env.SANITY_API_VERSION : window?.ENV?.apiVersion,
+})
 
 export const config = createConfig({
-  ...projectDetailsBrowser,
+  ...projectDetails(),
   plugins: [deskTool()],
   basePath: `/studio`,
   schema: {

@@ -14,7 +14,7 @@ export default function SanityImage(props: PortableTextComponentProps<SanityImag
   return (
     <img
       className="not-prose h-auto w-full"
-      src={urlBuilder(projectDetails)
+      src={urlBuilder(projectDetails())
         .image(value)
         .width(isInline ? 100 : 800)
         .fit('max')
