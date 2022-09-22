@@ -44,13 +44,11 @@ export default function App() {
       <body className="min-h-screen bg-green-50">
         <Outlet />
         <ScrollRestoration />
-        {isStudioRoute ? (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
-            }}
-          />
-        ) : null}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
+          }}
+        />
         <Scripts />
         <LiveReload />
       </body>
