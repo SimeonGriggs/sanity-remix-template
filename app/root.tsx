@@ -1,4 +1,4 @@
-import type {MetaFunction, LinksFunction} from '@remix-run/node'
+import type {MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {
   Links,
@@ -12,11 +12,6 @@ import {
 } from '@remix-run/react'
 
 import {projectDetails} from '~/sanity/config'
-import styles from './styles/app.css'
-
-export const links: LinksFunction = () => {
-  return [{rel: 'stylesheet', href: styles}]
-}
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',

@@ -1,10 +1,16 @@
-import type {LoaderFunction} from '@remix-run/node'
+import type {LinksFunction, LoaderFunction} from '@remix-run/node'
 import {Link, useLoaderData} from '@remix-run/react'
 import groq from 'groq'
 
 import Layout from '~/components/Layout'
 import {client} from '~/sanity/client'
 import type {ProductDocument} from '~/sanity/types/Product'
+
+import styles from './styles/app.css'
+
+export const links: LinksFunction = () => {
+  return [{rel: 'stylesheet', href: styles}]
+}
 
 export const loader: LoaderFunction = async () => {
   const products = await client.fetch(groq`*[_type == "product"]{ _id, title, slug }`)

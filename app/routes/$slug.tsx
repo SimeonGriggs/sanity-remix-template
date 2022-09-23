@@ -1,4 +1,4 @@
-import type {LoaderFunction} from '@remix-run/node'
+import type {LinksFunction, LoaderFunction} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
 import groq from 'groq'
 import Layout from '~/components/Layout'
@@ -6,6 +6,12 @@ import Layout from '~/components/Layout'
 import SanityContent from '~/components/SanityContent'
 import {client} from '~/sanity/client'
 import type {ProductDocument} from '~/sanity/types/Product'
+
+import styles from './styles/app.css'
+
+export const links: LinksFunction = () => {
+  return [{rel: 'stylesheet', href: styles}]
+}
 
 export const loader: LoaderFunction = async ({params}) => {
   const {slug} = params
