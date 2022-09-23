@@ -28,8 +28,9 @@ This starts your app in development mode, rebuilding assets on file changes.
 
 Visit `https://localhost:3000/studio` in your Remix app. You will need to:
 
-1. Update any `projectId` configs to a project your in your [Sanity Manage](https://sanity.io/manage)
-2. Possibly also add `localhost:3000` to the CORS settings on that project
+1. Rename `.env.template` to `.env`
+2. Set the correct Project ID, Dataset Name and preferred API Version from a project in your [Sanity Manage](https://sanity.io/manage)
+3. Add `http://localhost:3000` to the CORS settings on that project, with Allow Credentials privileges
 
 ## Deployment
 
