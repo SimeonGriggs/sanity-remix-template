@@ -6,14 +6,14 @@ import Layout from '~/components/Layout'
 import {client} from '~/sanity/client'
 import type {ProductDocument} from '~/sanity/types/Product'
 
-import styles from './styles/app.css'
+import styles from '~/styles/app.css'
 
 export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]
 }
 
 export const loader: LoaderFunction = async () => {
-  const products = await client.fetch(groq`*[_type == "product"]{ _id, title, slug }`)
+  const products = await client.fetch(groq`*[_type == "product"]`)
 
   return {products}
 }
@@ -25,9 +25,10 @@ export default function Index() {
     <Layout>
       <h1 className="mb-6 text-2xl font-bold">Welcome to Remix with Sanity Studio v3</h1>
       {products.length > 0 ? (
-        <ul className="grid grid-cols-1 gap-6">
+        <ul className="grid grid-cols-2 gap-6 md:grid-cols-3">
           {products.map((product) => (
-            <li key={product._id} className="rounded bg-white p-6 shadow md:p-12">
+            <li key={product._id} className="flex flex-col gap-4">
+              <div className="aspect-video rounded-lg bg-green-50"></div>
               {product?.slug?.current ? (
                 <Link
                   prefetch="render"

@@ -7,7 +7,7 @@ import SanityContent from '~/components/SanityContent'
 import {client} from '~/sanity/client'
 import type {ProductDocument} from '~/sanity/types/Product'
 
-import styles from './styles/app.css'
+import styles from '~/styles/app.css'
 
 export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]
@@ -15,10 +15,9 @@ export const links: LinksFunction = () => {
 
 export const loader: LoaderFunction = async ({params}) => {
   const {slug} = params
-  const product = await client.fetch(
-    groq`*[_type == "product" && slug.current == $slug][0]{ title, content }`,
-    {slug}
-  )
+  const product = await client.fetch(groq`*[_type == "product" && slug.current == $slug][0]`, {
+    slug,
+  })
 
   if (!product) {
     return new Response('Not found', {status: 404})
