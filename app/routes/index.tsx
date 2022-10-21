@@ -13,7 +13,7 @@ export const links: LinksFunction = () => {
 }
 
 export const loader: LoaderFunction = async () => {
-  const products = await client.fetch(groq`*[_type == "product"]`)
+  const products = await client.fetch(groq`*[_type == "product"][0...12]`)
 
   return {products}
 }

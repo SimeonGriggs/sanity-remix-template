@@ -11,7 +11,7 @@ import {
   useLocation,
 } from '@remix-run/react'
 
-import {projectDetails} from '~/sanity/config'
+import {projectDetails} from '~/sanity/projectDetails'
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',

@@ -1,10 +1,21 @@
 import type {LinksFunction} from '@remix-run/node'
 import {ClientOnly} from 'remix-utils'
-import {Studio} from 'sanity'
+import {Studio, createConfig} from 'sanity'
+import {deskTool} from 'sanity/desk'
 
-import {config} from '~/sanity/config'
+import {projectDetails} from '~/sanity/projectDetails'
+import schema from '~/sanity/schema'
 
 import styles from '~/styles/studio.css'
+
+const config = createConfig({
+  ...projectDetails(),
+  plugins: [deskTool()],
+  basePath: `/studio`,
+  schema: {
+    types: schema,
+  },
+})
 
 export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]

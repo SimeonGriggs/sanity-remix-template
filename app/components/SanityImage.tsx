@@ -3,7 +3,7 @@ import urlBuilder from '@sanity/image-url'
 import {getImageDimensions} from '@sanity/asset-utils'
 import type {SanityImageSource} from '@sanity/asset-utils'
 import type {PortableTextComponentProps} from '@portabletext/react'
-import {projectDetails} from '~/sanity/config'
+import {projectDetails} from '~/sanity/projectDetails'
 
 type SanityImageAssetWithAlt = SanityImageSource & {alt?: string}
 
