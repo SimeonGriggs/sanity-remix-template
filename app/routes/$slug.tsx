@@ -1,9 +1,10 @@
-import type {LinksFunction, LoaderFunction} from '@remix-run/node'
+import type {LinksFunction, LoaderArgs} from '@remix-run/node'
+import {json} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
 import groq from 'groq'
-import Layout from '~/components/Layout'
+import {PreviewSuspense} from '@sanity/preview-kit'
 
-import SanityContent from '~/components/SanityContent'
+import Product, {PreviewProduct} from '~/components/Product'
 import {client} from '~/sanity/client'
 import type {ProductDocument} from '~/sanity/types/Product'
 
@@ -13,32 +14,39 @@ export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]
 }
 
-export const loader: LoaderFunction = async ({params}) => {
-  const {slug} = params
-  const product = await client.fetch(groq`*[_type == "product" && slug.current == $slug][0]`, {
-    slug,
-  })
+export const loader = async ({params}: LoaderArgs) => {
+  const preview = true
+  const query = groq`*[_type == "product" && slug.current == $slug][0]`
+  const product: ProductDocument | null = await client.fetch(query, params)
 
   if (!product) {
     return new Response('Not found', {status: 404})
   }
 
-  return {product}
+  return json({
+    product,
+    preview,
+    query: preview ? query : null,
+    params: preview ? params : null,
+  })
 }
 
-export default function Product() {
-  const {product} = useLoaderData<{product: ProductDocument}>()
+export default function ProductPage() {
+  const {product, preview, query, params} = useLoaderData<typeof loader>()
 
-  return (
-    <Layout>
-      {product?.title ? (
-        <h1 className="mb-6 text-2xl font-bold text-green-700 md:mb-12 md:text-4xl">
-          {product.title}
-        </h1>
-      ) : null}
-      {product?.content && product.content?.length > 0 ? (
-        <SanityContent value={product.content} />
-      ) : null}
-    </Layout>
-  )
+  if (preview) {
+    return (
+      <PreviewSuspense fallback="Loading...">
+        <PreviewProduct
+          product={product}
+          query={query}
+          params={params}
+          // TODO: REMOVE THIS BEFORE DEPLOYING
+          token="asdf"
+        />
+      </PreviewSuspense>
+    )
+  }
+
+  return <Product {...product} />
 }

@@ -9,19 +9,20 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
-    "@portabletext/react": "^1.0.6",
+    "@portabletext/react": "^2.0.0",
     "@remix-run/node": "^1.7.0",
     "@remix-run/react": "^1.7.0",
     "@remix-run/serve": "^1.7.0",
     "@sanity/asset-utils": "^1.3.0",
     "@sanity/image-url": "^1.0.1",
+    "@sanity/preview-kit": "^1.2.0-add-type-allowlist.2",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "groq": "^2.33.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "remix-utils": "^3.3.0",
-    "sanity": "^3.0.0-dev-preview.20",
+    "remix-utils": "^4.1.0",
+    "sanity": "dev-preview",
     "styled-components": "^5.3.5"
   },
   "devDependencies": {

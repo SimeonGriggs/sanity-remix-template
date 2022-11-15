@@ -36,7 +36,7 @@ export default function App() {
         <Links />
         {isStudioRoute && typeof document === 'undefined' ? '__STYLES__' : null}
       </head>
-      <body className="min-h-screen bg-green-50">
+      <body className="min-h-screen bg-white">
         <Outlet />
         <ScrollRestoration />
         <script
