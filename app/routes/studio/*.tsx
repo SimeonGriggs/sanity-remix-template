@@ -1,20 +1,13 @@
-import type {LinksFunction} from '@remix-run/node'
+import type {LinksFunction, MetaFunction} from '@remix-run/node'
 import {ClientOnly} from 'remix-utils'
-import {Studio, createConfig} from 'sanity'
-import {deskTool} from 'sanity/desk'
-
-import {projectDetails} from '~/sanity/projectDetails'
-import schema from '~/sanity/schema'
+import {Studio} from 'sanity'
+import {config} from '~/sanity/sanity.config'
 
 import styles from '~/styles/studio.css'
 
-const config = createConfig({
-  ...projectDetails(),
-  plugins: [deskTool()],
-  basePath: `/studio`,
-  schema: {
-    types: schema,
-  },
+export const meta: MetaFunction = () => ({
+  title: 'Sanity Studio',
+  robots: 'noindex',
 })
 
 export const links: LinksFunction = () => {

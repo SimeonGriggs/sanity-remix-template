@@ -5,13 +5,17 @@
 
 ## Includes:
 
+Useful Sanity examples with a light sprinkling of opinionated patterns
+
 - Sanity Studio v3 embedded in the `/studio` route
 - Styled Components SSR support for the `/studio` route
+- Live Preview powered by [@sanity/plugin-kit](https://github.com/sanity-io/preview-kit)
 - Example Sanity Studio config and schema
-- Example Portable Text Component
-- Example Image Builder Component
+- Example Portable Text Component using [@portabletext/react](https://github.com/portabletext/react-portabletext)
+- Example Image Builder Component using [@sanity/image-url](https://github.com/sanity-io/image-url)
+- Validated and Typed GROQ query results using [Zod](https://zod.dev/)
 - eslint and Prettier
-- Tailwind CSS for the front-end
+- Tailwind CSS with presets by [@sanity/demo](https://github.com/sanity-io/demo)
 - Tailwind Prose and Prettier plugins
 
 ## Development
