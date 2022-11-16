@@ -59,9 +59,6 @@ export const loader = async ({request}: LoaderArgs) => {
   // Write secret token to session so that every route can authenticate by it
   const session = await getSession(request.headers.get('Cookie'))
   session.set('secret', process.env.SANITY_PREVIEW_SECRET)
-  console.log(process.env)
-
-  console.log(requestUrl.toString())
 
   return redirect(`/${validSlug}`, {
     headers: {

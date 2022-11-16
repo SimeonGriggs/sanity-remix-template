@@ -19,7 +19,6 @@ export const loader = async ({params, request}: LoaderArgs) => {
   const session = await getSession(request.headers.get('Cookie'))
   const token = session.get('secret') ? process.env.SANITY_READ_TOKEN : false
   const preview = Boolean(token)
-  console.log(token, preview)
 
   const query = groq`*[_type == "product" && slug.current == $slug][0]{
     title,
@@ -45,7 +44,9 @@ export const loader = async ({params, request}: LoaderArgs) => {
     preview,
     query: preview ? query : null,
     params: preview ? params : null,
-    // TODO: Not this, it's bad! __remixContext makes it globally available
+    // Note: This makes the token available to the client if they have an active session
+    // This is useful to show live preview to unauthenticated users
+    // If you would rather not, replace token with `null` and it will rely on your Studio auth
     token: preview ? token : null,
   })
 }

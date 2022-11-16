@@ -22,7 +22,7 @@ export default function Product(props: ProductDocument) {
 type PreviewProductProps = {
   query: string
   params: {[key: string]: string}
-  token: string
+  token: string | null
 }
 
 const {projectId, dataset} = projectDetails()
@@ -31,7 +31,7 @@ const usePreview = definePreview({projectId, dataset})
 export function PreviewProduct(props: PreviewProductProps) {
   const {query, params, token} = props
 
-  const data = usePreview(token ? token : null, query, params)
+  const data = usePreview(token ?? null, query, params)
 
   return (
     <>
