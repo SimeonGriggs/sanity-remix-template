@@ -3,12 +3,11 @@ import {definePreview} from '@sanity/preview-kit'
 
 import Layout from '~/components/Layout'
 import SanityContent from '~/components/SanityContent'
-import type {ProductDocument} from '~/sanity/types/Product'
 import {projectDetails} from '~/sanity/projectDetails'
+import type {Product as ProductDocument} from '~/types/product'
 
 export default function Product(props: ProductDocument) {
-  const {title, content, token} = props
-  const data = usePreview(token, `*[]`)
+  const {title, content} = props
 
   return (
     <Layout>
@@ -21,21 +20,19 @@ export default function Product(props: ProductDocument) {
 }
 
 type PreviewProductProps = {
-  product: ProductDocument
   query: string
   params: {[key: string]: string}
   token: string
 }
 
 const {projectId, dataset} = projectDetails()
-
 const usePreview = definePreview({projectId, dataset})
 
 export function PreviewProduct(props: PreviewProductProps) {
-  const {product, query, params, token} = props
-  console.log(`initial data`, product)
+  const {query, params, token} = props
+  console.log(props)
 
-  const data = usePreview(token, query, params)
+  const data = usePreview(token ? token : null, query, params)
 
   return <Product {...data} />
 }

@@ -21,5 +21,21 @@ export default defineType({
       type: 'array' as const,
       of: [{type: 'block'}, {type: 'image'}],
     }),
+    defineField({
+      name: 'images',
+      type: 'array',
+      of: [
+        defineField({
+          name: 'image',
+          type: 'image',
+          options: {hotspot: true},
+        }),
+      ],
+    }),
+    defineField({
+      name: 'category',
+      type: 'reference',
+      to: [{type: 'category'}],
+    }),
   ],
 })
