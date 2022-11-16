@@ -30,9 +30,17 @@ const usePreview = definePreview({projectId, dataset})
 
 export function PreviewProduct(props: PreviewProductProps) {
   const {query, params, token} = props
-  console.log(props)
 
   const data = usePreview(token ? token : null, query, params)
 
-  return <Product {...data} />
+  return (
+    <>
+      <div className="pointer-events-none fixed inset-0 flex h-screen w-screen items-center justify-end">
+        <form className="pointer-events-auto" action="/resource/preview" method="POST">
+          <button type="submit">Exit Preview Mode</button>
+        </form>
+      </div>
+      <Product {...data} />
+    </>
+  )
 }

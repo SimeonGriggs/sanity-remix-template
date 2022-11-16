@@ -1005,6 +1005,25 @@ video {
   margin-bottom: 0;
 }
 
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.pointer-events-auto {
+  pointer-events: auto;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.inset-0 {
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -1042,6 +1061,10 @@ video {
   height: auto;
 }
 
+.h-screen {
+  height: 100vh;
+}
+
 .min-h-screen {
   min-height: 100vh;
 }
@@ -1050,12 +1073,24 @@ video {
   width: 100%;
 }
 
+.w-screen {
+  width: 100vw;
+}
+
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .flex-col {
   flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
 }
 
 .gap-6 {
