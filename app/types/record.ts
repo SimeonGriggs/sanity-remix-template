@@ -12,6 +12,8 @@ export const recordZ = z.object({
   _id: z.string(),
   title: z.string().nullable(),
   slug: z.string().nullable(),
+  likes: z.number(),
+  dislikes: z.number(),
   artist: z.string().nullable(),
   image: z.any().nullable(),
   content: z.array(z.any()).nullable(),

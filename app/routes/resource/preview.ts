@@ -14,7 +14,7 @@ export const action: ActionFunction = async ({request}) => {
 
   const session = await getSession(request.headers.get('Cookie'))
 
-  redirect('/', {
+  return redirect('/', {
     headers: {
       'Set-Cookie': await destroySession(session),
     },
@@ -48,7 +48,7 @@ export const loader = async ({request}: LoaderArgs) => {
 
   // Confirm the passed-in slug actually exists
   const validSlug = await client.fetch(
-    groq`*[_type == "product" && slug.current == $slug][0].slug.current`,
+    groq`*[_type == "record" && slug.current == $slug][0].slug.current`,
     {slug}
   )
 

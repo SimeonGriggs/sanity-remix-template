@@ -20,12 +20,16 @@ export const structure: StructureResolver = (S, context) =>
       S.documentTypeListItem('genre').title('Genres').icon(Tags),
     ])
 
-function resolvePreviewUrl(doc: SanityDocument) {
+function resolvePreviewUrl(doc: SanityDocument & {slug: {current: string}}) {
   if (!doc?.slug?.current) {
     return ``
   }
 
-  return `http://localhost:3000/${doc.slug.current}`
+  const previewUrl = new URL(`/resource/preview`, `http://localhost:3000`)
+  previewUrl.searchParams.set(`secret`, `ek3aita3n0h2c7x1uitj1naetby6lqwxpc3y0p8jahtg7yq7`)
+  previewUrl.searchParams.set(`slug`, doc.slug.current)
+
+  return previewUrl.toString()
 }
 
 // TODO: Tidy up these repeated methods
@@ -38,10 +42,7 @@ export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, {schemaType,
           .component(Iframe)
           .options({
             url: (doc: SanityDocument) => resolvePreviewUrl(doc),
-            reload: {
-              button: true,
-              revision: true,
-            },
+            reload: {button: true},
           })
           .title('Preview'),
       ])

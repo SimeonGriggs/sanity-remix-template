@@ -32,7 +32,7 @@ export default function Index() {
   return (
     <Layout>
       <div className="grid grid-cols-1 gap-6 md:gap-12">
-        <Title>Welcome to Remix with Sanity Studio v3</Title>
+        <Title>Welcome to Sanity Studio v3 in Remix 🤘</Title>
         {records.length > 0 ? (
           <ul className="grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-12 lg:grid-cols-4">
             {records.map((record) => (

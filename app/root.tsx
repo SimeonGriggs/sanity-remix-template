@@ -12,11 +12,10 @@ import {
 } from '@remix-run/react'
 
 import {projectDetails} from '~/sanity/projectDetails'
-import Header from './components/Header'
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
-  title: 'New Remix + Sanity Studio v3 App',
+  title: 'Welcome to Sanity Studio v3 in Remix 🤘',
   viewport: 'width=device-width,initial-scale=1',
 })
 

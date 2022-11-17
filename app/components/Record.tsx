@@ -8,15 +8,19 @@ import Layout from '~/components/Layout'
 import Title from '~/components/Title'
 import AlbumCover from '~/components/RecordCover'
 import {secondsToMinutes} from '~/lib/secondsToMinutes'
+import LikeDislike from './LikeDislike'
 
 export default function Record(props: RecordDocument) {
-  const {title, artist, content, image, tracks} = props
+  const {_id, title, artist, content, image, tracks, likes, dislikes} = props
 
   return (
     <Layout>
       <article className="flex flex-col items-start gap-4 lg:flex-row lg:gap-12">
-        <AlbumCover image={image} title={title} />
-        <div className="flex flex-1 flex-shrink-0 flex-col gap-4 lg:w-2/3">
+        <div className="grid-gap-4 grid">
+          <AlbumCover image={image} title={title} />
+          <LikeDislike id={_id} likes={likes} dislikes={dislikes} />
+        </div>
+        <div className="flex flex-shrink-0 flex-col gap-4 lg:w-2/3">
           {title ? <Title>{title}</Title> : null}
           {artist ? (
             <h2 className="bg-black text-2xl font-bold tracking-tighter text-white">{artist}</h2>
@@ -61,9 +65,11 @@ export function PreviewRecord(props: PreviewRecordProps) {
 
   return (
     <>
-      <div className="pointer-events-none fixed inset-0 flex h-screen w-screen items-center justify-end bg-red-500">
+      <div className="pointer-events-none fixed inset-0 flex h-screen w-screen items-end justify-center">
         <form className="pointer-events-auto" action="/resource/preview" method="POST">
-          <button type="submit">Exit Preview Mode</button>
+          <button className="bg-black p-4 font-bold text-white" type="submit">
+            Exit Preview Mode
+          </button>
         </form>
       </div>
       <Record {...data} />
