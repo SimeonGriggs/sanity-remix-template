@@ -3,9 +3,7 @@
 - [Sanity Studio v3 Docs](https://beta.sanity.io)
 - [Remix Docs](https://remix.run/docs)
 
-<!-- Insert image -->
-
-[![Sanity Studio v3 + Remix](./img/home-page.png)
+![Sanity Studio v3 + Remix](./img/home-page.png)
 
 ## Includes:
 
