@@ -1,5 +1,7 @@
 import {defineField, defineType} from 'sanity'
+
 import {secondsToMinutes} from '~/lib/secondsToMinutes'
+import Duration from '~/sanity/components/Duration'
 
 export default defineType({
   name: 'track',
@@ -12,8 +14,11 @@ export default defineType({
     }),
     defineField({
       name: 'duration',
-      description: 'Duration in seconds',
+      description: 'Time in seconds',
       type: 'number',
+      components: {
+        input: Duration,
+      },
     }),
   ],
   preview: {
