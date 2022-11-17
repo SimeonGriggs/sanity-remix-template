@@ -1,9 +1,11 @@
+import {Users} from 'lucide-react'
 import {defineType, defineField} from 'sanity'
 
 export default defineType({
-  name: 'category',
-  title: 'Category',
+  name: 'artist',
+  title: 'Artist',
   type: 'document',
+  icon: Users,
   fields: [
     defineField({
       name: 'title',
@@ -15,6 +17,11 @@ export default defineType({
       options: {
         source: 'title',
       },
+    }),
+    defineField({
+      name: 'image',
+      type: 'image',
+      options: {hotspot: true},
     }),
   ],
 })

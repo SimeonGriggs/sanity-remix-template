@@ -1,65 +1,69 @@
 import type {LinksFunction, LoaderFunction} from '@remix-run/node'
 import {Link, useLoaderData} from '@remix-run/react'
-import urlBuilder from '@sanity/image-url'
 import groq from 'groq'
+import AlbumCover from '~/components/RecordCover'
 
 import Layout from '~/components/Layout'
+import Title from '~/components/Title'
 import {client} from '~/sanity/client'
-import {projectDetails} from '~/sanity/projectDetails'
-import type {ProductDocument} from '~/sanity/types/Product'
 
 import styles from '~/styles/app.css'
+import type {RecordDocument} from '~/types/record'
 
 export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]
 }
 
 export const loader: LoaderFunction = async () => {
-  const products = await client.fetch(groq`*[_type == "product"][0...12]`)
+  const records = await client.fetch(groq`*[_type == "record"][0...12]{
+    _id,
+    title,
+    "slug": slug.current,
+    "artist": artist->title,
+    image
+  }`)
 
-  return {products}
+  return {records}
 }
 
 export default function Index() {
-  const {products} = useLoaderData<{products: ProductDocument[]}>()
+  const {records} = useLoaderData<{records: RecordDocument[]}>()
 
   return (
     <Layout>
-      <h1 className="mb-6 text-2xl font-bold md:mb-12">Welcome to Remix with Sanity Studio v3</h1>
-      {products.length > 0 ? (
-        <ul className="grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-12">
-          {products.map((product) => (
-            <li key={product._id} className="flex flex-col gap-4">
-              <div className="aspect-video rounded-lg bg-gray-50">
-                {product?.images?.length > 0 ? (
-                  <img
-                    className="h-auto w-full rounded-lg"
-                    src={urlBuilder(projectDetails())
-                      .image(product.images[0].asset._ref)
-                      .width(800)
-                      .fit('max')
-                      .auto('format')
-                      .url()}
-                    alt={product.title}
-                    loading="lazy"
-                  />
+      <div className="grid grid-cols-1 gap-6 md:gap-12">
+        <Title>Welcome to Remix with Sanity Studio v3</Title>
+        {records.length > 0 ? (
+          <ul className="grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-12 lg:grid-cols-4">
+            {records.map((record) => (
+              <li key={record._id} className="group relative flex flex-col gap-4">
+                <div className="transition-opacity duration-100 ease-in-out group-hover:opacity-90">
+                  <AlbumCover image={record.image} title={record.title} />
+                </div>
+                {record?.slug ? (
+                  <Link
+                    prefetch="intent"
+                    to={record?.slug}
+                    className="text-bold bg-white text-xl font-bold tracking-tighter transition-colors duration-100 ease-in-out hover:bg-cyan-400 hover:text-white md:text-3xl"
+                  >
+                    {record.title}
+                    <span className="absolute inset-0" />
+                  </Link>
+                ) : (
+                  <span className="text-xl font-bold">{record.title}</span>
+                )}
+                {record?.artist ? (
+                  <span className="bg-black font-bold leading-none tracking-tighter text-white">
+                    {record.artist}
+                  </span>
                 ) : null}
-              </div>
-              {product?.slug?.current ? (
-                <Link
-                  prefetch="intent"
-                  to={product?.slug?.current}
-                  className="text-xl font-bold text-green-600 underline hover:text-green-400"
-                >
-                  {product.title}
-                </Link>
-              ) : (
-                <span className="text-xl font-bold">{product.title}</span>
-              )}
-            </li>
-          ))}
-        </ul>
-      ) : null}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No records found</p>
+        )}
+      </div>
     </Layout>
   )
 }

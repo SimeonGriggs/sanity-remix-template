@@ -5,9 +5,9 @@ import groq from 'groq'
 import {PreviewSuspense} from '@sanity/preview-kit'
 
 import styles from '~/styles/app.css'
-import Product, {PreviewProduct} from '~/components/Product'
+import Record, {PreviewRecord} from '~/components/Record'
 import {client} from '~/sanity/client'
-import {productZ} from '~/types/product'
+import {recordZ} from '~/types/record'
 import {getSession} from '~/sessions'
 
 export const links: LinksFunction = () => {
@@ -20,27 +20,33 @@ export const loader = async ({params, request}: LoaderArgs) => {
   const token = session.get('secret') ? process.env.SANITY_READ_TOKEN : false
   const preview = Boolean(token)
 
-  const query = groq`*[_type == "product" && slug.current == $slug][0]{
+  const query = groq`*[_type == "record" && slug.current == $slug][0]{
+    _id,
     title,
     "slug": slug.current,
-    images,
-    content
+    "artist": artist->title,
+    image,
+    content,
+    "tracks": tracks[]{
+      title,
+      duration
+    }
   }`
 
-  const product = await client
+  const record = await client
     // Params from the loader uses the filename
     // $slug.tsx has the params { slug: 'hello-world' }
     .fetch(query, params)
     // Parsed with Zod to validate data at runtime
     // and generate a Typescript type
-    .then((res) => productZ.parse(res))
+    .then((res) => recordZ.parse(res))
 
-  if (!product) {
+  if (!record) {
     return new Response('Not found', {status: 404})
   }
 
   return json({
-    product,
+    record,
     preview,
     query: preview ? query : null,
     params: preview ? params : null,
@@ -51,17 +57,17 @@ export const loader = async ({params, request}: LoaderArgs) => {
   })
 }
 
-export default function ProductPage() {
+export default function RecordPage() {
   // TODO: Solve for why type inference isn't working here
-  const {product, preview, query, params, token} = useLoaderData<typeof loader>()
+  const {record, preview, query, params, token} = useLoaderData<typeof loader>()
 
   if (preview) {
     return (
-      <PreviewSuspense fallback={<Product {...product} />}>
-        <PreviewProduct query={query} params={params} token={token} />
+      <PreviewSuspense fallback={<Record {...record} />}>
+        <PreviewRecord query={query} params={params} token={token} />
       </PreviewSuspense>
     )
   }
 
-  return <Product {...product} />
+  return <Record {...record} />
 }

@@ -1,4 +1,6 @@
-import category from './category'
-import product from './product'
+import artist from './artist'
+import genre from './genre'
+import record from './record'
+import track from './track'
 
-export default [product, category]
+export default [record, artist, track, genre]
