@@ -15,6 +15,7 @@ Useful Sanity examples with a light sprinkling of opinionated patterns
 - Example Sanity Studio config and schema
 - Example Portable Text Component using [@portabletext/react](https://github.com/portabletext/react-portabletext)
 - Example Image Builder Component using [@sanity/image-url](https://github.com/sanity-io/image-url)
+- Example custom decorated input "Duration" using [@sanity/ui](https://www.sanity.io/ui)
 - Validated and Typed GROQ query results using [Zod](https://zod.dev/)
 - eslint and Prettier
 - Tailwind CSS with presets by [@sanity/demo](https://github.com/sanity-io/demo)
