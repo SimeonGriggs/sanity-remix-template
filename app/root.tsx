@@ -12,6 +12,7 @@ import {
 } from '@remix-run/react'
 
 import {projectDetails} from '~/sanity/projectDetails'
+import Header from './components/Header'
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
