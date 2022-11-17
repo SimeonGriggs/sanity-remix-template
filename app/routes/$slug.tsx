@@ -1,4 +1,4 @@
-import type {LinksFunction, LoaderArgs} from '@remix-run/node'
+import type {ActionFunction, LinksFunction, LoaderArgs, MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
 import groq from 'groq'
@@ -6,7 +6,7 @@ import {PreviewSuspense} from '@sanity/preview-kit'
 
 import styles from '~/styles/app.css'
 import Record, {PreviewRecord} from '~/components/Record'
-import {client} from '~/sanity/client'
+import {client, writeClient} from '~/sanity/client'
 import {recordZ} from '~/types/record'
 import {getSession} from '~/sessions'
 
@@ -14,6 +14,47 @@ export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]
 }
 
+export const meta: MetaFunction = ({data}) => {
+  return {
+    title: data?.record?.title ?? `Untitled Record`,
+  }
+}
+
+// Perform a `like` or `dislike` mutation on a `record` document
+export const action: ActionFunction = async ({request}) => {
+  if (request.method !== 'POST') {
+    return json({message: 'Method not allowed'}, 405)
+  }
+
+  const body = await request.formData()
+  const id = String(body.get('id'))
+  const action = String(body.get('action'))
+
+  if (id) {
+    switch (action) {
+      case 'LIKE':
+        return await writeClient
+          .patch(id)
+          .setIfMissing({likes: 0})
+          .inc({likes: 1})
+          .commit()
+          .then(({likes, dislikes}) => ({likes: likes ?? 0, dislikes: dislikes ?? 0}))
+      case 'DISLIKE':
+        return await writeClient
+          .patch(id)
+          .setIfMissing({dislikes: 0})
+          .inc({dislikes: 1})
+          .commit()
+          .then(({likes, dislikes}) => ({likes: likes ?? 0, dislikes: dislikes ?? 0}))
+      default:
+        return json({message: 'Invalid action'}, 400)
+    }
+  }
+
+  return json({message: 'Bad request'}, 400)
+}
+
+// Load the `record` document with this slug
 export const loader = async ({params, request}: LoaderArgs) => {
   // If the URL contained a 'secret' query param and it matches the one on the server
   const session = await getSession(request.headers.get('Cookie'))
@@ -25,6 +66,8 @@ export const loader = async ({params, request}: LoaderArgs) => {
     title,
     "slug": slug.current,
     "artist": artist->title,
+    "likes": coalesce(likes, 0),
+    "dislikes": coalesce(dislikes, 0),
     image,
     content,
     "tracks": tracks[]{
@@ -39,10 +82,10 @@ export const loader = async ({params, request}: LoaderArgs) => {
     .fetch(query, params)
     // Parsed with Zod to validate data at runtime
     // and generate a Typescript type
-    .then((res) => recordZ.parse(res))
+    .then((res) => (res ? recordZ.parse(res) : null))
 
   if (!record) {
-    return new Response('Not found', {status: 404})
+    throw new Response('Not found', {status: 404})
   }
 
   return json({
