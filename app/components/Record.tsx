@@ -6,7 +6,7 @@ import {projectDetails} from '~/sanity/projectDetails'
 import type {RecordDocument} from '~/types/record'
 import Layout from '~/components/Layout'
 import Title from '~/components/Title'
-import AlbumCover from './RecordCover'
+import AlbumCover from '~/components/RecordCover'
 
 function secondsToMinutes(seconds: number) {
   return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`
