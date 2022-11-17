@@ -7,10 +7,7 @@ import type {RecordDocument} from '~/types/record'
 import Layout from '~/components/Layout'
 import Title from '~/components/Title'
 import AlbumCover from '~/components/RecordCover'
-
-function secondsToMinutes(seconds: number) {
-  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`
-}
+import {secondsToMinutes} from '~/lib/secondsToMinutes'
 
 export default function Record(props: RecordDocument) {
   const {title, artist, content, image, tracks} = props
@@ -19,7 +16,7 @@ export default function Record(props: RecordDocument) {
     <Layout>
       <article className="flex flex-col items-start gap-4 lg:flex-row lg:gap-12">
         <AlbumCover image={image} title={title} />
-        <div className="flex flex-shrink-0 flex-col gap-4 lg:w-2/3">
+        <div className="flex flex-1 flex-shrink-0 flex-col gap-4 lg:w-2/3">
           {title ? <Title>{title}</Title> : null}
           {artist ? (
             <h2 className="bg-black text-2xl font-bold tracking-tighter text-white">{artist}</h2>
