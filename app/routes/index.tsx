@@ -38,7 +38,7 @@ export default function Index() {
             {records.map((record) => (
               <li key={record._id} className="group relative flex flex-col">
                 <div className="relative overflow-hidden transition-all duration-200 ease-in-out group-hover:scale-105 group-hover:opacity-90">
-                  <div className="duration-400 absolute z-0 h-48 w-[200%] translate-x-20 translate-y-20 -rotate-45 bg-gradient-to-b from-white to-transparent opacity-25 mix-blend-overlay transition-transform ease-in-out group-hover:translate-y-10 group-hover:translate-x-10 group-hover:opacity-75" />
+                  <div className="absolute z-0 h-48 w-[200%] translate-x-20 translate-y-20 -rotate-45 bg-gradient-to-b from-white to-transparent opacity-25 mix-blend-overlay transition-transform duration-500 ease-in-out group-hover:translate-y-10 group-hover:translate-x-10 group-hover:opacity-75" />
                   <AlbumCover image={record.image} title={record.title} />
                 </div>
                 {record?.slug ? (

@@ -6,7 +6,7 @@ import {PreviewSuspense} from '@sanity/preview-kit'
 
 import styles from '~/styles/app.css'
 import Record, {PreviewRecord} from '~/components/Record'
-import {client, getClient, writeClient} from '~/sanity/client'
+import {getClient, writeClient} from '~/sanity/client'
 import {recordZ} from '~/types/record'
 import {getSession} from '~/sessions'
 
