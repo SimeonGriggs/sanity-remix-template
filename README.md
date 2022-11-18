@@ -69,6 +69,8 @@ Requires a token with **editor** permissions in `.env`. Clicking the like/dislik
 
 Powered by [Zod](https://zod.dev/)
 
+The results of the Sanity query in `./app/routes/$slug.tsx` are parsed with a Zod validator. This ensures that content is always returned in the expected shape at **run time**, and auto-generates Types which are fed from the `loader` into `useLoaderData()`.
+
 ### Other development choices
 
 - eslint and Prettier
