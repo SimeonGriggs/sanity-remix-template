@@ -38,7 +38,7 @@ async function resolvePreviewUrl(doc: SanityDocument & {slug: Slug}, client: San
     previewUrl.searchParams.set('secret', secret)
   }
 
-  return previewUrl.toString()
+  return `http://localhost:3000/${doc.slug.current}`
 }
 
 // TODO: Tidy up these repeated methods

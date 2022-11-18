@@ -12,6 +12,16 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'likes',
+      type: 'number',
+      readOnly: true,
+    }),
+    defineField({
+      name: 'dislikes',
+      type: 'number',
+      readOnly: true,
+    }),
+    defineField({
       name: 'slug',
       type: 'slug',
       options: {
