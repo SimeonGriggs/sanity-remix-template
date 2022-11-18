@@ -19,7 +19,7 @@ You can run development now using the default `projectId` and `dataset`, but you
 npm run dev
 ```
 
-1. Visit [manage.sanity.io](https://manage.sanity.io) to copy these details from an existing project
+1. Visit [sanity.io/manage](https://sanity.io/manage) to copy these details from an existing project
 2. Duplicate `.env.template` to `.env` and add your `projectId` and `dataset`
 3. Start development again, and open the Studio at [localhost:3000](http://localhost:3000) to start authoring content!
 
