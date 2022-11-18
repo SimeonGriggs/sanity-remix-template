@@ -19,8 +19,8 @@ export const projectDetails = (): ProjectDetails => {
     typeof document === 'undefined' ? process.env : window.ENV
 
   return {
-    projectId: String(SANITY_PUBLIC_PROJECT_ID),
-    dataset: String(SANITY_PUBLIC_DATASET),
-    apiVersion: String(SANITY_PUBLIC_API_VERSION),
+    projectId: SANITY_PUBLIC_PROJECT_ID ?? `pnkijp0b`,
+    dataset: SANITY_PUBLIC_DATASET ?? `remix`,
+    apiVersion: SANITY_PUBLIC_API_VERSION ?? `2022-09-19`,
   }
 }
