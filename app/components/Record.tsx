@@ -14,9 +14,9 @@ export default function Record(props: RecordDocument) {
 
   return (
     <Layout>
-      <article className="flex flex-col items-start gap-4 lg:flex-row lg:gap-12">
+      <article className="flex flex-col items-start gap-4 sm:flex-row lg:gap-12">
         <AlbumCover image={image} title={title} />
-        <div className="flex flex-1 flex-shrink-0 flex-col gap-4 lg:w-2/3">
+        <div className="flex flex-shrink-0 flex-col gap-4 sm:w-2/3">
           {title ? <Title>{title}</Title> : null}
           {artist ? (
             <h2 className="bg-black text-2xl font-bold tracking-tighter text-white">{artist}</h2>
