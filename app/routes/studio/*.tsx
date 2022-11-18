@@ -15,5 +15,16 @@ export const links: LinksFunction = () => {
 }
 
 export default function StudioPage() {
-  return <ClientOnly>{() => <Studio config={config} unstable_noAuthBoundary />}</ClientOnly>
+  return (
+    <ClientOnly>
+      {() => (
+        <Studio
+          config={config}
+          // Want guests to see your inside studio?
+          // Uncomment this line!
+          // unstable_noAuthBoundary
+        />
+      )}
+    </ClientOnly>
+  )
 }
