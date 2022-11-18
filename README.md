@@ -12,6 +12,7 @@ Useful Sanity examples with a light sprinkling of opinionated patterns
 - Sanity Studio v3 embedded in the `/studio` route
 - Styled Components SSR support for the `/studio` route
 - Live Preview powered by [@sanity/preview-kit](https://github.com/sanity-io/preview-kit)
+  -- An auto-generating, short-lived `secret` for guest previews
 - Example Sanity Studio config and schema
 - Example Portable Text Component using [@portabletext/react](https://github.com/portabletext/react-portabletext)
 - Example Image Builder Component using [@sanity/image-url](https://github.com/sanity-io/image-url)

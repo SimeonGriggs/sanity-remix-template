@@ -6,20 +6,32 @@ export default defineType({
   title: 'Record',
   type: 'document',
   icon: Disc,
+  fieldsets: [
+    {
+      name: 'rating',
+      title: 'Rating',
+      options: {columns: 2},
+    },
+  ],
+  groups: [
+    {
+      name: 'details',
+      title: 'Details',
+    },
+    {
+      name: 'editorial',
+      title: 'Editorial',
+    },
+    {
+      name: 'tracks',
+      title: 'Tracks',
+    },
+  ],
   fields: [
     defineField({
       name: 'title',
       type: 'string',
-    }),
-    defineField({
-      name: 'likes',
-      type: 'number',
-      readOnly: true,
-    }),
-    defineField({
-      name: 'dislikes',
-      type: 'number',
-      readOnly: true,
+      group: 'details',
     }),
     defineField({
       name: 'slug',
@@ -27,31 +39,49 @@ export default defineType({
       options: {
         source: 'title',
       },
+      group: 'details',
+    }),
+    defineField({
+      name: 'likes',
+      type: 'number',
+      readOnly: true,
+      fieldset: 'rating',
+    }),
+    defineField({
+      name: 'dislikes',
+      type: 'number',
+      readOnly: true,
+      fieldset: 'rating',
     }),
     defineField({
       name: 'artist',
       type: 'reference',
       to: [{type: 'artist'}],
-    }),
-    defineField({
-      name: 'content',
-      type: 'array',
-      of: [{type: 'block'}, {type: 'image'}],
-    }),
-    defineField({
-      name: 'image',
-      type: 'image',
-      options: {hotspot: true},
+      group: 'details',
     }),
     defineField({
       name: 'genres',
       type: 'array',
       of: [{type: 'reference', to: {type: 'genre'}}],
+      group: 'details',
+    }),
+    defineField({
+      name: 'content',
+      type: 'array',
+      of: [{type: 'block'}, {type: 'image'}],
+      group: 'editorial',
+    }),
+    defineField({
+      name: 'image',
+      type: 'image',
+      options: {hotspot: true},
+      group: 'editorial',
     }),
     defineField({
       name: 'tracks',
       type: 'array',
       of: [{type: 'track'}],
+      group: 'tracks',
     }),
   ],
   preview: {

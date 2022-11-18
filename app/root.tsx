@@ -1,4 +1,4 @@
-import type {MetaFunction} from '@remix-run/node'
+import type {LoaderArgs, MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {
   Links,
@@ -11,20 +11,24 @@ import {
   useLocation,
 } from '@remix-run/react'
 
-import {projectDetails} from '~/sanity/projectDetails'
-
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
-  title: 'Welcome to Sanity Studio v3 in Remix 🤘',
+  title: 'Sanity Studio v3 in Remix 🤘',
   viewport: 'width=device-width,initial-scale=1',
 })
 
-export async function loader() {
-  return json({ENV: projectDetails()})
+export const loader = async ({request}: LoaderArgs) => {
+  return json({
+    ENV: {
+      SANITY_PUBLIC_PROJECT_ID: process.env.SANITY_PUBLIC_PROJECT_ID,
+      SANITY_PUBLIC_DATASET: process.env.SANITY_PUBLIC_DATASET,
+      SANITY_PUBLIC_API_VERSION: process.env.SANITY_PUBLIC_API_VERSION,
+    },
+  })
 }
 
 export default function App() {
-  const data = useLoaderData()
+  const {ENV} = useLoaderData()
 
   const {pathname} = useLocation()
   const isStudioRoute = pathname.startsWith('/studio')
@@ -51,7 +55,7 @@ export default function App() {
         <ScrollRestoration />
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
+            __html: `window.ENV = ${JSON.stringify(ENV)}`,
           }}
         />
         <Scripts />

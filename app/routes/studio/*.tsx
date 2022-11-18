@@ -15,5 +15,5 @@ export const links: LinksFunction = () => {
 }
 
 export default function StudioPage() {
-  return <ClientOnly>{() => <Studio config={config} />}</ClientOnly>
+  return <ClientOnly>{() => <Studio config={config} unstable_noAuthBoundary />}</ClientOnly>
 }

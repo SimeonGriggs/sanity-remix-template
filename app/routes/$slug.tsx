@@ -6,7 +6,7 @@ import {PreviewSuspense} from '@sanity/preview-kit'
 
 import styles from '~/styles/app.css'
 import Record, {PreviewRecord} from '~/components/Record'
-import {client, writeClient} from '~/sanity/client'
+import {client, getClient, writeClient} from '~/sanity/client'
 import {recordZ} from '~/types/record'
 import {getSession} from '~/sessions'
 
@@ -56,9 +56,8 @@ export const action: ActionFunction = async ({request}) => {
 
 // Load the `record` document with this slug
 export const loader = async ({params, request}: LoaderArgs) => {
-  // If the URL contained a 'secret' query param and it matches the one on the server
   const session = await getSession(request.headers.get('Cookie'))
-  const token = session.get('secret') ? process.env.SANITY_READ_TOKEN : false
+  const token = session.get('token')
   const preview = Boolean(token)
 
   const query = groq`*[_type == "record" && slug.current == $slug][0]{
@@ -76,7 +75,7 @@ export const loader = async ({params, request}: LoaderArgs) => {
     }
   }`
 
-  const record = await client
+  const record = await getClient(preview)
     // Params from the loader uses the filename
     // $slug.tsx has the params { slug: 'hello-world' }
     .fetch(query, params)
@@ -104,7 +103,7 @@ export default function RecordPage() {
   // TODO: Solve for why type inference isn't working here
   const {record, preview, query, params, token} = useLoaderData<typeof loader>()
 
-  if (preview) {
+  if (preview && query && params && token) {
     return (
       <PreviewSuspense fallback={<Record {...record} />}>
         <PreviewRecord query={query} params={params} token={token} />
