@@ -1,8 +1,8 @@
-import type {ActionFunction, LoaderArgs, LoaderFunction} from '@remix-run/node'
+import type {ActionFunction, LoaderArgs} from '@remix-run/node'
 import {json, redirect} from '@remix-run/node' // or cloudflare/deno
-import {useLoaderData} from '@remix-run/react'
 import groq from 'groq'
-import {client} from '~/sanity/client'
+import {previewClient} from '~/sanity/client'
+import {getSecret, SECRET_ID} from '~/sanity/structure/getSecret'
 
 import {getSession, commitSession, destroySession} from '~/sessions'
 
@@ -22,6 +22,9 @@ export const action: ActionFunction = async ({request}) => {
 }
 
 // A `GET` request to this route will enter preview mode
+// It will check if the "token" document in the dataset
+// Is the same as the one passed in the query string
+// If so, it will write the Viewer Token to the session
 export const loader = async ({request}: LoaderArgs) => {
   const requestUrl = new URL(request.url)
 
@@ -39,15 +42,8 @@ export const loader = async ({request}: LoaderArgs) => {
     return new Response('No secret in URL', {status: 401})
   }
 
-  // Check the secret is valid
-  const validSecret = secret === process.env.SANITY_PREVIEW_SECRET
-
-  if (!validSecret) {
-    return new Response('Invalid secret', {status: 401})
-  }
-
   // Confirm the passed-in slug actually exists
-  const validSlug = await client.fetch(
+  const validSlug = await previewClient.fetch(
     groq`*[_type == "record" && slug.current == $slug][0].slug.current`,
     {slug}
   )
@@ -56,9 +52,15 @@ export const loader = async ({request}: LoaderArgs) => {
     return new Response('Invalid slug', {status: 401})
   }
 
-  // Write secret token to session so that every route can authenticate by it
+  const validSecret = await getSecret(previewClient, SECRET_ID, false)
+
+  if (validSecret !== secret) {
+    return new Response('Invalid secret', {status: 401})
+  }
+
+  // Write viewer token to session so that every route can authenticate by it
   const session = await getSession(request.headers.get('Cookie'))
-  session.set('secret', process.env.SANITY_PREVIEW_SECRET)
+  session.set(`token`, process.env.SANITY_READ_TOKEN)
 
   return redirect(`/${validSlug}`, {
     headers: {

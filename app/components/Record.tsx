@@ -16,7 +16,7 @@ export default function Record(props: RecordDocument) {
   return (
     <Layout>
       <article className="flex flex-col items-start gap-4 lg:flex-row lg:gap-12">
-        <div className="grid-gap-4 grid">
+        <div className="grid-gap-4 grid grid-cols-1">
           <AlbumCover image={image} title={title} />
           <LikeDislike id={_id} likes={likes} dislikes={dislikes} />
         </div>

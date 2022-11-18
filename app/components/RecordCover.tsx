@@ -28,7 +28,7 @@ export default function RecordCover(props: RecordCoverProps) {
           loading="lazy"
         />
       ) : (
-        <div className="flex h-full w-full items-center justify-center bg-gray-100 text-gray-500">
+        <div className="flex aspect-square w-full items-center justify-center bg-gray-100 text-gray-500">
           {title ?? `Missing Record art`}
         </div>
       )}
