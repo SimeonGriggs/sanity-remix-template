@@ -35,7 +35,7 @@ Access to Sanity Studio v3 from within the Remix application itself. Now the who
 
 Powered by [@sanity/preview-kit](https://github.com/sanity-io/preview-kit)
 
-Requires a token with viewer permissions in `.env`, so that live preview links can be shared with guests. Uses an auto-generated, short-lived secret in the dataset to authenticate users to use the token in their session.
+Requires a token with **viewer** permissions in `.env`, so that live preview links can be shared with guests. Uses an auto-generated, short-lived secret in the dataset to authenticate users to use the token in their session.
 
 ### Pre-configured Studio
 
@@ -58,6 +58,12 @@ The `<RecordCover />` component has an example of how to generate a full Sanity 
 Powered by [@sanity/ui](https://www.sanity.io/ui)
 
 Creating "decorated" inputs has never been easier than in Sanity Studio v3. `./app/sanity/components/Duration.tsx` is a 13-line example where a `number` field type to store duration as seconds can also be visualised in minutes. Minimal developer effort, maximum author impact.
+
+### Sanity Client mutation
+
+Powered by [@sanity/client](https://github.com/sanity-io/client)
+
+Requires a token with **editor** permissions in `.env`. Clicking the like/dislike buttons on a Record's page will trigger a Remix action which will send a mutation to the document. This is an example of how user actions on the site may trigger changes on your Sanity dataset.
 
 ### Typed and validated responses
 
