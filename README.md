@@ -5,32 +5,69 @@
 
 ![Sanity Studio v3 + Remix](./img/home-page.png)
 
-## Includes:
+## Installation
 
-Useful Sanity examples with a light sprinkling of opinionated patterns
+From the command line, install this project as a Remix template:
 
-- Sanity Studio v3 embedded in the `/studio` route
-- Styled Components SSR support for the `/studio` route
-- Live Preview powered by [@sanity/preview-kit](https://github.com/sanity-io/preview-kit)
-  -- An auto-generating, short-lived `secret` for guest previews
-- Example Sanity Studio config and schema
-- Example Portable Text Component using [@portabletext/react](https://github.com/portabletext/react-portabletext)
-- Example Image Builder Component using [@sanity/image-url](https://github.com/sanity-io/image-url)
-- Example custom decorated input "Duration" using [@sanity/ui](https://www.sanity.io/ui)
-- Validated and Typed GROQ query results using [Zod](https://zod.dev/)
-- eslint and Prettier
-- Tailwind CSS with presets by [@sanity/demo](https://github.com/sanity-io/demo)
-- Tailwind Prose and Prettier plugins
+```
+npx create-remix@latest --template SimeonGriggs/remix-sanity-studio-v3
+```
 
-## Development
-
-From your terminal:
+You can run development now using the default `projectId` and `dataset`, but you won't have permission to edit that data.
 
 ```sh
 npm run dev
 ```
 
-This starts your app in development mode, rebuilding assets on file changes.
+1. Visit [manage.sanity.io](https://manage.sanity.io) to copy these details from an existing project
+2. Duplicate `.env.template` to `.env` and add your `projectId` and `dataset`
+3. Start development again, and open the Studio at [localhost:3000](http://localhost:3000) to start authoring content!
+
+## Includes
+
+Useful Sanity examples with a light sprinkling of opinionated patterns
+
+### Embedded Studio
+
+Access to Sanity Studio v3 from within the Remix application itself. Now the whole Studio is a component, it lives at the `/studio` route.
+
+### Live preview
+
+Powered by [@sanity/preview-kit](https://github.com/sanity-io/preview-kit)
+
+Requires a token with viewer permissions in `.env`, so that live preview links can be shared with guests. Uses an auto-generated, short-lived secret in the dataset to authenticate users to use the token in their session.
+
+### Pre-configured Studio
+
+The Studio has been pre-configured with a basic "Record Collection" schema, as well as a basic Desk Structure to include live preview within a view pane.
+
+### Portable Text component
+
+Powered by [@portabletext/react](https://github.com/portabletext/react-portabletext)
+
+This component allows for the customisation and extension of how Portable Text is rendered within your app. The Rich Text field in Sanity is an array of objects. Content as data!
+
+### Image URL builder
+
+Powered by [@sanity/image-url](https://github.com/sanity-io/image-url)
+
+The `<RecordCover />` component has an example of how to generate a full Sanity CDN asset URL based on just the asset's ID. This is useful as we do not need to resolve the full image document in the query.
+
+### Example decorated input
+
+Powered by [@sanity/ui](https://www.sanity.io/ui)
+
+Creating "decorated" inputs has never been easier than in Sanity Studio v3. `./app/sanity/components/Duration.tsx` is a 13-line example where a `number` field type to store duration as seconds can also be visualised in minutes. Minimal developer effort, maximum author impact.
+
+### Typed and validated responses
+
+Powered by [Zod](https://zod.dev/)
+
+### Other development choices
+
+- eslint and Prettier
+- Tailwind CSS with presets by [@sanity/demo](https://github.com/sanity-io/demo)
+- Tailwind Prose and Prettier plugins
 
 ## Sanity Studio
 
