@@ -12,11 +12,9 @@ export const recordZ = z.object({
   _id: z.string(),
   title: z.string().nullable(),
   slug: z.string().nullable(),
-  likes: z.number(),
-  dislikes: z.number(),
+  likes: z.number().nullable(),
+  dislikes: z.number().nullable(),
   artist: z.string().nullable(),
-  image: z.any().nullable(),
-  content: z.array(z.any()).nullable(),
   tracks: z
     .array(
       z.object({
@@ -25,6 +23,9 @@ export const recordZ = z.object({
       })
     )
     .nullable(),
+  // ...being a touch lazy here, these could be more strongly typed
+  image: z.any().nullable(),
+  content: z.array(z.any()).nullable(),
 })
 
 export type RecordDocument = z.infer<typeof recordZ>
