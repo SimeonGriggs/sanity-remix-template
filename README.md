@@ -21,7 +21,7 @@ npm run dev
 
 1. Visit [sanity.io/manage](https://sanity.io/manage) to copy these details from an existing project
 2. Duplicate `.env.template` to `.env` and add your `projectId` and `dataset`
-3. Start development again, and open the Studio at [localhost:3000](http://localhost:3000) to start authoring content!
+3. Start development again, and open the Studio at [localhost:3000/studio](http://localhost:3000/studio) to start authoring content!
 
 ![Sanity Studio v3](./img/studio-page-dark.png)
 
