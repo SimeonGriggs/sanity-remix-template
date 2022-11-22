@@ -58,7 +58,7 @@ export default function Index() {
                     <Link
                       prefetch="intent"
                       to={record?.slug}
-                      className="text-bold bg-white pt-4 text-xl font-bold tracking-tighter transition-colors duration-100 ease-in-out hover:bg-cyan-400 hover:text-white md:text-3xl"
+                      className="text-bold pt-4 text-xl font-bold tracking-tighter transition-colors duration-100 ease-in-out hover:bg-cyan-400 hover:text-white md:text-3xl"
                     >
                       {record.title}
                       {/* Makes this entire block clickable */}

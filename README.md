@@ -3,7 +3,7 @@
 - [Sanity Studio v3 Docs](https://beta.sanity.io)
 - [Remix Docs](https://remix.run/docs)
 
-![Sanity Studio v3 + Remix](./img/home-page.png)
+![home Page of a Remix website](./img/home-page.png)
 
 ## Installation
 
@@ -22,6 +22,8 @@ npm run dev
 1. Visit [sanity.io/manage](https://sanity.io/manage) to copy these details from an existing project
 2. Duplicate `.env.template` to `.env` and add your `projectId` and `dataset`
 3. Start development again, and open the Studio at [localhost:3000](http://localhost:3000) to start authoring content!
+
+![Sanity Studio v3](./img/studio-page.png)
 
 ## Includes
 

@@ -1,17 +1,12 @@
-import {Link} from '@remix-run/react'
-import {useRouteData} from 'remix-utils'
-
-import type {HomeDocument} from '~/types/home'
+import ThemeToggle from '~/components/ThemeToggle'
+import Logo from '~/components/Logo'
 
 export default function Header() {
-  const {home} = useRouteData(`root`) as {home: HomeDocument}
-
   return (
-    <header className="border-b border-gray-100">
-      <div className="container mx-auto p-4 lg:px-12">
-        <h1 className="text-lg font-bold tracking-tighter text-black lg:text-2xl">
-          <Link to="/">{home.siteTitle}</Link>
-        </h1>
+    <header className="border-b border-gray-100 dark:border-gray-900">
+      <div className="container mx-auto flex items-center justify-between p-4 lg:px-12">
+        <Logo />
+        <ThemeToggle />
       </div>
     </header>
   )
