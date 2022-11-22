@@ -31,7 +31,7 @@ export default function Record(props: RecordDocument) {
           {content && content?.length > 0 ? <SanityContent value={content} /> : null}
           {tracks && tracks?.length > 0 ? (
             <>
-              <ul className="grid grid-cols-1 divide-y divide-gray-100">
+              <ul className="grid grid-cols-1 divide-y divide-gray-100 dark:divide-gray-900">
                 <li className="py-3 text-2xl font-bold tracking-tighter">
                   {tracks?.length === 1 ? `1 Track` : `${tracks?.length} Tracks`}
                 </li>
