@@ -10,7 +10,13 @@ export default function Footer() {
             Log in to Sanity Studio v3
           </a>
           <a className="hover:text-cyan-600 dark:hover:text-cyan-200" href="https://sanity.io">
-            Sign up for free at Sanity.io
+            Sign up free at Sanity.io
+          </a>
+          <a
+            className="hover:text-cyan-600 dark:hover:text-cyan-200"
+            href="https://github.com/SimeonGriggs/remix-sanity-studio-v3"
+          >
+            Clone this project on GitHub
           </a>
         </div>
       </div>
