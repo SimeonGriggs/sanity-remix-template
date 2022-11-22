@@ -10,6 +10,9 @@ import {
   useLoaderData,
   useLocation,
 } from '@remix-run/react'
+import groq from 'groq'
+import {getClient} from './sanity/client'
+import {homeZ} from './types/home'
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
@@ -17,8 +20,17 @@ export const meta: MetaFunction = () => ({
   viewport: 'width=device-width,initial-scale=1',
 })
 
-export const loader = async ({request}: LoaderArgs) => {
+export const loader = async (props: LoaderArgs) => {
+  const query = groq`*[_id == "home"][0]{
+    title,
+    siteTitle
+  }`
+  const home = await getClient()
+    .fetch(query)
+    .then((res) => (res ? homeZ.parse(res) : null))
+
   return json({
+    home,
     ENV: {
       SANITY_PUBLIC_PROJECT_ID: process.env.SANITY_PUBLIC_PROJECT_ID,
       SANITY_PUBLIC_DATASET: process.env.SANITY_PUBLIC_DATASET,
@@ -28,7 +40,7 @@ export const loader = async ({request}: LoaderArgs) => {
 }
 
 export default function App() {
-  const {ENV} = useLoaderData()
+  const {ENV} = useLoaderData<typeof loader>()
 
   const {pathname} = useLocation()
   const isStudioRoute = pathname.startsWith('/studio')

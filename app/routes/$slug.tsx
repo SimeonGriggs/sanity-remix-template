@@ -63,13 +63,21 @@ export const loader = async ({params, request}: LoaderArgs) => {
   const query = groq`*[_type == "record" && slug.current == $slug][0]{
     _id,
     title,
+    // GROQ can re-shape data in the request!
     "slug": slug.current,
     "artist": artist->title,
+    // coalesce() returns the first value that is not null
+    // so we can ensure we have at least a zero
     "likes": coalesce(likes, 0),
     "dislikes": coalesce(dislikes, 0),
+    // for simplicity in this demo these are typed as "any"
+    // we can make them type-safe with a little more work
+    // https://www.simeongriggs.dev/type-safe-groq-queries-for-sanity-data-with-zod
     image,
     content,
-    "tracks": tracks[]{
+    // this is how we extract values from arrays
+    tracks[]{
+      _key,
       title,
       duration
     }
@@ -100,7 +108,6 @@ export const loader = async ({params, request}: LoaderArgs) => {
 }
 
 export default function RecordPage() {
-  // TODO: Solve for why type inference isn't working here
   const {record, preview, query, params, token} = useLoaderData<typeof loader>()
 
   if (preview && query && params && token) {
