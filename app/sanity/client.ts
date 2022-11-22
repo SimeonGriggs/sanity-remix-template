@@ -1,6 +1,6 @@
 import SanityClient from '@sanity/client'
 
-import {projectDetails} from './projectDetails'
+import {projectDetails} from '~/sanity/projectDetails'
 
 export const client = new SanityClient({
   ...projectDetails(),

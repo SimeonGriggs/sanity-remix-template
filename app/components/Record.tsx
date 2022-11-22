@@ -8,7 +8,8 @@ import Layout from '~/components/Layout'
 import Title from '~/components/Title'
 import AlbumCover from '~/components/RecordCover'
 import {secondsToMinutes} from '~/lib/secondsToMinutes'
-import LikeDislike from './LikeDislike'
+import LikeDislike from '~/components/LikeDislike'
+import ExitPreview from '~/components/ExitPreview'
 
 export default function Record(props: RecordDocument) {
   const {_id, title, artist, content, image, tracks, likes, dislikes} = props
@@ -16,15 +17,17 @@ export default function Record(props: RecordDocument) {
   return (
     <Layout>
       <article className="flex flex-col items-start gap-4 lg:flex-row lg:gap-12">
-        <div className="grid-gap-4 grid grid-cols-1">
+        <div className="grid-gap-4 mx-auto grid max-w-[70vw] grid-cols-1">
           <AlbumCover image={image} title={title} />
           <LikeDislike id={_id} likes={likes} dislikes={dislikes} />
         </div>
-        <div className="flex flex-shrink-0 flex-col gap-4 lg:w-2/3">
-          {title ? <Title>{title}</Title> : null}
-          {artist ? (
-            <h2 className="bg-black text-2xl font-bold tracking-tighter text-white">{artist}</h2>
-          ) : null}
+        <div className="flex flex-shrink-0 flex-col gap-4 md:gap-6 lg:w-2/3">
+          <header>
+            {title ? <Title>{title}</Title> : null}
+            {artist ? (
+              <h2 className="bg-black text-2xl font-bold tracking-tighter text-white">{artist}</h2>
+            ) : null}
+          </header>
           {content && content?.length > 0 ? <SanityContent value={content} /> : null}
           {tracks && tracks?.length > 0 ? (
             <>
@@ -33,7 +36,7 @@ export default function Record(props: RecordDocument) {
                   {tracks?.length === 1 ? `1 Track` : `${tracks?.length} Tracks`}
                 </li>
                 {tracks.map((track) => (
-                  <li key={track.title} className="flex items-center justify-between py-3">
+                  <li key={track._key} className="flex items-center justify-between py-3">
                     <span className="text-lg">{track.title}</span>
                     {track.duration ? (
                       <span className="text-sm font-bold">{secondsToMinutes(track.duration)}</span>
@@ -65,13 +68,7 @@ export function PreviewRecord(props: PreviewRecordProps) {
 
   return (
     <>
-      <div className="pointer-events-none fixed inset-0 flex h-screen w-screen items-end justify-center">
-        <form className="pointer-events-auto" action="/resource/preview" method="POST">
-          <button className="bg-black p-4 font-bold text-white" type="submit">
-            Exit Preview Mode
-          </button>
-        </form>
-      </div>
+      <ExitPreview />
       <Record {...data} />
     </>
   )

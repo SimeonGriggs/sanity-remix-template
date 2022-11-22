@@ -1,6 +1,7 @@
 import React from 'react'
 import {PortableText} from '@portabletext/react'
-import SanityImage from './SanityImage'
+
+import SanityImage from '~/components/SanityImage'
 
 type ContentProps = {
   value: any[]
@@ -16,7 +17,7 @@ export default function SanityContent(props: ContentProps) {
   const {value} = props
 
   return (
-    <div className="prose prose-a:text-green-600 md:prose-xl">
+    <div className="prose font-serif prose-a:text-cyan-600 md:prose-2xl">
       <PortableText value={value} components={components} />
     </div>
   )
