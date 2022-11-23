@@ -9,14 +9,17 @@ import Record, {PreviewRecord} from '~/components/Record'
 import {getClient, writeClient} from '~/sanity/client'
 import {recordZ} from '~/types/record'
 import {getSession} from '~/sessions'
+import type {HomeDocument} from '~/types/home'
 
 export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]
 }
 
-export const meta: MetaFunction = ({data}) => {
+export const meta: MetaFunction = ({data, parentsData}) => {
+  const home = parentsData.root.home as HomeDocument
+
   return {
-    title: data?.record?.title ?? `Untitled Record`,
+    title: [data.record.title, home.siteTitle].filter(Boolean).join(' | '),
   }
 }
 
