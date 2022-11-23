@@ -1,4 +1,4 @@
-import type {LinksFunction, LoaderArgs, LoaderFunction} from '@remix-run/node'
+import type {LinksFunction, LoaderArgs, LoaderFunction, MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {Link, useLoaderData} from '@remix-run/react'
 import groq from 'groq'
@@ -6,15 +6,23 @@ import AlbumCover from '~/components/RecordCover'
 
 import Layout from '~/components/Layout'
 import Title from '~/components/Title'
-import {client, getClient} from '~/sanity/client'
+import {getClient} from '~/sanity/client'
 
 import styles from '~/styles/app.css'
-import {RecordDocument, recordStubsZ} from '~/types/record'
+import {recordStubsZ} from '~/types/record'
 import {useRouteData} from 'remix-utils'
 import type {HomeDocument} from '~/types/home'
 
 export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]
+}
+
+export const meta: MetaFunction = (data) => {
+  const home = data.parentsData.root.home as HomeDocument
+
+  return {
+    title: [home.title, home.siteTitle].filter(Boolean).join(' | '),
+  }
 }
 
 export const loader = async (props: LoaderArgs) => {
