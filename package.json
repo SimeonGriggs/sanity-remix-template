@@ -24,8 +24,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "remix-utils": "^4.1.0",
-    "sanity": "dev-preview",
-    "sanity-plugin-iframe-pane": "^2.0.1-v3-studio.3",
+    "sanity": "^3.0.0",
+    "sanity-plugin-iframe-pane": "^2.1.1",
     "styled-components": "^5.3.5",
     "zod": "^3.19.1"
   },
