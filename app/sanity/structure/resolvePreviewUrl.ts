@@ -20,7 +20,5 @@ export async function resolvePreviewUrl(doc: SanityDocumentWithSlug, client: San
     previewUrl.searchParams.set('secret', secret)
   }
 
-  previewUrl.pathname = `/resource/preview`
-
   return previewUrl.toString()
 }
