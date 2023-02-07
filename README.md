@@ -1,6 +1,6 @@
-# Sanity Studio v3 + Remix
+# Sanity Studio + Remix Template
 
-- [Sanity Studio v3 Docs](https://beta.sanity.io)
+- [Sanity Docs](https://sanity.io/docs)
 - [Remix Docs](https://remix.run/docs)
 
 ![home Page of a Remix website](./img/home-page-dark.png)
@@ -10,7 +10,7 @@
 From the command line, install this project as a Remix template:
 
 ```
-npx create-remix@latest --template SimeonGriggs/remix-sanity-template
+npx create-remix@latest --template SimeonGriggs/sanity-remix-template
 ```
 
 You can run development now using the default `projectId` and `dataset`, but you won't have permission to edit that data.
