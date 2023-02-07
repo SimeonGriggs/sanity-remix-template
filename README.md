@@ -10,7 +10,7 @@
 From the command line, install this project as a Remix template:
 
 ```
-npx create-remix@latest --template SimeonGriggs/remix-sanity-studio-v3
+npx create-remix@latest --template SimeonGriggs/remix-sanity-template
 ```
 
 You can run development now using the default `projectId` and `dataset`, but you won't have permission to edit that data.
