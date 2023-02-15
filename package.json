@@ -1,11 +1,9 @@
 {
-  "name": "remix-sanity-studio-v3",
+  "name": "sanity-remix-template",
   "sideEffects": false,
   "scripts": {
-    "build": "npm run build:css && remix build",
-    "build:css": "tailwindcss -m -i ./styles/app.css -o app/styles/app.css",
-    "dev": "concurrently \"npm run dev:css\" \"remix dev\"",
-    "dev:css": "tailwindcss -w -i ./styles/app.css -o app/styles/app.css",
+    "build": "remix build",
+    "dev": "remix dev",
     "lint": "eslint . --fix"
   },
   "dependencies": {
@@ -37,7 +35,6 @@
     "@types/react-dom": "^18.0.6",
     "@types/styled-components": "^5.1.26",
     "autoprefixer": "^10.4.11",
-    "concurrently": "^7.4.0",
     "eslint": "^8.20.0",
     "inquirer": "^9.1.4",
     "postcss": "^8.4.16",

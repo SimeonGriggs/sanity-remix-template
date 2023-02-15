@@ -11,12 +11,12 @@ import {
   useLocation,
 } from '@remix-run/react'
 import groq from 'groq'
+import {z} from 'zod'
 
 import {getClient} from '~/sanity/client'
 import {homeZ} from '~/types/home'
 import {themePreferenceCookie} from '~/cookies'
-import {z} from 'zod'
-import {getBodyClassNames} from './lib/getBodyClassNames'
+import {getBodyClassNames} from '~/lib/getBodyClassNames'
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
