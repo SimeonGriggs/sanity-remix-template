@@ -4,7 +4,7 @@ import {useLoaderData} from '@remix-run/react'
 import groq from 'groq'
 import {PreviewSuspense} from '@sanity/preview-kit'
 
-import styles from '~/styles/app.css'
+import stylesheet from '~/tailwind.css'
 import Record, {PreviewRecord} from '~/components/Record'
 import {getClient, writeClient} from '~/sanity/client'
 import {recordZ} from '~/types/record'
@@ -12,7 +12,7 @@ import {getSession} from '~/sessions'
 import type {HomeDocument} from '~/types/home'
 
 export const links: LinksFunction = () => {
-  return [{rel: 'stylesheet', href: styles}]
+  return [{rel: 'stylesheet', href: stylesheet}]
 }
 
 export const meta: MetaFunction = ({data, parentsData}) => {

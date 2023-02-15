@@ -1,20 +1,19 @@
-import type {LinksFunction, LoaderArgs, LoaderFunction, MetaFunction} from '@remix-run/node'
+import type {LinksFunction, LoaderArgs, MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {Link, useLoaderData} from '@remix-run/react'
 import groq from 'groq'
-import AlbumCover from '~/components/RecordCover'
+import {useRouteData} from 'remix-utils'
 
+import AlbumCover from '~/components/RecordCover'
 import Layout from '~/components/Layout'
 import Title from '~/components/Title'
 import {getClient} from '~/sanity/client'
-
-import styles from '~/styles/app.css'
+import stylesheet from '~/tailwind.css'
 import {recordStubsZ} from '~/types/record'
-import {useRouteData} from 'remix-utils'
 import type {HomeDocument} from '~/types/home'
 
 export const links: LinksFunction = () => {
-  return [{rel: 'stylesheet', href: styles}]
+  return [{rel: 'stylesheet', href: stylesheet}]
 }
 
 export const meta: MetaFunction = (data) => {
