@@ -3,7 +3,7 @@ import {ClientOnly} from 'remix-utils'
 import {Studio} from 'sanity'
 
 import styles from '~/styles/studio.css'
-import {config} from '~/sanity/sanity.config'
+import {config} from '../../../sanity.config'
 
 export const meta: MetaFunction = () => ({
   title: 'Sanity Studio',
