@@ -10,6 +10,7 @@ import {getClient, writeClient} from '~/sanity/client'
 import {recordZ} from '~/types/record'
 import {getSession} from '~/sessions'
 import type {HomeDocument} from '~/types/home'
+import {OG_IMAGE_WIDTH, OG_IMAGE_HEIGHT} from '~/routes/resource/og'
 
 export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: stylesheet}]
@@ -18,8 +19,17 @@ export const links: LinksFunction = () => {
 export const meta: MetaFunction = ({data, parentsData}) => {
   const home = parentsData.root.home as HomeDocument
 
+  const title = [data.record.title, home.siteTitle].filter(Boolean).join(' | ')
+  const {ogImageUrl} = data
+
   return {
-    title: [data.record.title, home.siteTitle].filter(Boolean).join(' | '),
+    title,
+    'twitter:card': 'summary_large_image',
+    'twitter:title': title,
+    'og:title': title,
+    'og:image:width': String(OG_IMAGE_WIDTH),
+    'og:image:height': String(OG_IMAGE_HEIGHT),
+    'og:image': ogImageUrl,
   }
 }
 
@@ -98,8 +108,13 @@ export const loader = async ({params, request}: LoaderArgs) => {
     throw new Response('Not found', {status: 404})
   }
 
+  // Create social share image url
+  const {origin} = new URL(request.url)
+  const ogImageUrl = `${origin}/resource/og?id=${record._id}`
+
   return json({
     record,
+    ogImageUrl,
     preview,
     query: preview ? query : null,
     params: preview ? params : null,

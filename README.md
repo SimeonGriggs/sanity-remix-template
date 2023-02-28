@@ -73,6 +73,10 @@ Powered by [Zod](https://zod.dev/)
 
 The results of the Sanity query in `./app/routes/$slug.tsx` are parsed with a Zod validator. This ensures that content is always returned in the expected shape at **run time**, and auto-generates Types which are fed from the `loader` into `useLoaderData()`.
 
+### Dynamic OG Image
+
+The `record` type generates dynamic open graph images using the `~/routes/resource/og` resource route.
+
 ### Other development choices
 
 - eslint and Prettier
