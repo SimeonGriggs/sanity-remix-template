@@ -1,10 +1,13 @@
 import type {DefaultDocumentNodeResolver, StructureResolver} from 'sanity/desk'
 import Iframe from 'sanity-plugin-iframe-pane'
 import {Disc, Users, Tags, Home} from 'lucide-react'
+import type {SanityDocument} from 'sanity'
 
 import {projectDetails} from '~/sanity/projectDetails'
 import type {SanityDocumentWithSlug} from '~/sanity/structure/resolvePreviewUrl'
 import {resolvePreviewUrl} from '~/sanity/structure/resolvePreviewUrl'
+import OGPreview from '../components/OGPreview'
+import {resolveOGUrl} from './resolveOGUrl'
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -36,6 +39,12 @@ export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, {schemaType,
             reload: {button: true},
           })
           .title('Preview'),
+        S.view
+          .component(OGPreview)
+          .options({
+            url: (doc: SanityDocument) => resolveOGUrl(doc),
+          })
+          .title('OG Preview'),
       ])
 
     default:

@@ -1,12 +1,12 @@
 import React from 'react'
-import type {SanityImageSource} from '@sanity/asset-utils'
+import type {SanityImageObjectStub} from '@sanity/asset-utils'
 import urlBuilder from '@sanity/image-url'
 
 import {projectDetails} from '~/sanity/projectDetails'
 
 type RecordCoverProps = {
   title?: string | null
-  image?: SanityImageSource
+  image?: SanityImageObjectStub
 }
 
 export default function RecordCover(props: RecordCoverProps) {
@@ -18,6 +18,7 @@ export default function RecordCover(props: RecordCoverProps) {
         <img
           className="h-auto w-full object-cover shadow-black transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-cyan-200"
           src={urlBuilder(projectDetails())
+            // @ts-ignore
             .image(image.asset._ref)
             .height(800)
             .width(800)
