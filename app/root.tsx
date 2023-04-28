@@ -1,4 +1,4 @@
-import type {LinksFunction, LoaderArgs, MetaFunction} from '@remix-run/node'
+import type {LinksFunction, LoaderArgs} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {
   Links,
@@ -17,11 +17,6 @@ import {homeZ} from '~/types/home'
 import {themePreferenceCookie} from '~/cookies'
 import {z} from 'zod'
 import {getBodyClassNames} from './lib/getBodyClassNames'
-
-export const meta: MetaFunction = () => ({
-  charset: 'utf-8',
-  viewport: 'width=device-width,initial-scale=1',
-})
 
 export const links: LinksFunction = () => {
   return [
@@ -74,6 +69,8 @@ export default function App() {
   return (
     <html lang="en">
       <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
         {isStudioRoute && typeof document === 'undefined' ? '__STYLES__' : null}

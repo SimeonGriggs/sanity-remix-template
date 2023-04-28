@@ -1,26 +1,40 @@
-import type {ActionFunction, LinksFunction, LoaderArgs, MetaFunction} from '@remix-run/node'
+import type {ActionFunction, LinksFunction, LoaderArgs, V2_MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
 import groq from 'groq'
 import {PreviewSuspense} from '@sanity/preview-kit'
 
+import type {loader as rootLoader} from '~/root'
 import styles from '~/styles/app.css'
 import Record, {PreviewRecord} from '~/components/Record'
 import {getClient, writeClient} from '~/sanity/client'
 import {recordZ} from '~/types/record'
 import {getSession} from '~/sessions'
-import type {HomeDocument} from '~/types/home'
 
 export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]
 }
 
-export const meta: MetaFunction = ({data, parentsData}) => {
-  const home = parentsData.root.home as HomeDocument
-
-  return {
-    title: [data.record.title, home.siteTitle].filter(Boolean).join(' | '),
+export const meta: V2_MetaFunction<
+  typeof loader,
+  {
+    root: typeof rootLoader
+    'routes/$slug': typeof loader
   }
+> = ({matches}) => {
+  const recordMatch = matches.find((m) => m.id === 'routes/$slug') as typeof loader | undefined
+  // Revisit when this is stable
+  // @ts-expect-error
+  const {record} = recordMatch ? recordMatch.data : {}
+
+  const root = matches.find((m) => m.id === 'root') as typeof rootLoader | undefined
+  // Revisit when this is stable
+  // @ts-expect-error
+  const {home} = root ? root.data : {}
+
+  const title = [record.title, home.siteTitle].filter(Boolean).join(' | ')
+
+  return [{title}]
 }
 
 // Perform a `like` or `dislike` mutation on a `record` document

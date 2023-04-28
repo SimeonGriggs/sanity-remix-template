@@ -1,4 +1,3 @@
-import React from 'react'
 import {definePreview} from '@sanity/preview-kit'
 
 import SanityContent from '~/components/SanityContent'

@@ -1,31 +1,35 @@
-import type {LinksFunction, LoaderArgs, LoaderFunction, MetaFunction} from '@remix-run/node'
+import type {LinksFunction, V2_MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
-import {Link, useLoaderData} from '@remix-run/react'
+import {Link, useLoaderData, useRouteLoaderData} from '@remix-run/react'
 import groq from 'groq'
-import AlbumCover from '~/components/RecordCover'
 
+import type {loader as rootLoader} from '~/root'
+import AlbumCover from '~/components/RecordCover'
 import Layout from '~/components/Layout'
 import Title from '~/components/Title'
 import {getClient} from '~/sanity/client'
-
 import styles from '~/styles/app.css'
 import {recordStubsZ} from '~/types/record'
-import {useRouteData} from 'remix-utils'
 import type {HomeDocument} from '~/types/home'
 
 export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]
 }
 
-export const meta: MetaFunction = (data) => {
-  const home = data.parentsData.root.home as HomeDocument
+export const meta: V2_MetaFunction<typeof loader, {root: typeof rootLoader}> = ({matches}) => {
+  const root = matches.find((m) => m.id === 'root')
 
-  return {
-    title: [home.title, home.siteTitle].filter(Boolean).join(' | '),
+  if (!root?.data?.home) {
+    return []
   }
+
+  const {home} = root.data
+  const title = [home.title, home.siteTitle].filter(Boolean).join(' | ')
+
+  return [{title}]
 }
 
-export const loader = async (props: LoaderArgs) => {
+export const loader = async () => {
   const query = groq`*[_type == "record"][0...12]{
     _id,
     title,
@@ -47,7 +51,7 @@ export const loader = async (props: LoaderArgs) => {
 
 export default function Index() {
   const {records} = useLoaderData<typeof loader>()
-  const {home} = useRouteData(`root`) as {home: HomeDocument}
+  const {home} = useRouteLoaderData(`root`) as {home: HomeDocument}
 
   return (
     <Layout>
@@ -58,7 +62,7 @@ export default function Index() {
             {records.map((record) => (
               <li key={record._id} className="group relative flex flex-col">
                 <div className="relative overflow-hidden transition-all duration-200 ease-in-out group-hover:scale-105 group-hover:opacity-90">
-                  <div className="absolute z-0 h-48 w-[200%] translate-x-20 translate-y-20 -rotate-45 bg-gradient-to-b from-white to-transparent opacity-25 mix-blend-overlay transition-transform duration-500 ease-in-out group-hover:translate-y-10 group-hover:translate-x-10 group-hover:opacity-75" />
+                  <div className="absolute z-0 h-48 w-[200%] translate-x-20 translate-y-20 -rotate-45 bg-gradient-to-b from-white to-transparent opacity-25 mix-blend-overlay transition-transform duration-500 ease-in-out group-hover:translate-x-10 group-hover:translate-y-10 group-hover:opacity-75" />
                   <AlbumCover image={record.image} title={record.title} />
                 </div>
                 <div className="flex flex-col">

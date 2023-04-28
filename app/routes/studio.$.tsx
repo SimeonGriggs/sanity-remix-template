@@ -1,14 +1,14 @@
-import type {LinksFunction, MetaFunction} from '@remix-run/node'
+import type {LinksFunction, V2_MetaFunction} from '@remix-run/node'
 import {ClientOnly} from 'remix-utils'
 import {Studio} from 'sanity'
 
 import styles from '~/styles/studio.css'
 import {config} from '~/sanity/sanity.config'
 
-export const meta: MetaFunction = () => ({
-  title: 'Sanity Studio',
-  robots: 'noindex',
-})
+export const meta: V2_MetaFunction = () => [
+  {title: 'Sanity Studio'},
+  {name: 'robots', content: 'noindex'},
+]
 
 export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]
