@@ -1,5 +1,6 @@
 import {Disc} from 'lucide-react'
 import {defineType, defineField} from 'sanity'
+import {MenuIcon, ComposeIcon, ThListIcon} from '@sanity/icons'
 
 export default defineType({
   name: 'record',
@@ -10,6 +11,7 @@ export default defineType({
     {
       name: 'rating',
       title: 'Rating',
+      description: 'These fields are written to from the Remix front end',
       options: {columns: 2},
     },
   ],
@@ -17,14 +19,17 @@ export default defineType({
     {
       name: 'details',
       title: 'Details',
+      icon: ThListIcon,
     },
     {
       name: 'editorial',
       title: 'Editorial',
+      icon: ComposeIcon,
     },
     {
       name: 'tracks',
       title: 'Tracks',
+      icon: MenuIcon,
     },
   ],
   fields: [

@@ -10,6 +10,7 @@ import Record, {PreviewRecord} from '~/components/Record'
 import {getClient, writeClient} from '~/sanity/client'
 import {recordZ} from '~/types/record'
 import {getSession} from '~/sessions'
+import {OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH} from './resource.og'
 
 export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]
@@ -25,16 +26,26 @@ export const meta: V2_MetaFunction<
   const recordMatch = matches.find((m) => m.id === 'routes/$slug') as typeof loader | undefined
   // Revisit when this is stable
   // @ts-expect-error
-  const {record} = recordMatch ? recordMatch.data : {}
+  const {record, ogImageUrl} = recordMatch ? recordMatch.data : {}
 
   const root = matches.find((m) => m.id === 'root') as typeof rootLoader | undefined
   // Revisit when this is stable
   // @ts-expect-error
   const {home} = root ? root.data : {}
 
+  console.log(ogImageUrl)
+
   const title = [record.title, home.siteTitle].filter(Boolean).join(' | ')
 
-  return [{title}]
+  return [
+    {title},
+    {name: 'twitter:card', content: 'summary_large_image'},
+    {name: 'twitter:title', content: title},
+    {name: 'og:title', content: title},
+    {name: 'og:image:width', content: String(OG_IMAGE_WIDTH)},
+    {name: 'og:image:height', content: String(OG_IMAGE_HEIGHT)},
+    {name: 'og:image', content: ogImageUrl},
+  ]
 }
 
 // Perform a `like` or `dislike` mutation on a `record` document
@@ -112,8 +123,13 @@ export const loader = async ({params, request}: LoaderArgs) => {
     throw new Response('Not found', {status: 404})
   }
 
+  // Create social share image url
+  const {origin} = new URL(request.url)
+  const ogImageUrl = `${origin}/resource/og?id=${record._id}`
+
   return json({
     record,
+    ogImageUrl,
     preview,
     query: preview ? query : null,
     params: preview ? params : null,

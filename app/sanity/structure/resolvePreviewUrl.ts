@@ -5,9 +5,12 @@ import {getSecret, SECRET_ID} from '~/sanity/structure/getSecret'
 export type SanityDocumentWithSlug = SanityDocument & {slug: Slug}
 
 export async function resolvePreviewUrl(doc: SanityDocumentWithSlug, client: SanityClient) {
-  const remoteUrl = `https://www.example.com`
-  const baseUrl = window?.location?.hostname === 'localhost' ? window.origin : remoteUrl
-  const previewUrl = new URL('/resource/preview', baseUrl)
+  // Studio is a client-side only app so window should be available
+  if (typeof window === 'undefined') {
+    return ''
+  }
+
+  const previewUrl = new URL('/resource/preview', window.origin)
 
   if (!doc?.slug?.current) {
     return previewUrl.toString()

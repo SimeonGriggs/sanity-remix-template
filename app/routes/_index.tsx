@@ -8,12 +8,12 @@ import AlbumCover from '~/components/RecordCover'
 import Layout from '~/components/Layout'
 import Title from '~/components/Title'
 import {getClient} from '~/sanity/client'
-import styles from '~/styles/app.css'
+import tailwind from '~/tailwind.css'
 import {recordStubsZ} from '~/types/record'
 import type {HomeDocument} from '~/types/home'
 
 export const links: LinksFunction = () => {
-  return [{rel: 'stylesheet', href: styles}]
+  return [{rel: 'stylesheet', href: tailwind}]
 }
 
 export const meta: V2_MetaFunction<typeof loader, {root: typeof rootLoader}> = ({matches}) => {
