@@ -1,36 +1,51 @@
-import type {ActionFunction, LinksFunction, LoaderArgs, MetaFunction} from '@remix-run/node'
+import type {ActionFunction, LinksFunction, LoaderArgs, V2_MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
 import groq from 'groq'
 import {PreviewSuspense} from '@sanity/preview-kit'
 
-import stylesheet from '~/tailwind.css'
+import type {loader as rootLoader} from '~/root'
+import styles from '~/styles/app.css'
 import Record, {PreviewRecord} from '~/components/Record'
 import {getClient, writeClient} from '~/sanity/client'
 import {recordZ} from '~/types/record'
 import {getSession} from '~/sessions'
-import type {HomeDocument} from '~/types/home'
-import {OG_IMAGE_WIDTH, OG_IMAGE_HEIGHT} from '~/routes/resource/og'
+import {OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH} from './resource.og'
 
 export const links: LinksFunction = () => {
-  return [{rel: 'stylesheet', href: stylesheet}]
+  return [{rel: 'stylesheet', href: styles}]
 }
 
-export const meta: MetaFunction = ({data, parentsData}) => {
-  const home = parentsData.root.home as HomeDocument
-
-  const title = [data.record.title, home.siteTitle].filter(Boolean).join(' | ')
-  const {ogImageUrl} = data
-
-  return {
-    title,
-    'twitter:card': 'summary_large_image',
-    'twitter:title': title,
-    'og:title': title,
-    'og:image:width': String(OG_IMAGE_WIDTH),
-    'og:image:height': String(OG_IMAGE_HEIGHT),
-    'og:image': ogImageUrl,
+export const meta: V2_MetaFunction<
+  typeof loader,
+  {
+    root: typeof rootLoader
+    'routes/$slug': typeof loader
   }
+> = ({matches}) => {
+  const recordMatch = matches.find((m) => m.id === 'routes/$slug') as typeof loader | undefined
+  // Revisit when this is stable
+  // @ts-expect-error
+  const {record, ogImageUrl} = recordMatch ? recordMatch.data : {}
+
+  const root = matches.find((m) => m.id === 'root') as typeof rootLoader | undefined
+  // Revisit when this is stable
+  // @ts-expect-error
+  const {home} = root ? root.data : {}
+
+  console.log(ogImageUrl)
+
+  const title = [record.title, home.siteTitle].filter(Boolean).join(' | ')
+
+  return [
+    {title},
+    {name: 'twitter:card', content: 'summary_large_image'},
+    {name: 'twitter:title', content: title},
+    {name: 'og:title', content: title},
+    {name: 'og:image:width', content: String(OG_IMAGE_WIDTH)},
+    {name: 'og:image:height', content: String(OG_IMAGE_HEIGHT)},
+    {name: 'og:image', content: ogImageUrl},
+  ]
 }
 
 // Perform a `like` or `dislike` mutation on a `record` document
