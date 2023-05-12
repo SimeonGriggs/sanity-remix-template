@@ -6,7 +6,7 @@ import type {SanityDocument} from 'sanity'
 import {projectDetails} from '~/sanity/projectDetails'
 import type {SanityDocumentWithSlug} from '~/sanity/structure/resolvePreviewUrl'
 import {resolvePreviewUrl} from '~/sanity/structure/resolvePreviewUrl'
-import OGPreview from '../components/OGPreview'
+import OGPreview from '~/sanity/components/OGPreview'
 import {resolveOGUrl} from './resolveOGUrl'
 
 export const structure: StructureResolver = (S) =>

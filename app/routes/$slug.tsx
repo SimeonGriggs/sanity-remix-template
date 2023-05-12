@@ -17,7 +17,7 @@ import {getClient, writeClient} from '~/sanity/client'
 import {recordZ} from '~/types/record'
 import {getSession} from '~/sessions'
 import type {loader as rootLoader} from '~/root'
-import { OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from './resource.og'
+import {OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH} from '~/routes/resource.og'
 
 export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]
