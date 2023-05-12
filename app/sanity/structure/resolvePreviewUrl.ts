@@ -11,12 +11,12 @@ export async function resolvePreviewUrl(doc: SanityDocumentWithSlug, client: San
   }
 
   const previewUrl = new URL('/resource/preview', window.origin)
+  previewUrl.searchParams.set('type', doc._type)
 
-  if (!doc?.slug?.current) {
-    return previewUrl.toString()
+  if (doc?.slug?.current) {
+    previewUrl.searchParams.set('slug', doc.slug.current)
   }
 
-  previewUrl.searchParams.set('slug', doc.slug.current)
   const secret = await getSecret(client, SECRET_ID, true)
 
   if (secret) {

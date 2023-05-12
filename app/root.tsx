@@ -1,4 +1,4 @@
-import type {LinksFunction, LoaderArgs, MetaFunction} from '@remix-run/node'
+import type {LinksFunction, LoaderArgs, MetaFunction, V2_MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {
   Links,
@@ -17,11 +17,8 @@ import {getClient} from '~/sanity/client'
 import {homeZ} from '~/types/home'
 import {themePreferenceCookie} from '~/cookies'
 import {getBodyClassNames} from '~/lib/getBodyClassNames'
-
-export const meta: MetaFunction = () => ({
-  charset: 'utf-8',
-  viewport: 'width=device-width,initial-scale=1',
-})
+import Header from '~/components/Header'
+import Footer from '~/components/Footer'
 
 export const links: LinksFunction = () => {
   return [
@@ -57,9 +54,9 @@ export const loader = async ({request}: LoaderArgs) => {
     home,
     themePreference,
     ENV: {
-      SANITY_PUBLIC_PROJECT_ID: process.env.SANITY_PUBLIC_PROJECT_ID,
-      SANITY_PUBLIC_DATASET: process.env.SANITY_PUBLIC_DATASET,
-      SANITY_PUBLIC_API_VERSION: process.env.SANITY_PUBLIC_API_VERSION,
+      SANITY_PROJECT_ID: process.env.SANITY_PROJECT_ID,
+      SANITY_DATASET: process.env.SANITY_DATASET,
+      SANITY_API_VERSION: process.env.SANITY_API_VERSION,
     },
   })
 }
@@ -75,11 +72,24 @@ export default function App() {
     <html lang="en">
       <head>
         <Meta />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link rel="icon" href="https://fav.farm/🤘" />
         <Links />
         {isStudioRoute && typeof document === 'undefined' ? '__STYLES__' : null}
       </head>
       <body className={bodyClassNames}>
-        <Outlet />
+        {isStudioRoute ? (
+          <Outlet />
+        ) : (
+          <>
+            <Header />
+            <div className="container mx-auto p-4 lg:p-12">
+              <Outlet />
+            </div>
+            <Footer />
+          </>
+        )}
         <ScrollRestoration />
         <script
           dangerouslySetInnerHTML={{

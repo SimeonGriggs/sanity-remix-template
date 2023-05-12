@@ -28,25 +28,25 @@ export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, {schemaType,
   const {apiVersion} = projectDetails()
   const client = getClient({apiVersion})
 
-  switch (schemaType) {
-    case `record`:
-      return S.document().views([
-        S.view.form(),
-        S.view
-          .component(Iframe)
-          .options({
-            url: (doc: SanityDocumentWithSlug) => resolvePreviewUrl(doc, client),
-            reload: {button: true},
-          })
-          .title('Preview'),
-        S.view
-          .component(OGPreview)
-          .options({
-            url: (doc: SanityDocument) => resolveOGUrl(doc),
-          })
-          .title('OG Preview'),
-      ])
+  const previewView = S.view
+    .component(Iframe)
+    .options({
+      url: (doc: SanityDocumentWithSlug) => resolvePreviewUrl(doc, client),
+      reload: {button: true},
+    })
+    .title('Preview')
+  const OGPreviewView = S.view
+    .component(OGPreview)
+    .options({
+      url: (doc: SanityDocument) => resolveOGUrl(doc),
+    })
+    .title('OG Preview')
 
+  switch (schemaType) {
+    case `home`:
+      return S.document().views([S.view.form(), previewView])
+    case `record`:
+      return S.document().views([S.view.form(), previewView, OGPreviewView])
     default:
       return S.document().views([S.view.form()])
   }

@@ -4,7 +4,7 @@ import {useFetcher, useLoaderData} from '@remix-run/react'
 
 export default function ThemeToggle() {
   const cookieToggle = useFetcher()
-  const {themePreference} = useLoaderData()
+  const {themePreference} = useLoaderData() ?? {}
 
   const isDarkMode = themePreference === `dark`
 
