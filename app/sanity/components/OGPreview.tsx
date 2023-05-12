@@ -1,6 +1,6 @@
 import {Card, Code, Flex} from '@sanity/ui'
 import React from 'react'
-import {OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH} from '~/routes/resource/og'
+import {OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH} from '~/routes/resource.og'
 
 export default function OGPreview({document, options}: any) {
   const {displayed} = document

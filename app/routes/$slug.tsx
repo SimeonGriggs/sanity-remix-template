@@ -11,16 +11,16 @@ import {isRouteErrorResponse, useLoaderData, useRouteError} from '@remix-run/rea
 import groq from 'groq'
 import {PreviewSuspense} from '@sanity/preview-kit'
 
-import stylesheet from '~/tailwind.css'
+import styles from '~/styles/app.css'
 import Record, {PreviewRecord} from '~/components/Record'
 import {getClient, writeClient} from '~/sanity/client'
 import {recordZ} from '~/types/record'
 import {getSession} from '~/sessions'
-import {OG_IMAGE_WIDTH, OG_IMAGE_HEIGHT} from '~/routes/resource/og'
 import type {loader as rootLoader} from '~/root'
+import { OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from './resource.og'
 
 export const links: LinksFunction = () => {
-  return [{rel: 'stylesheet', href: stylesheet}]
+  return [{rel: 'stylesheet', href: styles}]
 }
 
 export const meta: V2_MetaFunction = ({data, matches}) => {

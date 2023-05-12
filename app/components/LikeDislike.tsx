@@ -1,6 +1,5 @@
 import {useFetcher, useLocation} from '@remix-run/react'
 import {ThumbsUp, ThumbsDown} from 'lucide-react'
-import React from 'react'
 
 type LikeDislikeProps = {
   id: string

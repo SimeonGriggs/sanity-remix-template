@@ -18,7 +18,7 @@
     "@sanity/demo": "^1.0.2",
     "@sanity/image-url": "^1.0.1",
     "@sanity/preview-kit": "^1.2.10",
-    "@sanity/vision": "^3.4.0",
+    "@sanity/vision": "^3.9.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "groq": "^3.10.1",

@@ -73,7 +73,7 @@ The results of the Sanity query in `./app/routes/$slug.tsx` are parsed with a Zo
 
 ### Dynamic OG Image
 
-The `record` type generates dynamic open graph images using the `~/routes/resource/og` resource route.
+The `record` type generates dynamic open graph images using the `~/routes/resource.og` resource route.
 
 ### Other development choices
 
