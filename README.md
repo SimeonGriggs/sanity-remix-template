@@ -9,19 +9,17 @@
 
 From the command line, install this project as a Remix template:
 
-```
+```sh
 npx create-remix@latest --template SimeonGriggs/sanity-remix-template
 ```
 
-You can run development now using the default `projectId` and `dataset`, but you won't have permission to edit that data.
+After setup, `npx sanity@latest init --env` will run to populate your `.env` file with the details of a new or existing Sanity Project's ID and dataset name'.
 
 ```sh
 npm run dev
 ```
 
-1. Visit [sanity.io/manage](https://sanity.io/manage) to copy these details from an existing project
-2. Duplicate `.env.template` to `.env` and add your `projectId` and `dataset`
-3. Start development again, and open the Studio at [localhost:3000/studio](http://localhost:3000/studio) to start authoring content!
+Now open the Studio at [localhost:3000/studio](http://localhost:3000/studio) and start authoring content!
 
 ![Sanity Studio v3](./img/studio-page-dark.png)
 

@@ -1,57 +1,60 @@
-import type {ActionFunction, LinksFunction, LoaderArgs, V2_MetaFunction} from '@remix-run/node'
+import type {
+  ActionFunction,
+  LinksFunction,
+  LoaderArgs,
+  SerializeFrom,
+  V2_MetaFunction,
+} from '@remix-run/node'
 import {json} from '@remix-run/node'
-import {useLoaderData} from '@remix-run/react'
+import type {RouteMatch} from '@remix-run/react'
+import {isRouteErrorResponse, useLoaderData, useRouteError} from '@remix-run/react'
 import groq from 'groq'
 import {PreviewSuspense} from '@sanity/preview-kit'
 
-import type {loader as rootLoader} from '~/root'
 import styles from '~/styles/app.css'
 import Record, {PreviewRecord} from '~/components/Record'
 import {getClient, writeClient} from '~/sanity/client'
 import {recordZ} from '~/types/record'
 import {getSession} from '~/sessions'
-import {OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH} from './resource.og'
+import type {loader as rootLoader} from '~/root'
+import {OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH} from '~/routes/resource.og'
 
 export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]
 }
 
-export const meta: V2_MetaFunction<
-  typeof loader,
-  {
-    root: typeof rootLoader
-    'routes/$slug': typeof loader
-  }
-> = ({matches}) => {
-  const recordMatch = matches.find((m) => m.id === 'routes/$slug') as typeof loader | undefined
-  // Revisit when this is stable
-  // @ts-expect-error
-  const {record, ogImageUrl} = recordMatch ? recordMatch.data : {}
-
-  const root = matches.find((m) => m.id === 'root') as typeof rootLoader | undefined
-  // Revisit when this is stable
-  // @ts-expect-error
-  const {home} = root ? root.data : {}
-
-  console.log(ogImageUrl)
-
-  const title = [record.title, home.siteTitle].filter(Boolean).join(' | ')
+export const meta: V2_MetaFunction = ({data, matches}) => {
+  const rootData = matches.find((match: RouteMatch) => match.id === `root`) as
+    | {data: SerializeFrom<typeof rootLoader>}
+    | undefined
+  const home = rootData ? rootData.data.home : null
+  const title = [data?.record?.title, home?.siteTitle].filter(Boolean).join(' | ')
+  const {ogImageUrl} = data
 
   return [
     {title},
-    {name: 'twitter:card', content: 'summary_large_image'},
-    {name: 'twitter:title', content: title},
-    {name: 'og:title', content: title},
-    {name: 'og:image:width', content: String(OG_IMAGE_WIDTH)},
-    {name: 'og:image:height', content: String(OG_IMAGE_HEIGHT)},
-    {name: 'og:image', content: ogImageUrl},
+    {property: 'twitter:card', content: 'summary_large_image'},
+    {property: 'twitter:title', content: title},
+    {property: 'og:title', content: title},
+    {property: 'og:image:width', content: String(OG_IMAGE_WIDTH)},
+    {property: 'og:image:height', content: String(OG_IMAGE_HEIGHT)},
+    {property: 'og:image', content: ogImageUrl},
   ]
 }
 
 // Perform a `like` or `dislike` mutation on a `record` document
 export const action: ActionFunction = async ({request}) => {
   if (request.method !== 'POST') {
-    return json({message: 'Method not allowed'}, 405)
+    throw new Response('Method not allowed', {status: 405})
+  }
+
+  const {token, projectId} = writeClient.config()
+
+  if (!token) {
+    throw new Response(
+      `Setup "SANITY_WRITE_TOKEN" with a token with "Editor" permissions to your environment variables. Create one at https://sanity.io/manage/project/${projectId}/api#tokens`,
+      {status: 401}
+    )
   }
 
   const body = await request.formData()
@@ -152,4 +155,34 @@ export default function RecordPage() {
   }
 
   return <Record {...record} />
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div className="prose prose-xl mx-auto bg-red-50 p-5">
+        <h1>
+          {error.status} {error.statusText}
+        </h1>
+        <p>{error.data}</p>
+      </div>
+    )
+  } else if (error instanceof Error) {
+    return (
+      <div className="prose prose-xl mx-auto bg-red-50 p-5">
+        <h1>Error</h1>
+        <p>{error.message}</p>
+        <p>The stack trace is:</p>
+        <pre>{error.stack}</pre>
+      </div>
+    )
+  } else {
+    return (
+      <div className="prose prose-xl mx-auto bg-red-50 p-5">
+        <h1>Unknown Error</h1>
+      </div>
+    )
+  }
 }

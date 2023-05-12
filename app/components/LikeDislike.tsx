@@ -1,6 +1,5 @@
 import {useFetcher, useLocation} from '@remix-run/react'
 import {ThumbsUp, ThumbsDown} from 'lucide-react'
-import React from 'react'
 
 type LikeDislikeProps = {
   id: string
@@ -14,9 +13,19 @@ export default function LikeDislike(props: LikeDislikeProps) {
   const location = useLocation()
 
   // Use fresh data returned from the ActionFunction, if a mutation has just finished
-  let isDone = fetcher.state === 'idle' && fetcher.data != null
-  const likes = isDone ? fetcher.data.likes : props.likes
-  const dislikes = isDone ? fetcher.data.dislikes : props.dislikes
+  const isDone = fetcher.state === 'idle' && fetcher.data !== null
+  const isWorking = fetcher.state === 'loading' || fetcher.state === 'submitting'
+
+  const likes = isDone && Number(fetcher?.data?.likes) ? fetcher.data.likes : props?.likes
+  const optimisticLikes =
+    fetcher.formData && fetcher.formData.get('action') === 'LIKE' ? likes + 1 : likes
+  const displayLikes = optimisticLikes || likes
+
+  const dislikes =
+    isDone && Number(fetcher?.data?.dislikes) ? fetcher.data.dislikes : props?.dislikes
+  const optimisticDislikes =
+    fetcher.formData && fetcher.formData.get('action') === 'DISLIKE' ? dislikes + 1 : dislikes
+  const displayDislikes = optimisticDislikes || dislikes
 
   return (
     <fetcher.Form
@@ -29,11 +38,11 @@ export default function LikeDislike(props: LikeDislikeProps) {
         name="action"
         type="submit"
         value="LIKE"
-        disabled={fetcher.state !== 'idle'}
+        disabled={isWorking}
         className="flex items-center gap-2 bg-black p-4 transition-all duration-100 ease-in-out hover:bg-cyan-400 hover:text-black disabled:opacity-50"
         title="Like"
       >
-        <span className="text-xs font-bold">{likes}</span>
+        <span className="text-xs font-bold">{displayLikes}</span>
         <ThumbsUp />
         <span className="sr-only">Like</span>
       </button>
@@ -41,12 +50,12 @@ export default function LikeDislike(props: LikeDislikeProps) {
         name="action"
         type="submit"
         value="DISLIKE"
-        disabled={fetcher.state !== 'idle'}
+        disabled={isWorking}
         className="flex items-center gap-2 bg-black p-4 transition-all duration-100 ease-in-out hover:bg-cyan-400 hover:text-black disabled:opacity-50"
         title="Dislike"
       >
         <ThumbsDown />
-        <span className="text-xs font-bold">{dislikes}</span>
+        <span className="text-xs font-bold">{displayDislikes}</span>
         <span className="sr-only">Dislike</span>
       </button>
     </fetcher.Form>
