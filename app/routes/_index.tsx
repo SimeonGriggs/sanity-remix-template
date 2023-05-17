@@ -69,36 +69,28 @@ export default function Index() {
   const {records = [], query, params} = useLoaderData<typeof loader>()
   const {
     home,
-    preview,
-    token,
     query: homeQuery,
     params: homeParams,
   } = useRouteLoaderData(`root`) as SerializeFrom<typeof rootLoader>
 
   return (
     <div className="grid grid-cols-1 gap-6 md:gap-12">
-      {preview && homeQuery && homeParams ? (
-        <PreviewWrapper
-          render={(previewData) =>
-            previewData?.title ? <Title>{previewData.title}</Title> : null
-          }
-          query={homeQuery}
-          params={homeParams}
-          token={token}
-        />
-      ) : (
-        <>{home?.title ? <Title>{home.title}</Title> : null}</>
-      )}
-      {preview && query && params ? (
-        <PreviewWrapper
-          render={(previewData) => <Records records={previewData} />}
-          query={query}
-          params={params}
-          token={token}
-        />
-      ) : (
+      <PreviewWrapper
+        render={(previewData) =>
+          previewData?.title ? <Title>{previewData.title}</Title> : null
+        }
+        query={homeQuery}
+        params={homeParams}
+      >
+        {home?.title ? <Title>{home.title}</Title> : null}
+      </PreviewWrapper>
+      <PreviewWrapper
+        render={(previewData) => <Records records={previewData} />}
+        query={query}
+        params={params}
+      >
         <Records records={records ?? []} />
-      )}
+      </PreviewWrapper>
     </div>
   )
 }

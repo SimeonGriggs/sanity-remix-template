@@ -151,19 +151,11 @@ export const loader = async ({params, request}: LoaderArgs) => {
 
 export default function RecordPage() {
   const {record, query, params} = useLoaderData<typeof loader>()
-  const {preview, token} = useRouteLoaderData(`root`) as SerializeFrom<
-    typeof rootLoader
-  >
 
-  return preview && query && params ? (
-    <PreviewWrapper
-      render={Record}
-      query={query}
-      params={params}
-      token={token}
-    />
-  ) : (
-    <Record {...record} />
+  return (
+    <PreviewWrapper render={Record} query={query} params={params}>
+      <Record {...record} />
+    </PreviewWrapper>
   )
 }
 

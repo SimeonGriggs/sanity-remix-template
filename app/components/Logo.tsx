@@ -24,18 +24,15 @@ export function Logo(props: LogoProps) {
 
   return (
     <p className="text-lg font-bold tracking-tighter text-black dark:text-white lg:text-2xl">
-      {preview && homeQuery && homeParams ? (
-        <PreviewWrapper
-          render={(previewData) => (
-            <Link to="/">{previewData?.siteTitle ?? `Sanity Remix`}</Link>
-          )}
-          query={homeQuery}
-          params={homeParams}
-          token={token}
-        />
-      ) : (
+      <PreviewWrapper
+        render={(previewData) => (
+          <Link to="/">{previewData?.siteTitle ?? `Sanity Remix`}</Link>
+        )}
+        query={homeQuery}
+        params={homeParams}
+      >
         <Link to="/">{props.siteTitle ?? `Sanity Remix`}</Link>
-      )}
+      </PreviewWrapper>
     </p>
   )
 }
