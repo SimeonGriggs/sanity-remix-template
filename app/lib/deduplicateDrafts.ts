@@ -1,28 +1,28 @@
 import type {SanityDocumentLike} from 'sanity'
 
-export function deduplicateDrafts(documents: SanityDocumentLike[]) {
-  return documents.reduce<SanityDocumentLike[]>(
-    (accumulator, currentObject) => {
-      const id = currentObject._id
+export function deduplicateDrafts(data: SanityDocumentLike[]) {
+  const draftsMap = new Map()
+  const orderArray = []
 
-      if (id.startsWith('drafts.')) {
-        const existingObject = accumulator.find(
-          (obj) => obj._id === id.substring(7)
-        )
-        if (!existingObject) {
-          accumulator.push(currentObject) // Include the draft object if no non-draft object exists
-        }
-      } else {
-        const existingObject = accumulator.find(
-          (obj) => obj._id === `drafts.${id}`
-        )
-        if (!existingObject) {
-          accumulator.push(currentObject) // Include the non-draft object if no draft object exists
-        }
+  // Create the map with draft objects and preserve order
+  for (const currentObject of data) {
+    const id = currentObject._id
+    if (id.startsWith('drafts.')) {
+      const draftId = id.substring(7)
+      if (!draftsMap.has(draftId) && !draftsMap.has(id)) {
+        draftsMap.set(draftId, currentObject)
+        orderArray.push(draftId)
       }
+    } else {
+      if (!draftsMap.has(id)) {
+        draftsMap.set(id, currentObject)
+        orderArray.push(id)
+      }
+    }
+  }
 
-      return accumulator
-    },
-    []
-  )
+  // Generate the reduced data array while preserving the original order
+  const reducedData = orderArray.map((id) => draftsMap.get(id))
+
+  return reducedData
 }

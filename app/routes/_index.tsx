@@ -36,7 +36,7 @@ export const meta: V2_MetaFunction = ({matches}) => {
 
 export const loader = async ({request}: LoaderArgs) => {
   const {preview} = await getPreviewToken(request)
-  const query = groq`*[_type == "record"][0...12]{
+  const query = groq`*[_type == "record"][0...12]|order(title asc){
     _id,
     _type,
     title,
