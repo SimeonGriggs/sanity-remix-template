@@ -1,6 +1,6 @@
 import type {LoaderArgs} from '@remix-run/node'
-import {generatePngFromDocument} from '~/lib/og.server'
 
+import {generatePngFromDocument} from '~/lib/og.server'
 import {previewClient} from '~/sanity/client'
 
 export const OG_IMAGE_WIDTH = 1200
@@ -14,7 +14,9 @@ export const loader = async ({request}: LoaderArgs) => {
     return new Response('Bad request', {status: 400})
   }
 
-  const doc = await previewClient.fetch(`*[_id == $id][0]{ ..., artist-> }`, {id})
+  const doc = await previewClient.fetch(`*[_id == $id][0]{ ..., artist-> }`, {
+    id,
+  })
 
   // Reject requests for documents that don't exist
   if (!doc) {

@@ -1,17 +1,22 @@
 import {Resvg} from '@resvg/resvg-js'
+import type {SanityDocument} from '@sanity/client'
+import urlBuilder from '@sanity/image-url'
 import type {SatoriOptions} from 'satori'
 import satori from 'satori'
-import type {SanityDocument} from '@sanity/client'
 
 import {OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH} from '~/routes/resource.og'
-import urlBuilder from '@sanity/image-url'
 import {projectDetails} from '~/sanity/projectDetails'
 
 // Load the font from the "public" directory
 const fontSans = (baseUrl: string) =>
-  fetch(new URL(`${baseUrl}/fonts/Inter-ExtraBold.otf`)).then((res) => res.arrayBuffer())
+  fetch(new URL(`${baseUrl}/fonts/Inter-ExtraBold.otf`)).then((res) =>
+    res.arrayBuffer()
+  )
 
-export async function generatePngFromDocument(doc: SanityDocument, origin: string) {
+export async function generatePngFromDocument(
+  doc: SanityDocument,
+  origin: string
+) {
   const {title, artist, image} = doc
 
   // Prepare font data and settings for Satori
@@ -54,7 +59,9 @@ export async function generatePngFromDocument(doc: SanityDocument, origin: strin
         }}
       >
         <div style={{fontSize: 100}}>{title}</div>
-        {artist?.title ? <div style={{fontSize: 40}}>{artist.title}</div> : null}
+        {artist?.title ? (
+          <div style={{fontSize: 40}}>{artist.title}</div>
+        ) : null}
       </div>
       {image?.asset?._ref ? (
         <div

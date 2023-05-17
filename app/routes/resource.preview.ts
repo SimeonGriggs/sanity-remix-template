@@ -1,10 +1,10 @@
 import type {ActionFunction, LoaderArgs} from '@remix-run/node'
 import {json, redirect} from '@remix-run/node'
 import groq from 'groq'
+
 import {previewClient} from '~/sanity/client'
 import {getSecret, SECRET_ID} from '~/sanity/structure/getSecret'
-
-import {getSession, commitSession, destroySession} from '~/sessions'
+import {commitSession, destroySession, getSession} from '~/sessions'
 
 // A `POST` request to this route will exit preview mode
 export const action: ActionFunction = async ({request}) => {

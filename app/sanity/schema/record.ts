@@ -1,8 +1,8 @@
+import {ComposeIcon, MenuIcon, ThListIcon} from '@sanity/icons'
 import {Disc} from 'lucide-react'
-import {defineType, defineField} from 'sanity'
-import {MenuIcon, ComposeIcon, ThListIcon} from '@sanity/icons'
+import {defineField, defineType} from 'sanity'
 
-export default defineType({
+export const recordType = defineType({
   name: 'record',
   title: 'Record',
   type: 'document',

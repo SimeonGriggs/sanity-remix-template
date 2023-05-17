@@ -1,6 +1,6 @@
-import React from 'react'
 import type {SanityImageObjectStub} from '@sanity/asset-utils'
 import urlBuilder from '@sanity/image-url'
+import React from 'react'
 
 import {projectDetails} from '~/sanity/projectDetails'
 
@@ -9,7 +9,7 @@ type RecordCoverProps = {
   image?: SanityImageObjectStub
 }
 
-export default function RecordCover(props: RecordCoverProps) {
+export function RecordCover(props: RecordCoverProps) {
   const {title, image} = props
 
   return (

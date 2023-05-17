@@ -3,6 +3,7 @@ import {ClientOnly} from 'remix-utils'
 import {Studio} from 'sanity'
 
 import studio from '~/styles/studio.css'
+
 import {config} from '../../sanity.config'
 
 export const meta: V2_MetaFunction = () => [
