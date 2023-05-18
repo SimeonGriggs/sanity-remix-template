@@ -9,14 +9,13 @@ type LogoProps = {
 }
 
 export function Logo(props: LogoProps) {
-  const {
-    preview,
-    token,
-    query: homeQuery,
-    params: homeParams,
-  } = useRouteLoaderData(`root`) as SerializeFrom<typeof rootLoader>
+  const {query: homeQuery, params: homeParams} = useRouteLoaderData(
+    `root`
+  ) as SerializeFrom<typeof rootLoader>
 
-  if (props.siteTitle && typeof document !== `undefined`) {
+  const {siteTitle} = props
+
+  if (siteTitle && typeof document !== `undefined`) {
     console.info(
       `Create and publish "home" document in Sanity Studio at ${window.origin}/studio/desk/home`
     )
@@ -25,14 +24,13 @@ export function Logo(props: LogoProps) {
   return (
     <p className="text-lg font-bold tracking-tighter text-black dark:text-white lg:text-2xl">
       <PreviewWrapper
-        render={(previewData) => (
-          <Link to="/">{previewData?.siteTitle ?? `Sanity Remix`}</Link>
+        data={{siteTitle}}
+        render={({siteTitle}) => (
+          <Link to="/">{siteTitle ?? `Sanity Remix`}</Link>
         )}
         query={homeQuery}
         params={homeParams}
-      >
-        <Link to="/">{props.siteTitle ?? `Sanity Remix`}</Link>
-      </PreviewWrapper>
+      />
     </p>
   )
 }

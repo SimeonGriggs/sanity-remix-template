@@ -153,38 +153,11 @@ export default function RecordPage() {
   const {record, query, params} = useLoaderData<typeof loader>()
 
   return (
-    <PreviewWrapper render={Record} query={query} params={params}>
-      <Record {...record} />
-    </PreviewWrapper>
+    <PreviewWrapper
+      data={record}
+      render={Record}
+      query={query}
+      params={params}
+    />
   )
-}
-
-export function ErrorBoundary() {
-  const error = useRouteError()
-
-  if (isRouteErrorResponse(error)) {
-    return (
-      <div className="prose prose-xl mx-auto bg-red-50 p-5">
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
-        <p>{error.data}</p>
-      </div>
-    )
-  } else if (error instanceof Error) {
-    return (
-      <div className="prose prose-xl mx-auto bg-red-50 p-5">
-        <h1>Error</h1>
-        <p>{error.message}</p>
-        <p>The stack trace is:</p>
-        <pre>{error.stack}</pre>
-      </div>
-    )
-  } else {
-    return (
-      <div className="prose prose-xl mx-auto bg-red-50 p-5">
-        <h1>Unknown Error</h1>
-      </div>
-    )
-  }
 }

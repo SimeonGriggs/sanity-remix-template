@@ -6,7 +6,7 @@ import type {
 } from '@remix-run/node'
 import {json} from '@remix-run/node'
 import type {RouteMatch} from '@remix-run/react'
-import {useLoaderData, useRouteLoaderData} from '@remix-run/react'
+import {useLoaderData} from '@remix-run/react'
 import groq from 'groq'
 
 import {PreviewWrapper} from '~/components/PreviewWrapper'
@@ -14,6 +14,7 @@ import {Records} from '~/components/Records'
 import {Title} from '~/components/Title'
 import {deduplicateDrafts} from '~/lib/deduplicateDrafts'
 import {getPreviewToken} from '~/lib/getPreviewToken'
+import {useRootLoaderData} from '~/lib/useRootLoaderData'
 import type {loader as rootLoader} from '~/root'
 import {getClient} from '~/sanity/client'
 import tailwind from '~/tailwind.css'
@@ -67,30 +68,22 @@ export const loader = async ({request}: LoaderArgs) => {
 
 export default function Index() {
   const {records = [], query, params} = useLoaderData<typeof loader>()
-  const {
-    home,
-    query: homeQuery,
-    params: homeParams,
-  } = useRouteLoaderData(`root`) as SerializeFrom<typeof rootLoader>
+  const {home, query: homeQuery, params: homeParams} = useRootLoaderData()
 
   return (
     <div className="grid grid-cols-1 gap-6 md:gap-12">
       <PreviewWrapper
-        render={(previewData) =>
-          previewData?.title ? <Title>{previewData.title}</Title> : null
-        }
+        data={home}
+        render={(data) => (data?.title ? <Title>{data.title}</Title> : null)}
         query={homeQuery}
         params={homeParams}
-      >
-        {home?.title ? <Title>{home.title}</Title> : null}
-      </PreviewWrapper>
+      />
       <PreviewWrapper
-        render={(previewData) => <Records records={previewData} />}
+        data={records}
+        render={(data) => <Records records={data ?? []} />}
         query={query}
         params={params}
-      >
-        <Records records={records ?? []} />
-      </PreviewWrapper>
+      />
     </div>
   )
 }
