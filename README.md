@@ -1,9 +1,10 @@
 # Sanity Studio + Remix Template
 
-- [Sanity Docs](https://sanity.io/docs)
-- [Remix Docs](https://remix.run/docs)
+Batteries-included website template for a content-editable, live-preview enabled Remix website powered by Sanity Studio v3.
 
 ![home Page of a Remix website](./img/home-page-dark.png)
+
+[Sanity Docs](https://sanity.io/docs) | [Remix Docs](https://remix.run/docs)
 
 ## Installation
 

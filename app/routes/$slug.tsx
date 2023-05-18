@@ -7,17 +7,22 @@ import type {
 } from '@remix-run/node'
 import {json} from '@remix-run/node'
 import type {RouteMatch} from '@remix-run/react'
-import {isRouteErrorResponse, useLoaderData, useRouteError} from '@remix-run/react'
+import {useRouteLoaderData} from '@remix-run/react'
+import {
+  isRouteErrorResponse,
+  useLoaderData,
+  useRouteError,
+} from '@remix-run/react'
 import groq from 'groq'
-import {PreviewSuspense} from '@sanity/preview-kit'
 
-import styles from '~/styles/app.css'
-import Record, {PreviewRecord} from '~/components/Record'
-import {getClient, writeClient} from '~/sanity/client'
-import {recordZ} from '~/types/record'
-import {getSession} from '~/sessions'
+import {PreviewWrapper} from '~/components/PreviewWrapper'
+import {Record} from '~/components/Record'
+import {getPreviewToken} from '~/lib/getPreviewToken'
 import type {loader as rootLoader} from '~/root'
 import {OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH} from '~/routes/resource.og'
+import {client, writeClient} from '~/sanity/client'
+import styles from '~/styles/app.css'
+import {recordZ} from '~/types/record'
 
 export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]
@@ -28,7 +33,9 @@ export const meta: V2_MetaFunction = ({data, matches}) => {
     | {data: SerializeFrom<typeof rootLoader>}
     | undefined
   const home = rootData ? rootData.data.home : null
-  const title = [data?.record?.title, home?.siteTitle].filter(Boolean).join(' | ')
+  const title = [data?.record?.title, home?.siteTitle]
+    .filter(Boolean)
+    .join(' | ')
   const {ogImageUrl} = data
 
   return [
@@ -69,14 +76,20 @@ export const action: ActionFunction = async ({request}) => {
           .setIfMissing({likes: 0})
           .inc({likes: 1})
           .commit()
-          .then(({likes, dislikes}) => ({likes: likes ?? 0, dislikes: dislikes ?? 0}))
+          .then(({likes, dislikes}) => ({
+            likes: likes ?? 0,
+            dislikes: dislikes ?? 0,
+          }))
       case 'DISLIKE':
         return await writeClient
           .patch(id)
           .setIfMissing({dislikes: 0})
           .inc({dislikes: 1})
           .commit()
-          .then(({likes, dislikes}) => ({likes: likes ?? 0, dislikes: dislikes ?? 0}))
+          .then(({likes, dislikes}) => ({
+            likes: likes ?? 0,
+            dislikes: dislikes ?? 0,
+          }))
       default:
         return json({message: 'Invalid action'}, 400)
     }
@@ -87,9 +100,7 @@ export const action: ActionFunction = async ({request}) => {
 
 // Load the `record` document with this slug
 export const loader = async ({params, request}: LoaderArgs) => {
-  const session = await getSession(request.headers.get('Cookie'))
-  const token = session.get('token')
-  const preview = Boolean(token)
+  const {preview} = await getPreviewToken(request)
 
   const query = groq`*[_type == "record" && slug.current == $slug][0]{
     _id,
@@ -114,7 +125,7 @@ export const loader = async ({params, request}: LoaderArgs) => {
     }
   }`
 
-  const record = await getClient(preview)
+  const record = await client
     // Params from the loader uses the filename
     // $slug.tsx has the params { slug: 'hello-world' }
     .fetch(query, params)
@@ -133,56 +144,20 @@ export const loader = async ({params, request}: LoaderArgs) => {
   return json({
     record,
     ogImageUrl,
-    preview,
     query: preview ? query : null,
     params: preview ? params : null,
-    // Note: This makes the token available to the client if they have an active session
-    // This is useful to show live preview to unauthenticated users
-    // If you would rather not, replace token with `null` and it will rely on your Studio auth
-    token: preview ? token : null,
   })
 }
 
 export default function RecordPage() {
-  const {record, preview, query, params, token} = useLoaderData<typeof loader>()
+  const {record, query, params} = useLoaderData<typeof loader>()
 
-  if (preview && query && params && token) {
-    return (
-      <PreviewSuspense fallback={<Record {...record} />}>
-        <PreviewRecord query={query} params={params} token={token} />
-      </PreviewSuspense>
-    )
-  }
-
-  return <Record {...record} />
-}
-
-export function ErrorBoundary() {
-  const error = useRouteError()
-
-  if (isRouteErrorResponse(error)) {
-    return (
-      <div className="prose prose-xl mx-auto bg-red-50 p-5">
-        <h1>
-          {error.status} {error.statusText}
-        </h1>
-        <p>{error.data}</p>
-      </div>
-    )
-  } else if (error instanceof Error) {
-    return (
-      <div className="prose prose-xl mx-auto bg-red-50 p-5">
-        <h1>Error</h1>
-        <p>{error.message}</p>
-        <p>The stack trace is:</p>
-        <pre>{error.stack}</pre>
-      </div>
-    )
-  } else {
-    return (
-      <div className="prose prose-xl mx-auto bg-red-50 p-5">
-        <h1>Unknown Error</h1>
-      </div>
-    )
-  }
+  return (
+    <PreviewWrapper
+      data={record}
+      render={Record}
+      query={query}
+      params={params}
+    />
+  )
 }

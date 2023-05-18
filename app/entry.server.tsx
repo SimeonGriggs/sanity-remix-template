@@ -1,8 +1,8 @@
-import {PassThrough} from 'stream'
 import type {EntryContext} from '@remix-run/node'
 import {Response} from '@remix-run/node'
 import {RemixServer} from '@remix-run/react'
 import {renderToPipeableStream, renderToString} from 'react-dom/server'
+import {PassThrough} from 'stream'
 import {ServerStyleSheet} from 'styled-components'
 
 const ABORT_DELAY = 5000
@@ -22,7 +22,9 @@ export default function handleRequest(
     if (isStudioRoute) {
       const sheet = new ServerStyleSheet()
       let markup = renderToString(
-        sheet.collectStyles(<RemixServer context={remixContext} url={request.url} />)
+        sheet.collectStyles(
+          <RemixServer context={remixContext} url={request.url} />
+        )
       )
       const styles = sheet.getStyleTags()
       markup = markup.replace('__STYLES__', styles)

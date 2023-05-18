@@ -1,7 +1,7 @@
 import {Users} from 'lucide-react'
-import {defineType, defineField} from 'sanity'
+import {defineField, defineType} from 'sanity'
 
-export default defineType({
+export const artistType = defineType({
   name: 'artist',
   title: 'Artist',
   type: 'document',

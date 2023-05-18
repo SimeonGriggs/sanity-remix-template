@@ -1,11 +1,21 @@
-import type {LinksFunction, SerializeFrom, V2_MetaFunction} from '@remix-run/node'
+import type {
+  LinksFunction,
+  LoaderArgs,
+  SerializeFrom,
+  V2_MetaFunction,
+} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import type {RouteMatch} from '@remix-run/react'
-import {Link, useLoaderData, useRouteLoaderData} from '@remix-run/react'
+import {useLoaderData} from '@remix-run/react'
 import groq from 'groq'
+
+import {PreviewWrapper} from '~/components/PreviewWrapper'
+import {Records} from '~/components/Records'
+import {Title} from '~/components/Title'
+import {deduplicateDrafts} from '~/lib/deduplicateDrafts'
+import {getPreviewToken} from '~/lib/getPreviewToken'
+import {useRootLoaderData} from '~/lib/useRootLoaderData'
 import type {loader as rootLoader} from '~/root'
-import AlbumCover from '~/components/RecordCover'
-import Title from '~/components/Title'
 import {getClient} from '~/sanity/client'
 import tailwind from '~/tailwind.css'
 import {recordStubsZ} from '~/types/record'
@@ -25,72 +35,55 @@ export const meta: V2_MetaFunction = ({matches}) => {
   return [{title}]
 }
 
-export const loader = async () => {
-  const query = groq`*[_type == "record"][0...12]{
+export const loader = async ({request}: LoaderArgs) => {
+  const {preview} = await getPreviewToken(request)
+  const query = groq`*[_type == "record"][0...12]|order(title asc){
     _id,
+    _type,
     title,
     "slug": slug.current,
     "artist": artist->title,
     image
   }`
 
-  const records = await getClient()
+  const records = await getClient(preview)
     .fetch(query)
     .then((res) => (res ? recordStubsZ.parse(res) : null))
+
+  const recordsDeduped =
+    records?.length && preview
+      ? recordStubsZ.parse(deduplicateDrafts(records))
+      : records
 
   if (!records) {
     throw new Response('Not found', {status: 404})
   }
 
-  return json({records})
+  return json({
+    records: recordsDeduped,
+    query: preview ? query : null,
+    params: preview ? {} : null,
+  })
 }
 
 export default function Index() {
-  const {records} = useLoaderData<typeof loader>()
-  const {home} = useRouteLoaderData(`root`) as SerializeFrom<typeof rootLoader>
+  const {records = [], query, params} = useLoaderData<typeof loader>()
+  const {home, query: homeQuery, params: homeParams} = useRootLoaderData()
 
   return (
     <div className="grid grid-cols-1 gap-6 md:gap-12">
-      {home?.title ? <Title>{home.title}</Title> : null}
-      {records.length > 0 ? (
-        <ul className="grid grid-cols-2 gap-6 md:grid-cols-3 md:gap-12 lg:grid-cols-4">
-          {records.map((record) => (
-            <li key={record._id} className="group relative flex flex-col">
-              <div className="relative overflow-hidden transition-all duration-200 ease-in-out group-hover:scale-105 group-hover:opacity-90">
-                <div className="absolute z-0 h-48 w-[200%] translate-x-20 translate-y-20 -rotate-45 bg-gradient-to-b from-white to-transparent opacity-25 mix-blend-overlay transition-transform duration-500 ease-in-out group-hover:translate-x-10 group-hover:translate-y-10 group-hover:opacity-75" />
-                <AlbumCover image={record.image} title={record.title} />
-              </div>
-              <div className="flex flex-col">
-                {record?.slug ? (
-                  <Link
-                    prefetch="intent"
-                    to={record?.slug}
-                    className="text-bold pt-4 text-xl font-bold tracking-tighter transition-colors duration-100 ease-in-out hover:bg-cyan-400 hover:text-white md:text-3xl"
-                  >
-                    {record.title}
-                    {/* Makes this entire block clickable */}
-                    <span className="absolute inset-0" />
-                  </Link>
-                ) : (
-                  <span className="pt-4 text-xl font-bold tracking-tighter">{record.title}</span>
-                )}
-                {record?.artist ? (
-                  <span className="bg-black font-bold leading-none tracking-tighter text-white">
-                    {record.artist}
-                  </span>
-                ) : null}
-              </div>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div className="prose prose-xl mx-auto bg-green-50 p-4">
-          <p>No records found, yet!</p>
-          <p>
-            <a href="/studio">Log in to your Sanity Studio</a> and start creating content!
-          </p>
-        </div>
-      )}
+      <PreviewWrapper
+        data={home}
+        render={(data) => (data?.title ? <Title>{data.title}</Title> : null)}
+        query={homeQuery}
+        params={homeParams}
+      />
+      <PreviewWrapper
+        data={records}
+        render={(data) => <Records records={data ?? []} />}
+        query={query}
+        params={params}
+      />
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import {Home} from 'lucide-react'
-import {defineType, defineField} from 'sanity'
+import {defineField, defineType} from 'sanity'
 
-export default defineType({
+export const homeType = defineType({
   name: 'home',
   title: 'Home',
   type: 'document',

@@ -1,5 +1,5 @@
 import {useFetcher, useLocation} from '@remix-run/react'
-import {ThumbsUp, ThumbsDown} from 'lucide-react'
+import {ThumbsDown, ThumbsUp} from 'lucide-react'
 
 type LikeDislikeProps = {
   id: string
@@ -7,24 +7,32 @@ type LikeDislikeProps = {
   dislikes: number
 }
 
-export default function LikeDislike(props: LikeDislikeProps) {
+export function LikeDislike(props: LikeDislikeProps) {
   const {id} = props
   const fetcher = useFetcher()
   const location = useLocation()
 
   // Use fresh data returned from the ActionFunction, if a mutation has just finished
   const isDone = fetcher.state === 'idle' && fetcher.data !== null
-  const isWorking = fetcher.state === 'loading' || fetcher.state === 'submitting'
+  const isWorking =
+    fetcher.state === 'loading' || fetcher.state === 'submitting'
 
-  const likes = isDone && Number(fetcher?.data?.likes) ? fetcher.data.likes : props?.likes
+  const likes =
+    isDone && Number(fetcher?.data?.likes) ? fetcher.data.likes : props?.likes
   const optimisticLikes =
-    fetcher.formData && fetcher.formData.get('action') === 'LIKE' ? likes + 1 : likes
+    fetcher.formData && fetcher.formData.get('action') === 'LIKE'
+      ? likes + 1
+      : likes
   const displayLikes = optimisticLikes || likes
 
   const dislikes =
-    isDone && Number(fetcher?.data?.dislikes) ? fetcher.data.dislikes : props?.dislikes
+    isDone && Number(fetcher?.data?.dislikes)
+      ? fetcher.data.dislikes
+      : props?.dislikes
   const optimisticDislikes =
-    fetcher.formData && fetcher.formData.get('action') === 'DISLIKE' ? dislikes + 1 : dislikes
+    fetcher.formData && fetcher.formData.get('action') === 'DISLIKE'
+      ? dislikes + 1
+      : dislikes
   const displayDislikes = optimisticDislikes || dislikes
 
   return (

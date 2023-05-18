@@ -23,10 +23,16 @@ export async function getSecret(
   )
   if (!secret && createIfNotExists) {
     const newSecret =
-      createIfNotExists === true ? Math.random().toString(36).slice(2) : createIfNotExists()
+      createIfNotExists === true
+        ? Math.random().toString(36).slice(2)
+        : createIfNotExists()
     try {
       const patch = client.patch(id).set({secret: newSecret})
-      await client.transaction().createIfNotExists({_id: id, _type: id}).patch(patch).commit({tag})
+      await client
+        .transaction()
+        .createIfNotExists({_id: id, _type: id})
+        .patch(patch)
+        .commit({tag})
       return newSecret
     } catch (err) {
       console.error(
