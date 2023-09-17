@@ -5,7 +5,8 @@
     "build": "remix build",
     "dev": "remix dev",
     "lint": "eslint . --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "start": "dotenv -e .env.production remix-serve build"
   },
   "dependencies": {
     "@portabletext/react": "^3.0.0",
