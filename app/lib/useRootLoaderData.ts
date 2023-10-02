@@ -1,10 +1,9 @@
-import type {SerializeFrom} from '@remix-run/node'
 import {useRouteLoaderData} from '@remix-run/react'
 
-import type {loader as rootLoader} from '~/root'
+import type {Loader as RootLoader} from '~/root'
 
 export function useRootLoaderData() {
-  const data = useRouteLoaderData(`root`) as SerializeFrom<typeof rootLoader>
+  const data = useRouteLoaderData<RootLoader>(`root`)
 
-  return data
+  return data!
 }

@@ -1,4 +1,4 @@
-import type {LinksFunction, LoaderArgs} from '@remix-run/node'
+import type {LinksFunction, LoaderFunctionArgs} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {
   Links,
@@ -13,14 +13,13 @@ import {
 import groq from 'groq'
 import {z} from 'zod'
 
-import {ExitPreview} from '~/components/ExitPreview'
-import {Footer} from '~/components/Footer'
-import {Header} from '~/components/Header'
 import {themePreferenceCookie} from '~/cookies'
 import {getBodyClassNames} from '~/lib/getBodyClassNames'
 import {getPreviewToken} from '~/lib/getPreviewToken'
 import {getClient} from '~/sanity/client'
 import {homeZ} from '~/types/home'
+
+import {Layout} from './components/Layout'
 
 export const links: LinksFunction = () => {
   return [
@@ -42,7 +41,9 @@ export const links: LinksFunction = () => {
   ]
 }
 
-export const loader = async ({request}: LoaderArgs) => {
+export type Loader = typeof loader
+
+export const loader = async ({request}: LoaderFunctionArgs) => {
   const {token, preview} = await getPreviewToken(request)
 
   // Dark/light mode
@@ -65,24 +66,23 @@ export const loader = async ({request}: LoaderArgs) => {
   return json({
     home,
     preview,
-    query: preview ? query : token,
-    params: preview ? {} : null,
+    query: preview ? query : ``,
+    params: {},
     // Note: This makes the token available to the client if they have an active session
     // This is useful to show live preview to unauthenticated users
     // If you would rather not, replace token with `null` and it will rely on your Studio auth
     token: preview ? token : null,
     themePreference,
     ENV: {
-      SANITY_PROJECT_ID: process.env.SANITY_PROJECT_ID,
-      SANITY_DATASET: process.env.SANITY_DATASET,
-      SANITY_API_VERSION: process.env.SANITY_API_VERSION,
+      SANITY_PUBLIC_PROJECT_ID: process.env.SANITY_PUBLIC_PROJECT_ID,
+      SANITY_PUBLIC_DATASET: process.env.SANITY_PUBLIC_DATASET,
+      SANITY_PUBLIC_API_VERSION: process.env.SANITY_PUBLIC_API_VERSION,
     },
   })
 }
 
 export default function App() {
-  const {ENV, themePreference, home, preview} = useLoaderData<typeof loader>()
-
+  const {ENV, themePreference} = useLoaderData<typeof loader>()
   const {pathname} = useLocation()
   const isStudioRoute = pathname.startsWith('/studio')
   const bodyClassNames = getBodyClassNames(themePreference)
@@ -90,28 +90,20 @@ export default function App() {
   return (
     <html lang="en">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <link rel="icon" href="https://fav.farm/🤘" />
         <Links />
-        {isStudioRoute && typeof document === 'undefined' ? '__STYLES__' : null}
       </head>
       <body className={bodyClassNames}>
         {isStudioRoute ? (
           <Outlet />
         ) : (
-          <>
-            <Header siteTitle={home?.siteTitle} />
-            <div className="container mx-auto p-4 lg:p-12">
-              <Outlet />
-            </div>
-            <Footer />
-          </>
+          <Layout>
+            <Outlet />
+          </Layout>
         )}
-        {preview ? <ExitPreview /> : null}
         <ScrollRestoration />
         <script
           dangerouslySetInnerHTML={{

@@ -1,4 +1,4 @@
-import type {LoaderArgs} from '@remix-run/node'
+import type {LoaderFunctionArgs} from '@remix-run/node'
 
 import {generatePngFromDocument} from '~/lib/og.server'
 import {previewClient} from '~/sanity/client'
@@ -6,7 +6,7 @@ import {previewClient} from '~/sanity/client'
 export const OG_IMAGE_WIDTH = 1200
 export const OG_IMAGE_HEIGHT = 630
 
-export const loader = async ({request}: LoaderArgs) => {
+export const loader = async ({request}: LoaderFunctionArgs) => {
   const {origin, searchParams} = new URL(request.url)
   const id = searchParams.get('id')
 

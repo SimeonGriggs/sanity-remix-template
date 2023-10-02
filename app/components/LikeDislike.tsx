@@ -9,7 +9,10 @@ type LikeDislikeProps = {
 
 export function LikeDislike(props: LikeDislikeProps) {
   const {id} = props
-  const fetcher = useFetcher()
+  const fetcher = useFetcher<{
+    likes: number
+    dislikes: number
+  }>()
   const location = useLocation()
 
   // Use fresh data returned from the ActionFunction, if a mutation has just finished
@@ -18,7 +21,7 @@ export function LikeDislike(props: LikeDislikeProps) {
     fetcher.state === 'loading' || fetcher.state === 'submitting'
 
   const likes =
-    isDone && Number(fetcher?.data?.likes) ? fetcher.data.likes : props?.likes
+    isDone && fetcher.data ? Number(fetcher?.data?.likes) : props?.likes
   const optimisticLikes =
     fetcher.formData && fetcher.formData.get('action') === 'LIKE'
       ? likes + 1
@@ -26,9 +29,7 @@ export function LikeDislike(props: LikeDislikeProps) {
   const displayLikes = optimisticLikes || likes
 
   const dislikes =
-    isDone && Number(fetcher?.data?.dislikes)
-      ? fetcher.data.dislikes
-      : props?.dislikes
+    isDone && fetcher.data ? Number(fetcher?.data?.dislikes) : props?.dislikes
   const optimisticDislikes =
     fetcher.formData && fetcher.formData.get('action') === 'DISLIKE'
       ? dislikes + 1

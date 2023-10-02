@@ -1,6 +1,6 @@
-# Sanity Studio + Remix Template
+# Sanity Studio v3 + Remix v2 Template
 
-Batteries-included website template for a content-editable, live-preview enabled Remix website powered by Sanity Studio v3.
+Batteries-included website template for a content-editable, live-preview enabled Remix website powered by Sanity Studio.
 
 ![home Page of a Remix website](./img/home-page-dark.png)
 

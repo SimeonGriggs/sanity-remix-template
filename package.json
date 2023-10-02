@@ -17,19 +17,19 @@
     "@sanity/client": "^6.0.1",
     "@sanity/demo": "^1.0.2",
     "@sanity/image-url": "^1.0.1",
-    "@sanity/preview-kit": "^1.2.10",
+    "@sanity/preview-kit": "^3.1.6",
     "@sanity/vision": "^3.9.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "groq": "^3.10.1",
+    "isbot": "latest",
     "lucide-react": "^0.216.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "remix-utils": "^6.3.0",
-    "sanity": "^3.11.1",
-    "sanity-plugin-iframe-pane": "^2.1.1",
-    "satori": "^0.4.0",
-    "styled-components": "^5.3.6",
+    "sanity": "^3.16.7",
+    "sanity-plugin-iframe-pane": "^2.5.7",
+    "satori": "^0.4.14",
+    "styled-components": "^5.3.11",
     "zod": "^3.19.1"
   },
   "devDependencies": {
@@ -50,6 +50,6 @@
     "typescript": "^5.0.4"
   },
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   }
 }
