@@ -5,8 +5,13 @@ import {Title} from '~/components/Title'
 import {secondsToMinutes} from '~/lib/secondsToMinutes'
 import type {RecordDocument} from '~/types/record'
 
-export function Record(props: RecordDocument) {
-  const {_id, title, artist, content, image, tracks, likes, dislikes} = props
+type RecordProps = {
+  data: RecordDocument
+}
+
+export function Record(props: RecordProps) {
+  const {_id, title, artist, content, image, tracks, likes, dislikes} =
+    props.data
 
   return (
     <article className="flex flex-col items-start gap-4 lg:flex-row lg:gap-12">
@@ -16,7 +21,7 @@ export function Record(props: RecordDocument) {
       </div>
       <div className="flex flex-shrink-0 flex-col gap-4 md:gap-6 lg:w-2/3">
         <header>
-          {title ? <Title>{title}</Title> : null}
+          <Title data={{title}} />
           {artist ? (
             <h2 className="bg-black text-2xl font-bold tracking-tighter text-white">
               {artist}

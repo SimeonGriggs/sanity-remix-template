@@ -1,26 +1,20 @@
 import type {
   ActionFunction,
   LinksFunction,
-  LoaderArgs,
-  SerializeFrom,
-  V2_MetaFunction,
+  LoaderFunctionArgs,
+  MetaFunction,
 } from '@remix-run/node'
 import {json} from '@remix-run/node'
-import type {RouteMatch} from '@remix-run/react'
-import {useRouteLoaderData} from '@remix-run/react'
-import {
-  isRouteErrorResponse,
-  useLoaderData,
-  useRouteError,
-} from '@remix-run/react'
+import {useLoaderData} from '@remix-run/react'
+import {LiveQuery} from '@sanity/preview-kit/live-query'
 import groq from 'groq'
 
-import {PreviewWrapper} from '~/components/PreviewWrapper'
 import {Record} from '~/components/Record'
 import {getPreviewToken} from '~/lib/getPreviewToken'
-import type {loader as rootLoader} from '~/root'
+import {useRootLoaderData} from '~/lib/useRootLoaderData'
+import type {Loader as RootLoader} from '~/root'
 import {OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH} from '~/routes/resource.og'
-import {client, writeClient} from '~/sanity/client'
+import {client, getClient, writeClient} from '~/sanity/client'
 import styles from '~/styles/app.css'
 import {recordZ} from '~/types/record'
 
@@ -28,15 +22,18 @@ export const links: LinksFunction = () => {
   return [{rel: 'stylesheet', href: styles}]
 }
 
-export const meta: V2_MetaFunction = ({data, matches}) => {
-  const rootData = matches.find((match: RouteMatch) => match.id === `root`) as
-    | {data: SerializeFrom<typeof rootLoader>}
-    | undefined
-  const home = rootData ? rootData.data.home : null
+export const meta: MetaFunction<
+  typeof loader,
+  {
+    root: RootLoader
+  }
+> = ({data, matches}) => {
+  const rootData = matches.find((match) => match.id === `root`)?.data
+  const home = rootData ? rootData.home : null
   const title = [data?.record?.title, home?.siteTitle]
     .filter(Boolean)
     .join(' | ')
-  const {ogImageUrl} = data
+  const ogImageUrl = data ? data.ogImageUrl : null
 
   return [
     {title},
@@ -99,7 +96,7 @@ export const action: ActionFunction = async ({request}) => {
 }
 
 // Load the `record` document with this slug
-export const loader = async ({params, request}: LoaderArgs) => {
+export const loader = async ({params, request}: LoaderFunctionArgs) => {
   const {preview} = await getPreviewToken(request)
 
   const query = groq`*[_type == "record" && slug.current == $slug][0]{
@@ -125,7 +122,7 @@ export const loader = async ({params, request}: LoaderArgs) => {
     }
   }`
 
-  const record = await client
+  const record = await getClient(preview)
     // Params from the loader uses the filename
     // $slug.tsx has the params { slug: 'hello-world' }
     .fetch(query, params)
@@ -144,20 +141,23 @@ export const loader = async ({params, request}: LoaderArgs) => {
   return json({
     record,
     ogImageUrl,
-    query: preview ? query : null,
-    params: preview ? params : null,
+    query: preview ? query : ``,
+    params: preview ? params : {},
   })
 }
 
 export default function RecordPage() {
   const {record, query, params} = useLoaderData<typeof loader>()
+  const rootData = useRootLoaderData()
 
   return (
-    <PreviewWrapper
-      data={record}
-      render={Record}
+    <LiveQuery
+      enabled={Boolean(rootData?.preview)}
       query={query}
       params={params}
-    />
+      initialData={record}
+    >
+      <Record data={record} />
+    </LiveQuery>
   )
 }

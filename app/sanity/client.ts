@@ -10,6 +10,7 @@ export const client = createClient({
 export const previewClient = createClient({
   ...projectDetails(),
   useCdn: false,
+  perspective: 'previewDrafts',
   token: process.env.SANITY_READ_TOKEN,
 })
 

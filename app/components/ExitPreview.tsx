@@ -1,5 +1,3 @@
-import React from 'react'
-
 export function ExitPreview() {
   return (
     <div className="pointer-events-none fixed inset-0 flex h-screen w-screen items-end justify-center">

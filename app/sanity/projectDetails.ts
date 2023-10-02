@@ -1,9 +1,9 @@
 declare global {
   interface Window {
     ENV: {
-      SANITY_PROJECT_ID: string
-      SANITY_DATASET: string
-      SANITY_API_VERSION: string
+      SANITY_PUBLIC_PROJECT_ID: string
+      SANITY_PUBLIC_DATASET: string
+      SANITY_PUBLIC_API_VERSION: string
     }
   }
 }
@@ -15,12 +15,15 @@ type ProjectDetails = {
 }
 
 export const projectDetails = (): ProjectDetails => {
-  const {SANITY_PROJECT_ID, SANITY_DATASET, SANITY_API_VERSION} =
-    typeof document === 'undefined' ? process.env : window.ENV
+  const {
+    SANITY_PUBLIC_PROJECT_ID,
+    SANITY_PUBLIC_DATASET,
+    SANITY_PUBLIC_API_VERSION,
+  } = typeof document === 'undefined' ? process.env : window.ENV
 
   return {
-    projectId: SANITY_PROJECT_ID ?? `pnkijp0b`,
-    dataset: SANITY_DATASET ?? `remix`,
-    apiVersion: SANITY_API_VERSION ?? `2022-09-19`,
+    projectId: SANITY_PUBLIC_PROJECT_ID ?? ``,
+    dataset: SANITY_PUBLIC_DATASET ?? ``,
+    apiVersion: SANITY_PUBLIC_API_VERSION ?? `2023-10-01`,
   }
 }

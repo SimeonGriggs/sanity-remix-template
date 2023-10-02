@@ -1,4 +1,4 @@
-import type {ActionFunction, LoaderArgs} from '@remix-run/node'
+import type {ActionFunction, LoaderFunctionArgs} from '@remix-run/node'
 import {json, redirect} from '@remix-run/node'
 import groq from 'groq'
 
@@ -27,7 +27,7 @@ const PREVIEW_TYPES = [`record`, `home`]
 // It will check if the "token" document in the dataset
 // Is the same as the one passed in the query string
 // If so, it will write the Viewer Token to the session
-export const loader = async ({request}: LoaderArgs) => {
+export const loader = async ({request}: LoaderFunctionArgs) => {
   const {token, projectId} = previewClient.config()
 
   if (!token) {

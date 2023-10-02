@@ -1,21 +1,12 @@
-import type {SerializeFrom} from '@remix-run/node'
-import {Link, useRouteLoaderData} from '@remix-run/react'
+import {Link} from '@remix-run/react'
 
-import {PreviewWrapper} from '~/components/PreviewWrapper'
-import type {loader as rootLoader} from '~/root'
+import {useRootLoaderData} from '~/lib/useRootLoaderData'
 
-type LogoProps = {
-  siteTitle?: string | null
-}
+export function Logo() {
+  const rootData = useRootLoaderData()
+  const siteTitle = rootData?.home?.siteTitle ?? `Sanity Remix`
 
-export function Logo(props: LogoProps) {
-  const {query: homeQuery, params: homeParams} = useRouteLoaderData(
-    `root`
-  ) as SerializeFrom<typeof rootLoader>
-
-  const {siteTitle} = props
-
-  if (siteTitle && typeof document !== `undefined`) {
+  if (!siteTitle && typeof document !== `undefined`) {
     console.info(
       `Create and publish "home" document in Sanity Studio at ${window.origin}/studio/desk/home`
     )
@@ -23,14 +14,7 @@ export function Logo(props: LogoProps) {
 
   return (
     <p className="text-lg font-bold tracking-tighter text-black dark:text-white lg:text-2xl">
-      <PreviewWrapper
-        data={{siteTitle}}
-        render={({siteTitle}) => (
-          <Link to="/">{siteTitle ?? `Sanity Remix`}</Link>
-        )}
-        query={homeQuery}
-        params={homeParams}
-      />
+      <Link to="/">{siteTitle ?? `Sanity Remix`}</Link>
     </p>
   )
 }
