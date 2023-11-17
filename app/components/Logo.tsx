@@ -1,14 +1,13 @@
 import {Link} from '@remix-run/react'
 
-import {useRootLoaderData} from '~/lib/useRootLoaderData'
+import type {LogoProps} from '~/types/home'
 
-export function Logo() {
-  const rootData = useRootLoaderData()
-  const siteTitle = rootData?.home?.siteTitle ?? `Sanity Remix`
+export function Logo(props: LogoProps) {
+  const {siteTitle} = props.home ?? {}
 
   if (!siteTitle && typeof document !== `undefined`) {
     console.info(
-      `Create and publish "home" document in Sanity Studio at ${window.origin}/studio/desk/home`
+      `Create and publish "home" document in Sanity Studio at ${window.origin}/studio/desk/home`,
     )
   }
 

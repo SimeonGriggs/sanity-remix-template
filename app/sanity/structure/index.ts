@@ -1,12 +1,7 @@
 import {Disc, Home, Tags, Users} from 'lucide-react'
-import type {SanityDocument} from 'sanity'
 import type {DefaultDocumentNodeResolver, StructureResolver} from 'sanity/desk'
-import Iframe from 'sanity-plugin-iframe-pane'
 
 import OGPreview from '~/sanity/components/OGPreview'
-import {projectDetails} from '~/sanity/projectDetails'
-import type {SanityDocumentWithSlug} from '~/sanity/structure/resolvePreviewUrl'
-import {resolvePreviewUrl} from '~/sanity/structure/resolvePreviewUrl'
 
 import {resolveOGUrl} from './resolveOGUrl'
 
@@ -31,30 +26,20 @@ export const structure: StructureResolver = (S) =>
 
 export const defaultDocumentNode: DefaultDocumentNodeResolver = (
   S,
-  {schemaType, getClient}
+  {schemaType, documentId},
 ) => {
-  const {apiVersion} = projectDetails()
-  const client = getClient({apiVersion})
-
-  const previewView = S.view
-    .component(Iframe)
-    .options({
-      url: (doc: SanityDocumentWithSlug) => resolvePreviewUrl(doc, client),
-      reload: {button: true},
-    })
-    .title('Preview')
   const OGPreviewView = S.view
     .component(OGPreview)
     .options({
-      url: (doc: SanityDocument) => resolveOGUrl(doc),
+      url: resolveOGUrl(documentId),
     })
     .title('OG Preview')
 
   switch (schemaType) {
     case `home`:
-      return S.document().views([S.view.form(), previewView])
+      return S.document().views([S.view.form()])
     case `record`:
-      return S.document().views([S.view.form(), previewView, OGPreviewView])
+      return S.document().views([S.view.form(), OGPreviewView])
     default:
       return S.document().views([S.view.form()])
   }

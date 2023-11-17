@@ -1,12 +1,10 @@
 import type {SanityClient, SanityDocument, Slug} from 'sanity'
 
-import {getSecret, SECRET_ID} from '~/sanity/structure/getSecret'
-
 export type SanityDocumentWithSlug = SanityDocument & {slug: Slug}
 
 export async function resolvePreviewUrl(
   doc: SanityDocumentWithSlug,
-  client: SanityClient
+  client: SanityClient,
 ) {
   // Studio is a client-side only app so window should be available
   if (typeof window === 'undefined') {
@@ -14,17 +12,16 @@ export async function resolvePreviewUrl(
   }
 
   const previewUrl = new URL('/resource/preview', window.origin)
-  previewUrl.searchParams.set('type', doc._type)
 
   if (doc?.slug?.current) {
     previewUrl.searchParams.set('slug', doc.slug.current)
   }
 
-  const secret = await getSecret(client, SECRET_ID, true)
+  // const secret = await getSecret(client, SECRET_ID, true)
 
-  if (secret) {
-    previewUrl.searchParams.set('secret', secret)
-  }
+  // if (secret) {
+  // previewUrl.searchParams.set('secret', secret)
+  // }
 
   return previewUrl.toString()
 }

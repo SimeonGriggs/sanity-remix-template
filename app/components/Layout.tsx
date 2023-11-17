@@ -1,26 +1,20 @@
-import {type PropsWithChildren, Suspense} from 'react'
+import {type PropsWithChildren} from 'react'
 
-import {useRootLoaderData} from '~/lib/useRootLoaderData'
+import {Footer} from '~/components/Footer'
+import {Header} from '~/components/Header'
+import type {LogoProps} from '~/types/home'
 
-import {Footer} from './Footer'
-import {Header} from './Header'
-import {PreviewProvider} from './PreviewProvider'
+import {Title} from './Title'
 
-export function Layout(props: PropsWithChildren) {
-  const rootData = useRootLoaderData()
-  const children = (
+export function Layout({home, children}: PropsWithChildren<LogoProps>) {
+  return (
     <>
-      <Header />
-      <div className="container mx-auto p-4 lg:p-12">{props.children}</div>
-      <Footer />
+      <Header home={home} />
+      <div className="container mx-auto p-4 lg:p-12 grid grid-cols-1 gap-4 lg:gap-12">
+        {home?.title ? <Title>{home?.title}</Title> : null}
+        {children}
+      </div>
+      <Footer home={home} />
     </>
-  )
-
-  return rootData.preview ? (
-    <Suspense fallback={children}>
-      <PreviewProvider>{children}</PreviewProvider>
-    </Suspense>
-  ) : (
-    children
   )
 }

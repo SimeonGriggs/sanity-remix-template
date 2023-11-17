@@ -9,10 +9,10 @@ const main = ({rootDirectory}) => {
   })
 
   console.log(
-    `Complete your ".env" file with values from ".env.template" to setup live preview and mutations.`
+    `Complete your ".env" file with values from ".env.template" to setup live preview and mutations.`,
   )
   console.log(
-    `Visit /studio in your application to load Sanity Studio and begin creating content`
+    `Visit /studio in your application to load Sanity Studio and begin creating content`,
   )
 }
 

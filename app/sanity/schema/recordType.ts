@@ -47,6 +47,10 @@ export const recordType = defineType({
       group: 'details',
     }),
     defineField({
+      name: 'releaseDate',
+      type: 'datetime',
+    }),
+    defineField({
       name: 'likes',
       type: 'number',
       readOnly: true,
@@ -81,6 +85,7 @@ export const recordType = defineType({
       type: 'image',
       options: {hotspot: true},
       group: 'editorial',
+      fields: [defineField({name: 'alt', type: 'string'})],
     }),
     defineField({
       name: 'tracks',
@@ -92,7 +97,7 @@ export const recordType = defineType({
   preview: {
     select: {
       title: 'title',
-      artist: 'artist.title',
+      artist: 'artist.name',
       media: 'image',
     },
     prepare({title, artist, media}) {

@@ -1,7 +1,7 @@
 import type {LoaderFunctionArgs} from '@remix-run/node'
 
 import {generatePngFromDocument} from '~/lib/og.server'
-import {previewClient} from '~/sanity/client'
+import {previewClient} from '~/sanity/client.server'
 
 export const OG_IMAGE_WIDTH = 1200
 export const OG_IMAGE_HEIGHT = 630

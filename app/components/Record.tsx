@@ -15,13 +15,15 @@ export function Record(props: RecordProps) {
 
   return (
     <article className="flex flex-col items-start gap-4 lg:flex-row lg:gap-12">
-      <div className="grid-gap-4 mx-auto grid max-w-[70vw] grid-cols-1">
-        <RecordCover image={image} title={title} />
+      <div className="grid-gap-4 grid max-w-[70vw] grid-cols-1">
+        <div className="max-w-sm">
+          <RecordCover image={image} />
+        </div>
         <LikeDislike id={_id} likes={likes} dislikes={dislikes} />
       </div>
-      <div className="flex flex-shrink-0 flex-col gap-4 md:gap-6 lg:w-2/3">
+      <div className="flex flex-shrink-0 flex-col gap-4 lg:gap-6 lg:w-2/3">
         <header>
-          <Title data={{title}} />
+          <Title>{title}</Title>
           {artist ? (
             <h2 className="bg-black text-2xl font-bold tracking-tighter text-white">
               {artist}

@@ -8,21 +8,25 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useLocation,
 } from '@remix-run/react'
-import groq from 'groq'
+import {lazy, Suspense} from 'react'
 import {z} from 'zod'
 
+import {Layout} from '~/components/Layout'
 import {themePreferenceCookie} from '~/cookies'
 import {getBodyClassNames} from '~/lib/getBodyClassNames'
-import {getPreviewToken} from '~/lib/getPreviewToken'
-import {getClient} from '~/sanity/client'
+import {useQuery} from '~/sanity/loader'
+import {loadQuery} from '~/sanity/loader.server'
+import {HOME_QUERY} from '~/sanity/queries'
+import styles from '~/tailwind.css'
+import type {HomeDocument} from '~/types/home'
 import {homeZ} from '~/types/home'
 
-import {Layout} from './components/Layout'
+const VisualEditing = lazy(() => import('~/components/VisualEditing'))
 
 export const links: LinksFunction = () => {
   return [
+    {rel: 'stylesheet', href: styles},
     {rel: 'preconnect', href: 'https://cdn.sanity.io'},
     {
       rel: 'preconnect',
@@ -44,8 +48,6 @@ export const links: LinksFunction = () => {
 export type Loader = typeof loader
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
-  const {token, preview} = await getPreviewToken(request)
-
   // Dark/light mode
   const cookieHeader = request.headers.get('Cookie')
   const cookie = (await themePreferenceCookie.parse(cookieHeader)) || {}
@@ -54,38 +56,37 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
     .optional()
     .parse(cookie.themePreference)
 
-  // Sanity content throughout the site
-  const query = groq`*[_id == "home"][0]{
-    title,
-    siteTitle
-  }`
-  const home = await getClient(preview)
-    .fetch(query)
-    .then((res) => (res ? homeZ.parse(res) : null))
+  const isStudioRoute = new URL(request.url).pathname.startsWith('/studio')
+  const bodyClassNames = getBodyClassNames(themePreference)
+
+  // Sanity content reused throughout the site
+  const initial = await loadQuery<HomeDocument>(HOME_QUERY).then((res) => ({
+    ...res,
+    data: res.data ? homeZ.parse(res.data) : null,
+  }))
 
   return json({
-    home,
-    preview,
-    query: preview ? query : ``,
+    initial,
+    query: HOME_QUERY,
     params: {},
-    // Note: This makes the token available to the client if they have an active session
-    // This is useful to show live preview to unauthenticated users
-    // If you would rather not, replace token with `null` and it will rely on your Studio auth
-    token: preview ? token : null,
-    themePreference,
+    bodyClassNames,
+    isStudioRoute,
     ENV: {
-      SANITY_PUBLIC_PROJECT_ID: process.env.SANITY_PUBLIC_PROJECT_ID,
-      SANITY_PUBLIC_DATASET: process.env.SANITY_PUBLIC_DATASET,
-      SANITY_PUBLIC_API_VERSION: process.env.SANITY_PUBLIC_API_VERSION,
+      SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID,
+      SANITY_STUDIO_DATASET: process.env.SANITY_STUDIO_DATASET,
+      SANITY_STUDIO_API_VERSION: process.env.SANITY_STUDIO_API_VERSION,
+      SANITY_STUDIO_URL: process.env.SANITY_STUDIO_URL,
+      SANITY_STUDIO_USE_STEGA: process.env.SANITY_STUDIO_USE_STEGA,
     },
   })
 }
 
 export default function App() {
-  const {ENV, themePreference} = useLoaderData<typeof loader>()
-  const {pathname} = useLocation()
-  const isStudioRoute = pathname.startsWith('/studio')
-  const bodyClassNames = getBodyClassNames(themePreference)
+  const {initial, query, params, bodyClassNames, isStudioRoute, ENV} =
+    useLoaderData<typeof loader>()
+  const {data, loading} = useQuery<typeof initial.data>(query, params, {
+    initial,
+  })
 
   return (
     <html lang="en">
@@ -100,7 +101,7 @@ export default function App() {
         {isStudioRoute ? (
           <Outlet />
         ) : (
-          <Layout>
+          <Layout home={loading || !data ? null : data}>
             <Outlet />
           </Layout>
         )}
@@ -110,6 +111,11 @@ export default function App() {
             __html: `window.ENV = ${JSON.stringify(ENV)}`,
           }}
         />
+        {ENV.SANITY_STUDIO_USE_STEGA ? (
+          <Suspense>
+            <VisualEditing />
+          </Suspense>
+        ) : null}
         <Scripts />
         <LiveReload />
       </body>
