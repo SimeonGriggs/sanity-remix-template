@@ -21,7 +21,7 @@ export const recordZ = z.object({
         _key: z.string(),
         title: z.string().nullable(),
         duration: z.number().nullable(),
-      })
+      }),
     )
     .nullable(),
   // ...being a touch lazy here, these could be more strongly typed
@@ -37,6 +37,7 @@ export const recordStubZ = z.object({
   _id: z.string(),
   _type: z.string(),
   title: z.string().nullable(),
+  releaseDate: z.string().nullable(),
   slug: z.string().nullable(),
   artist: z.string().nullable(),
   image: z.any().nullable(),

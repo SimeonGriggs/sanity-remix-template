@@ -1,8 +1,8 @@
-# Sanity Studio v3 + Remix v2 Template
+# Full-featured Sanity Studio + Remix Template
 
-Batteries-included website template for a content-editable, live-preview enabled Remix website powered by Sanity Studio.
+Batteries-included website template for a content-editable, interactive live-preview enabled Remix website powered by Sanity Studio.
 
-![home Page of a Remix website](./img/home-page-dark.png)
+![Presentation tool in Sanity Studio](./img/sanity-remix-presentation.png)
 
 [Sanity Docs](https://sanity.io/docs) | [Remix Docs](https://remix.run/docs)
 
@@ -22,7 +22,16 @@ npm run dev
 
 Now open the Studio at [localhost:3000/studio](http://localhost:3000/studio) and start authoring content!
 
-![Sanity Studio v3](./img/studio-page-dark.png)
+### Seed the Studio with fake content
+
+Your new Sanity project starts with no content. A script is included in this repo [using Faker to generate content](https://www.sanity.io/guides/create-fake-demo-content-with-sanity-cli) to start with.
+
+> [!WARNING]  
+> This script will **delete** existing content in the dataset every time it is run. It is intended for use in a new dataset only.
+
+```sh
+npx sanity@latest exec ./scripts/createData.ts --with-user-token
+```
 
 ## Includes
 
@@ -32,11 +41,11 @@ Useful Sanity examples with a light sprinkling of opinionated patterns
 
 Access to Sanity Studio v3 from within the Remix application itself. Now the whole Studio is a component, it lives at the `/studio` route.
 
-### Live preview
+### Interactive live preview inside Presentation
 
-Powered by [@sanity/preview-kit](https://github.com/sanity-io/preview-kit)
+Powered by [Presentation](https://www.sanity.io/docs/presentation) and [@sanity/react-loader](https://www.sanity.io/docs/react-loader)
 
-Requires a token with **viewer** permissions in `.env`, so that live preview links can be shared with guests. Uses an auto-generated, short-lived secret in the dataset to authenticate users to use the token in their session.
+Authenticated users inside Sanity Studio can use the Presentation tool to browse through the website and target specific fields to edit - and see changes in real-time.
 
 ### Pre-configured Studio
 
@@ -46,7 +55,7 @@ The Studio has been pre-configured with a basic "Record Collection" schema, as w
 
 Powered by [@portabletext/react](https://github.com/portabletext/react-portabletext)
 
-This component allows for the customisation and extension of how Portable Text is rendered within your app. The Rich Text field in Sanity is an array of objects. Content as data!
+This component allows for the customization and extension of how Portable Text is rendered within your app. The Rich Text field in Sanity is an array of objects. Content as data!
 
 ### Image URL builder
 
@@ -58,7 +67,7 @@ The `<RecordCover />` component has an example of how to generate a full Sanity 
 
 Powered by [@sanity/ui](https://www.sanity.io/ui)
 
-Creating "decorated" inputs has never been easier than in Sanity Studio v3. `./app/sanity/components/Duration.tsx` is a 13-line example where a `number` field type to store duration as seconds can also be visualised in minutes. Minimal developer effort, maximum author impact.
+Creating "decorated" inputs has never been easier than in Sanity Studio v3. `./app/sanity/components/Duration.tsx` is a 13-line example where a `number` field type to store duration as seconds can also be visualized in minutes. Minimal developer effort, maximum author impact.
 
 ### Sanity Client mutation
 

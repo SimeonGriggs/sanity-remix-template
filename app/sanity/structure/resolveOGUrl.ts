@@ -1,14 +1,12 @@
-import type {SanityDocument} from 'sanity'
-
-export function resolveOGUrl(doc: SanityDocument) {
+export function resolveOGUrl(documentId?: string) {
   // Studio is a client-side only app so window should be available
-  if (typeof window === 'undefined') {
+  if (!documentId || typeof document === 'undefined') {
     return ''
   }
 
   const ogUrl = new URL('/resource/og', window.origin)
 
-  ogUrl.searchParams.set('id', doc._id)
+  ogUrl.searchParams.set('id', documentId)
 
   return ogUrl.toString()
 }

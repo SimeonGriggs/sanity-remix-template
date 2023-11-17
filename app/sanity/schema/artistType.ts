@@ -8,7 +8,7 @@ export const artistType = defineType({
   icon: Users,
   fields: [
     defineField({
-      name: 'title',
+      name: 'name',
       type: 'string',
     }),
     defineField({

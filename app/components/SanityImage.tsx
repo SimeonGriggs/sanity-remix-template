@@ -2,14 +2,13 @@ import type {PortableTextComponentProps} from '@portabletext/react'
 import type {SanityImageSource} from '@sanity/asset-utils'
 import {getImageDimensions} from '@sanity/asset-utils'
 import urlBuilder from '@sanity/image-url'
-import React from 'react'
 
-import {projectDetails} from '~/sanity/projectDetails'
+import {dataset, projectId} from '~/sanity/projectDetails'
 
 type SanityImageAssetWithAlt = SanityImageSource & {alt?: string}
 
 export function SanityImage(
-  props: PortableTextComponentProps<SanityImageAssetWithAlt>
+  props: PortableTextComponentProps<SanityImageAssetWithAlt>,
 ) {
   const {value, isInline} = props
   const {width, height} = getImageDimensions(value)
@@ -17,7 +16,7 @@ export function SanityImage(
   return (
     <img
       className="not-prose h-auto w-full"
-      src={urlBuilder(projectDetails())
+      src={urlBuilder({projectId, dataset})
         .image(value)
         .width(isInline ? 100 : 800)
         .fit('max')

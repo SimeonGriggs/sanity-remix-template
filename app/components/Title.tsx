@@ -1,13 +1,13 @@
-type TitleProps = {
-  data: {
-    title?: string | null
-  } | null
-}
+import type {PropsWithChildren} from 'react'
 
-export function Title({data}: TitleProps) {
-  return data?.title ? (
-    <h1 className="text-bold max-w-4xl text-4xl font-bold tracking-tighter md:text-4xl lg:text-5xl xl:text-8xl">
-      {data.title}
+export function Title(props: PropsWithChildren) {
+  return (
+    <h1
+      className="text-bold max-w-4xl text-4xl font-bold tracking-tighter md:text-4xl lg:text-5xl xl:text-8xl"
+      // @ts-expect-error
+      style={{textWrap: 'balance'}}
+    >
+      {props.children}
     </h1>
-  ) : null
+  )
 }

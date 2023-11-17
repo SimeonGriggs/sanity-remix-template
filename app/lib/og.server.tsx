@@ -5,17 +5,17 @@ import type {SatoriOptions} from 'satori'
 import satori from 'satori'
 
 import {OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH} from '~/routes/resource.og'
-import {projectDetails} from '~/sanity/projectDetails'
+import {dataset, projectId} from '~/sanity/projectDetails'
 
 // Load the font from the "public" directory
 const fontSans = (baseUrl: string) =>
   fetch(new URL(`${baseUrl}/fonts/Inter-ExtraBold.otf`)).then((res) =>
-    res.arrayBuffer()
+    res.arrayBuffer(),
   )
 
 export async function generatePngFromDocument(
   doc: SanityDocument,
-  origin: string
+  origin: string,
 ) {
   const {title, artist, image} = doc
 
@@ -74,7 +74,7 @@ export async function generatePngFromDocument(
         >
           <img
             alt=""
-            src={urlBuilder(projectDetails())
+            src={urlBuilder({projectId, dataset})
               // @ts-ignore
               .image(image.asset._ref)
               .height(800)
@@ -88,7 +88,7 @@ export async function generatePngFromDocument(
         </div>
       ) : null}
     </div>,
-    options
+    options,
   )
 
   // Convert to PNG with resvg
