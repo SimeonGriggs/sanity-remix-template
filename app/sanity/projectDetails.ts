@@ -45,7 +45,8 @@ export const frontendUrl =
     ? process.env.VERCEL
       ? process.env.VERCEL_ENV !== 'production'
         ? `https://${process.env.VERCEL_BRANCH_URL}`
-        : `https://www.your-production-domain.com`
+        : // TODO: Replace with YOUR production domain
+          `https://sanity-remix-template.sanity.build`
       : process.env.SANITY_FRONTEND_URL!
     : window.ENV.SANITY_FRONTEND_URL!
 export const studioUrl =
