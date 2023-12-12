@@ -3,19 +3,20 @@ import {visionTool} from '@sanity/vision'
 import {defineConfig} from 'sanity'
 import {deskTool} from 'sanity/desk'
 
-import {dataset, projectId} from '~/sanity/projectDetails'
+import {locate} from '~/sanity/presentation/locate'
+import {frontendUrl, projectDetails} from '~/sanity/projectDetails'
 import schema from '~/sanity/schema'
 import {defaultDocumentNode, structure} from '~/sanity/structure'
 
 export const config = defineConfig({
-  projectId,
-  dataset,
+  ...projectDetails(),
   name: 'sanity-remix',
   title: 'Sanity Remix',
   plugins: [
     deskTool({structure, defaultDocumentNode}),
     presentationTool({
-      previewUrl: 'http://localhost:3000',
+      previewUrl: frontendUrl,
+      locate,
     }),
     visionTool(),
   ],

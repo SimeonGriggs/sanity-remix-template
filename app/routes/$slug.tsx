@@ -23,8 +23,10 @@ export const meta: MetaFunction<
   }
 > = ({data, matches}) => {
   const rootData = matches.find((match) => match.id === `root`)?.data
-  const home = rootData ? rootData.data : null
-  const title = [data?.data?.title, home?.siteTitle].filter(Boolean).join(' | ')
+  const home = rootData ? rootData.initial.data : null
+  const title = [data?.initial?.data?.title, home?.siteTitle]
+    .filter(Boolean)
+    .join(' | ')
   const ogImageUrl = data ? data.ogImageUrl : null
 
   return [

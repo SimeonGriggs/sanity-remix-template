@@ -1,6 +1,6 @@
-import {client} from '~/sanity/client'
-import {queryStore} from '~/sanity/loader'
+import {stegaClient} from '~/sanity/client'
+import {loadQuery, setServerClient} from '~/sanity/loader'
 
-export const {loadQuery} = queryStore
+setServerClient(stegaClient)
 
-queryStore.setServerClient(client)
+export {loadQuery}

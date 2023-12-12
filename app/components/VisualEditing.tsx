@@ -3,13 +3,16 @@ import type {HistoryUpdate} from '@sanity/overlays'
 import {enableOverlays} from '@sanity/overlays'
 import {useEffect, useRef} from 'react'
 
-import {client} from '~/sanity/client'
+import {stegaClient} from '~/sanity/client'
 import {useLiveMode} from '~/sanity/loader'
-import {studioUrl} from '~/sanity/projectDetails'
+
+type VisualEditingProps = {
+  studioUrl: string
+}
 
 // Default export required for React Lazy loading
 // eslint-disable-next-line import/no-default-export
-export default function VisualEditing() {
+export default function VisualEditing({studioUrl}: VisualEditingProps) {
   const navigateRemix = useNavigate()
   const navigateComposerRef = useRef<null | ((update: HistoryUpdate) => void)>(
     null,
@@ -38,8 +41,14 @@ export default function VisualEditing() {
         },
       })
       return () => disable()
+    } else {
+      if (typeof document !== 'undefined') {
+        console.log(
+          `Stega is enabled but Visual Editing is configured to only display in an iframe.`,
+        )
+      }
     }
-  }, [navigateRemix])
+  }, [navigateRemix, studioUrl])
 
   const location = useLocation()
   useEffect(() => {
@@ -52,7 +61,10 @@ export default function VisualEditing() {
   }, [location.hash, location.pathname, location.search])
 
   // Enable live queries from the specified studio origin URL
-  useLiveMode({allowStudioOrigin: studioUrl, client})
+  useLiveMode({
+    allowStudioOrigin: studioUrl,
+    client: stegaClient,
+  })
 
   return null
 }

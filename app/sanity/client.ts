@@ -5,16 +5,17 @@ import {
   dataset,
   projectId,
   studioUrl,
-  useStega,
-} from './projectDetails'
+} from '~/sanity/projectDetails'
 
-export const client = createClient({
+// Because this is the Stega client, it should never be used in production.
+// Any client component that imports this should conditionally lazy load it
+export const stegaClient = createClient({
   projectId,
   dataset,
   apiVersion,
   useCdn: true,
   stega: {
-    enabled: useStega,
+    enabled: true,
     studioUrl,
   },
 })

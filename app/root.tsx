@@ -10,17 +10,20 @@ import {
   useLoaderData,
 } from '@remix-run/react'
 import {lazy, Suspense} from 'react'
-import {z} from 'zod'
 
 import {Layout} from '~/components/Layout'
 import {themePreferenceCookie} from '~/cookies'
 import {getBodyClassNames} from '~/lib/getBodyClassNames'
+import {getStegaConfig} from '~/sanity/getStegaConfig'
 import {useQuery} from '~/sanity/loader'
 import {loadQuery} from '~/sanity/loader.server'
 import {HOME_QUERY} from '~/sanity/queries'
 import styles from '~/tailwind.css'
 import type {HomeDocument} from '~/types/home'
 import {homeZ} from '~/types/home'
+
+import {frontendUrl, studioUrl} from './sanity/projectDetails'
+import {themePreference} from './types/themePreference'
 
 const VisualEditing = lazy(() => import('~/components/VisualEditing'))
 
@@ -50,39 +53,44 @@ export type Loader = typeof loader
 export const loader = async ({request}: LoaderFunctionArgs) => {
   // Dark/light mode
   const cookieHeader = request.headers.get('Cookie')
-  const cookie = (await themePreferenceCookie.parse(cookieHeader)) || {}
-  const themePreference = z
-    .union([z.literal('dark'), z.literal('light')])
-    .optional()
-    .parse(cookie.themePreference)
+  const cookieValue = (await themePreferenceCookie.parse(cookieHeader)) || {}
+  const theme = themePreference.parse(cookieValue.themePreference) || 'light'
+  const bodyClassNames = getBodyClassNames(theme)
 
-  const isStudioRoute = new URL(request.url).pathname.startsWith('/studio')
-  const bodyClassNames = getBodyClassNames(themePreference)
+  const {pathname, hostname} = new URL(request.url)
 
   // Sanity content reused throughout the site
   const initial = await loadQuery<HomeDocument>(HOME_QUERY).then((res) => ({
     ...res,
-    data: res.data ? homeZ.parse(res.data) : null,
+    data: res.data ? homeZ.parse(res.data) : undefined,
   }))
 
   return json({
     initial,
     query: HOME_QUERY,
     params: {},
+    theme,
     bodyClassNames,
-    isStudioRoute,
+    sanity: {
+      isStudioRoute: pathname.startsWith('/studio'),
+      stegaEnabled: process.env.VERCEL
+        ? hostname.startsWith(`${process.env.VERCEL_GIT_REPO_SLUG}-`)
+        : hostname.startsWith('localhost'),
+    },
     ENV: {
-      SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID,
-      SANITY_STUDIO_DATASET: process.env.SANITY_STUDIO_DATASET,
-      SANITY_STUDIO_API_VERSION: process.env.SANITY_STUDIO_API_VERSION,
-      SANITY_STUDIO_URL: process.env.SANITY_STUDIO_URL,
-      SANITY_STUDIO_USE_STEGA: process.env.SANITY_STUDIO_USE_STEGA,
+      SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID!,
+      SANITY_STUDIO_DATASET: process.env.SANITY_STUDIO_DATASET!,
+      SANITY_STUDIO_API_VERSION: process.env.SANITY_STUDIO_API_VERSION!,
+      // URL of the Frontend that will be loaded into Presentation
+      SANITY_FRONTEND_URL: frontendUrl,
+      // URL of the Studio to allow requests from Presentation
+      SANITY_STUDIO_URL: studioUrl,
     },
   })
 }
 
 export default function App() {
-  const {initial, query, params, bodyClassNames, isStudioRoute, ENV} =
+  const {initial, query, params, theme, bodyClassNames, sanity, ENV} =
     useLoaderData<typeof loader>()
   const {data, loading} = useQuery<typeof initial.data>(query, params, {
     initial,
@@ -98,12 +106,14 @@ export default function App() {
         <Links />
       </head>
       <body className={bodyClassNames}>
-        {isStudioRoute ? (
+        {sanity.isStudioRoute ? (
           <Outlet />
         ) : (
-          <Layout home={loading || !data ? null : data}>
-            <Outlet />
-          </Layout>
+          <>
+            <Layout home={loading || !data ? initial.data : data} theme={theme}>
+              <Outlet />
+            </Layout>
+          </>
         )}
         <ScrollRestoration />
         <script
@@ -111,13 +121,13 @@ export default function App() {
             __html: `window.ENV = ${JSON.stringify(ENV)}`,
           }}
         />
-        {ENV.SANITY_STUDIO_USE_STEGA ? (
-          <Suspense>
-            <VisualEditing />
-          </Suspense>
-        ) : null}
         <Scripts />
         <LiveReload />
+        {!sanity.isStudioRoute && sanity.stegaEnabled ? (
+          <Suspense>
+            <VisualEditing studioUrl={ENV.SANITY_STUDIO_URL} />
+          </Suspense>
+        ) : null}
       </body>
     </html>
   )
