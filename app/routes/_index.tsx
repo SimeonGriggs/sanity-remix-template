@@ -1,4 +1,4 @@
-import type {LoaderFunctionArgs, MetaFunction} from '@remix-run/node'
+import type {MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
 
@@ -15,15 +15,15 @@ export const meta: MetaFunction<
   {
     root: RootLoader
   }
-> = ({data, matches}) => {
+> = ({matches}) => {
   const rootData = matches.find((match) => match.id === `root`)?.data
-  const home = rootData ? rootData.data : null
+  const home = rootData ? rootData.initial.data : null
   const title = [home?.title, home?.siteTitle].filter(Boolean).join(' | ')
 
   return [{title}]
 }
 
-export const loader = async ({request}: LoaderFunctionArgs) => {
+export const loader = async () => {
   const initial = await loadQuery<RecordStub[]>(RECORDS_QUERY).then((res) => ({
     ...res,
     data: res.data ? recordStubsZ.parse(res.data) : null,

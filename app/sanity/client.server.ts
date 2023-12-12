@@ -10,7 +10,7 @@ export const writeClient = createClient({
   token: process.env.SANITY_WRITE_TOKEN,
 })
 
-export const previewClient = createClient({
+export const viewClient = createClient({
   projectId,
   dataset,
   apiVersion,

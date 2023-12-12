@@ -1,7 +1,8 @@
 import type {LoaderFunctionArgs} from '@remix-run/node'
+import groq from 'groq'
 
 import {generatePngFromDocument} from '~/lib/og.server'
-import {previewClient} from '~/sanity/client.server'
+import {viewClient} from '~/sanity/client.server'
 
 export const OG_IMAGE_WIDTH = 1200
 export const OG_IMAGE_HEIGHT = 630
@@ -14,7 +15,7 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
     return new Response('Bad request', {status: 400})
   }
 
-  const doc = await previewClient.fetch(`*[_id == $id][0]{ ..., artist-> }`, {
+  const doc = await viewClient.fetch(groq`*[_id == $id][0]{ ..., artist-> }`, {
     id,
   })
 

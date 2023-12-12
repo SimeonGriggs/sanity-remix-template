@@ -1,11 +1,11 @@
-import {useFetcher, useLoaderData} from '@remix-run/react'
+import {useFetcher} from '@remix-run/react'
 import {Moon, Sun} from 'lucide-react'
 
-export function ThemeToggle() {
-  const cookieToggle = useFetcher()
-  const {themePreference} = useLoaderData()
+import type {ThemePreference} from '~/types/themePreference'
 
-  const isDarkMode = themePreference === `dark`
+export function ThemeToggle(props: {theme: ThemePreference}) {
+  const cookieToggle = useFetcher()
+  const isDarkMode = props.theme === `dark`
 
   return (
     <cookieToggle.Form method="post" action="/resource/toggle-theme">
