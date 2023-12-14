@@ -61,7 +61,7 @@ export const studioUrl =
     : window.ENV.SANITY_STUDIO_URL!
 
 export const stegaEnabled =
-  new URL(frontendUrl).hostname !== new URL(PRODUCTION_URL).hostname
+  new URL(studioUrl).hostname !== new URL(PRODUCTION_URL).hostname
 
 // If any of these values are missing, throw errors as the app requires them
 if (!projectId) throw new Error('Missing SANITY_STUDIO_PROJECT_ID in .env')
