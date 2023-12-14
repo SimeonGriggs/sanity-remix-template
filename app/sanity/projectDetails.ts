@@ -47,16 +47,16 @@ export const PRODUCTION_URL = 'https://sanity-remix-template.sanity.build'
 export const frontendUrl =
   typeof document === 'undefined'
     ? process.env.VERCEL
-      ? process.env.VERCEL_ENV !== 'production'
-        ? `https://${process.env.VERCEL_BRANCH_URL}`
-        : PRODUCTION_URL
+      ? `https://${process.env.VERCEL_BRANCH_URL}`
       : process.env.SANITY_FRONTEND_URL!
     : window.ENV.SANITY_FRONTEND_URL!
 
 export const studioUrl =
   typeof document === 'undefined'
     ? process.env.VERCEL
-      ? `https://${process.env.VERCEL_URL}`
+      ? process.env.VERCEL_ENV !== 'production'
+        ? `https://${process.env.VERCEL_URL}`
+        : PRODUCTION_URL
       : process.env.SANITY_STUDIO_URL!
     : window.ENV.SANITY_STUDIO_URL!
 
