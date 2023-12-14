@@ -107,28 +107,10 @@ Visit `https://localhost:3000/studio` in your Remix app. You will need to:
 
 ## Deployment
 
-First, build your app for production:
+This Remix template is specifically configured for hosting on Vercel.
 
-```sh
-npm run build
-```
-
-Then run the app in production mode:
-
-```sh
-npm start
-```
-
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `remix build`
-
-- `build/`
-- `public/build/`
+1. Check this repository into your own source control (like GitHub) and deploy to Vercel.
+2. You will need to update `PRODUCTION_URL` in `./app/sanity/projectDetails.ts` to match your production URL. This value is used to enable "stega" encoding on all URLs other than in production. And when using the production URL to view the Studio will load the production build at one of the other automatically generated URLs.
 
 ### Using a Template
 

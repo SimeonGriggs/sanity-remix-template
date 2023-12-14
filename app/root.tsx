@@ -16,7 +16,7 @@ import {themePreferenceCookie} from '~/cookies'
 import {getBodyClassNames} from '~/lib/getBodyClassNames'
 import {useQuery} from '~/sanity/loader'
 import {loadQuery} from '~/sanity/loader.server'
-import {frontendUrl, PRODUCTION_URL, studioUrl} from '~/sanity/projectDetails'
+import {frontendUrl, stegaEnabled, studioUrl} from '~/sanity/projectDetails'
 import {HOME_QUERY} from '~/sanity/queries'
 import styles from '~/tailwind.css'
 import type {HomeDocument} from '~/types/home'
@@ -55,8 +55,7 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
   const theme = themePreference.parse(cookieValue.themePreference) || 'light'
   const bodyClassNames = getBodyClassNames(theme)
 
-  const {pathname, hostname} = new URL(request.url)
-  const {hostname: productionHostname} = new URL(PRODUCTION_URL)
+  const {pathname} = new URL(request.url)
 
   // Sanity content reused throughout the site
   const initial = await loadQuery<HomeDocument>(HOME_QUERY).then((res) => ({
@@ -72,7 +71,7 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
     bodyClassNames,
     sanity: {
       isStudioRoute: pathname.startsWith('/studio'),
-      stegaEnabled: hostname !== productionHostname,
+      stegaEnabled,
     },
     ENV: {
       SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID!,

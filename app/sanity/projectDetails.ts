@@ -52,12 +52,16 @@ export const frontendUrl =
         : PRODUCTION_URL
       : process.env.SANITY_FRONTEND_URL!
     : window.ENV.SANITY_FRONTEND_URL!
+
 export const studioUrl =
   typeof document === 'undefined'
     ? process.env.VERCEL
       ? `https://${process.env.VERCEL_URL}`
       : process.env.SANITY_STUDIO_URL!
     : window.ENV.SANITY_STUDIO_URL!
+
+export const stegaEnabled =
+  new URL(frontendUrl).hostname !== new URL(PRODUCTION_URL).hostname
 
 // If any of these values are missing, throw errors as the app requires them
 if (!projectId) throw new Error('Missing SANITY_STUDIO_PROJECT_ID in .env')

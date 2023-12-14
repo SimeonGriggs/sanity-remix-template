@@ -3,7 +3,7 @@ import type {HistoryUpdate} from '@sanity/overlays'
 import {enableOverlays} from '@sanity/overlays'
 import {useEffect, useRef} from 'react'
 
-import {stegaClient} from '~/sanity/client'
+import {client} from '~/sanity/client'
 import {useLiveMode} from '~/sanity/loader'
 
 type VisualEditingProps = {
@@ -60,7 +60,7 @@ export default function VisualEditing({studioUrl}: VisualEditingProps) {
   }, [location.hash, location.pathname, location.search])
 
   // Enable live queries from the specified studio origin URL
-  useLiveMode({client: stegaClient})
+  useLiveMode({client})
 
   return null
 }
