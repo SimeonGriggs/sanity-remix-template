@@ -14,7 +14,13 @@ From the command line, install this project as a Remix template:
 npx create-remix@latest --template SimeonGriggs/sanity-remix-template
 ```
 
-After setup, `npx sanity@latest init --env` will run to populate your `.env` file with the details of a new or existing Sanity project's ID and dataset name'.
+After setup, populate your `.env` file with the details of a new or existing Sanity project's ID and dataset name with the following command:
+
+```sh
+npx sanity@latest init --env
+```
+
+Then, start the development server:
 
 ```sh
 npm run dev
@@ -41,7 +47,7 @@ Useful Sanity examples with a light sprinkling of opinionated patterns
 
 Access to Sanity Studio v3 from within the Remix application itself. Now the whole Studio is a component, it lives at the `/studio` route.
 
-### Interactive live preview inside Presentation
+### Visual Editing for interactive live preview inside Presentation
 
 Powered by [Presentation](https://www.sanity.io/docs/presentation) and [@sanity/react-loader](https://www.sanity.io/docs/react-loader)
 

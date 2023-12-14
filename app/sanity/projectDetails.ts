@@ -39,14 +39,17 @@ export const projectDetails = () => ({
 // <git-repo-slug>-git-<branch>-<username>.vercel.app
 // <git-repo-slug>-<sha>-<username>.vercel.app
 
+// TODO: Replace with YOUR production domain
+// This is used to enable stega on any URL except this one
+export const PRODUCTION_URL = 'https://sanity-remix-template.sanity.build'
+
 // With the logic below we enable stega only on the non-production domain
 export const frontendUrl =
   typeof document === 'undefined'
     ? process.env.VERCEL
       ? process.env.VERCEL_ENV !== 'production'
         ? `https://${process.env.VERCEL_BRANCH_URL}`
-        : // TODO: Replace with YOUR production domain
-          `https://sanity-remix-template.sanity.build`
+        : PRODUCTION_URL
       : process.env.SANITY_FRONTEND_URL!
     : window.ENV.SANITY_FRONTEND_URL!
 export const studioUrl =

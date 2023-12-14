@@ -1,6 +1,6 @@
 import {createClient} from '@sanity/client'
 
-import {apiVersion, dataset, projectId} from './projectDetails'
+import {apiVersion, dataset, projectId} from '~/sanity/projectDetails'
 
 export const writeClient = createClient({
   projectId,

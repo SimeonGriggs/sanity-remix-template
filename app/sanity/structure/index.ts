@@ -2,8 +2,7 @@ import {Disc, Home, Tags, Users} from 'lucide-react'
 import type {DefaultDocumentNodeResolver, StructureResolver} from 'sanity/desk'
 
 import OGPreview from '~/sanity/components/OGPreview'
-
-import {resolveOGUrl} from './resolveOGUrl'
+import {resolveOGUrl} from '~/sanity/structure/resolveOGUrl'
 
 export const structure: StructureResolver = (S) =>
   S.list()
