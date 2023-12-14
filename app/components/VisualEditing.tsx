@@ -22,7 +22,6 @@ export default function VisualEditing({studioUrl}: VisualEditingProps) {
     // When displayed inside an iframe
     if (window.parent !== window.self) {
       const disable = enableOverlays({
-        allowStudioOrigin: studioUrl,
         zIndex: 999999,
         history: {
           subscribe: (navigate) => {
@@ -61,10 +60,7 @@ export default function VisualEditing({studioUrl}: VisualEditingProps) {
   }, [location.hash, location.pathname, location.search])
 
   // Enable live queries from the specified studio origin URL
-  useLiveMode({
-    allowStudioOrigin: studioUrl,
-    client: stegaClient,
-  })
+  useLiveMode({client: stegaClient})
 
   return null
 }

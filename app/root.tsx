@@ -14,16 +14,14 @@ import {lazy, Suspense} from 'react'
 import {Layout} from '~/components/Layout'
 import {themePreferenceCookie} from '~/cookies'
 import {getBodyClassNames} from '~/lib/getBodyClassNames'
-import {getStegaConfig} from '~/sanity/getStegaConfig'
 import {useQuery} from '~/sanity/loader'
 import {loadQuery} from '~/sanity/loader.server'
+import {frontendUrl, PRODUCTION_URL, studioUrl} from '~/sanity/projectDetails'
 import {HOME_QUERY} from '~/sanity/queries'
 import styles from '~/tailwind.css'
 import type {HomeDocument} from '~/types/home'
 import {homeZ} from '~/types/home'
-
-import {frontendUrl, studioUrl} from './sanity/projectDetails'
-import {themePreference} from './types/themePreference'
+import {themePreference} from '~/types/themePreference'
 
 const VisualEditing = lazy(() => import('~/components/VisualEditing'))
 
@@ -58,6 +56,7 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
   const bodyClassNames = getBodyClassNames(theme)
 
   const {pathname, hostname} = new URL(request.url)
+  const {hostname: productionHostname} = new URL(PRODUCTION_URL)
 
   // Sanity content reused throughout the site
   const initial = await loadQuery<HomeDocument>(HOME_QUERY).then((res) => ({
@@ -73,9 +72,7 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
     bodyClassNames,
     sanity: {
       isStudioRoute: pathname.startsWith('/studio'),
-      stegaEnabled: process.env.VERCEL
-        ? hostname.startsWith(`${process.env.VERCEL_GIT_REPO_SLUG}-`)
-        : hostname.startsWith('localhost'),
+      stegaEnabled: hostname !== productionHostname,
     },
     ENV: {
       SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID!,
