@@ -5,7 +5,7 @@ import {OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH} from '~/routes/resource.og'
 
 export default function OGPreview({document, options}: any) {
   const {displayed} = document
-  const url = React.useMemo(() => options.url(displayed), [displayed, options])
+  const url = React.useMemo(() => options.url, [displayed, options])
 
   return (
     <Flex
