@@ -39,11 +39,10 @@ export const projectDetails = () => ({
 // <git-repo-slug>-git-<branch>-<username>.vercel.app
 // <git-repo-slug>-<sha>-<username>.vercel.app
 
-// TODO: Replace with YOUR production domain
 // This is used to enable stega on any URL except this one
 export const PRODUCTION_URL = 'https://sanity-remix-template.sanity.build'
 
-// With the logic below we enable stega only on the non-production domain
+// This is the front end URL that should display inside Presentation
 export const frontendUrl =
   typeof document === 'undefined'
     ? process.env.VERCEL
@@ -51,6 +50,7 @@ export const frontendUrl =
       : process.env.SANITY_FRONTEND_URL!
     : window.ENV.SANITY_FRONTEND_URL!
 
+// This is the Studio URL that will be allowed to access the front end URL
 export const studioUrl =
   typeof document === 'undefined'
     ? process.env.VERCEL
@@ -60,12 +60,15 @@ export const studioUrl =
       : process.env.SANITY_STUDIO_URL!
     : window.ENV.SANITY_STUDIO_URL!
 
-export const stegaEnabled =
-  new URL(studioUrl).hostname !== new URL(PRODUCTION_URL).hostname
+// With the logic below we enable stega only on the non-production domain
+export function isStegaEnabled(url: string) {
+  const {hostname} = new URL(url)
+  return hostname !== new URL(PRODUCTION_URL).hostname
+}
 
 // If any of these values are missing, throw errors as the app requires them
 if (!projectId) throw new Error('Missing SANITY_STUDIO_PROJECT_ID in .env')
 if (!dataset) throw new Error('Missing SANITY_STUDIO_DATASET in .env')
 if (!apiVersion) throw new Error('Missing SANITY_STUDIO_API_VERSION in .env')
-if (!frontendUrl) throw new Error('Missing SANITY_FRONTEND_URL in root route')
-if (!studioUrl) throw new Error('Missing SANITY_STUDIO_URL in root route')
+if (!frontendUrl) throw new Error('Missing SANITY_FRONTEND_URL in .env')
+if (!studioUrl) throw new Error('Missing SANITY_STUDIO_URL in .env')

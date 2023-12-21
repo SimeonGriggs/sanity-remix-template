@@ -16,7 +16,7 @@ import {themePreferenceCookie} from '~/cookies'
 import {getBodyClassNames} from '~/lib/getBodyClassNames'
 import {useQuery} from '~/sanity/loader'
 import {loadQuery} from '~/sanity/loader.server'
-import {frontendUrl, stegaEnabled, studioUrl} from '~/sanity/projectDetails'
+import {frontendUrl, isStegaEnabled, studioUrl} from '~/sanity/projectDetails'
 import {HOME_QUERY} from '~/sanity/queries'
 import styles from '~/tailwind.css'
 import type {HomeDocument} from '~/types/home'
@@ -49,16 +49,22 @@ export const links: LinksFunction = () => {
 export type Loader = typeof loader
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
+  const stegaEnabled = isStegaEnabled(request.url)
+
   // Dark/light mode
   const cookieHeader = request.headers.get('Cookie')
   const cookieValue = (await themePreferenceCookie.parse(cookieHeader)) || {}
   const theme = themePreference.parse(cookieValue.themePreference) || 'light'
   const bodyClassNames = getBodyClassNames(theme)
 
-  const {pathname} = new URL(request.url)
-
   // Sanity content reused throughout the site
-  const initial = await loadQuery<HomeDocument>(HOME_QUERY).then((res) => ({
+  const initial = await loadQuery<HomeDocument>(
+    HOME_QUERY,
+    {},
+    {
+      perspective: stegaEnabled ? 'previewDrafts' : 'published',
+    },
+  ).then((res) => ({
     ...res,
     data: res.data ? homeZ.parse(res.data) : undefined,
   }))
@@ -70,7 +76,7 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
     theme,
     bodyClassNames,
     sanity: {
-      isStudioRoute: pathname.startsWith('/studio'),
+      isStudioRoute: new URL(request.url).pathname.startsWith('/studio'),
       stegaEnabled,
     },
     ENV: {
@@ -89,6 +95,7 @@ export default function App() {
   const {initial, query, params, theme, bodyClassNames, sanity, ENV} =
     useLoaderData<typeof loader>()
   const {data, loading} = useQuery<typeof initial.data>(query, params, {
+    // @ts-expect-error
     initial,
   })
 
