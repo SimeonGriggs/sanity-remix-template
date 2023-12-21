@@ -12,6 +12,7 @@ import {OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH} from '~/routes/resource.og'
 import {writeClient} from '~/sanity/client.server'
 import {useQuery} from '~/sanity/loader'
 import {loadQuery} from '~/sanity/loader.server'
+import {isStegaEnabled} from '~/sanity/projectDetails'
 import {RECORD_QUERY} from '~/sanity/queries'
 import type {RecordDocument} from '~/types/record'
 import {recordZ} from '~/types/record'
@@ -91,11 +92,13 @@ export const action: ActionFunction = async ({request}) => {
 
 // Load the `record` document with this slug
 export const loader = async ({params, request}: LoaderFunctionArgs) => {
+  const stegaEnabled = isStegaEnabled(request.url)
+
   // Params from the loader uses the filename
   // $slug.tsx has the params { slug: 'hello-world' }
-  const initial = await loadQuery<RecordDocument>(RECORD_QUERY, params).then(
-    (res) => ({...res, data: res.data ? recordZ.parse(res.data) : null}),
-  )
+  const initial = await loadQuery<RecordDocument>(RECORD_QUERY, params, {
+    perspective: stegaEnabled ? 'previewDrafts' : 'published',
+  }).then((res) => ({...res, data: res.data ? recordZ.parse(res.data) : null}))
 
   if (!initial.data) {
     throw new Response('Not found', {status: 404})
