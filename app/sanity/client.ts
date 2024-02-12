@@ -4,7 +4,6 @@ import {
   apiVersion,
   dataset,
   projectId,
-  stegaEnabled,
   studioUrl,
 } from '~/sanity/projectDetails'
 
@@ -14,8 +13,9 @@ export const client = createClient({
   dataset,
   apiVersion,
   useCdn: true,
+  perspective: 'published',
   stega: {
-    enabled: stegaEnabled,
+    enabled: false,
     studioUrl,
   },
 })

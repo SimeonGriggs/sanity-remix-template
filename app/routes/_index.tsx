@@ -1,4 +1,4 @@
-import type {MetaFunction} from '@remix-run/node'
+import type {LoaderFunctionArgs, MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
 
@@ -6,6 +6,7 @@ import {Records} from '~/components/Records'
 import type {Loader as RootLoader} from '~/root'
 import {useQuery} from '~/sanity/loader'
 import {loadQuery} from '~/sanity/loader.server'
+import {isStegaEnabled} from '~/sanity/projectDetails'
 import {RECORDS_QUERY} from '~/sanity/queries'
 import type {RecordStub} from '~/types/record'
 import {recordStubsZ} from '~/types/record'
@@ -23,8 +24,15 @@ export const meta: MetaFunction<
   return [{title}]
 }
 
-export const loader = async () => {
-  const initial = await loadQuery<RecordStub[]>(RECORDS_QUERY).then((res) => ({
+export const loader = async ({request}: LoaderFunctionArgs) => {
+  const stegaEnabled = isStegaEnabled(request.url)
+  const initial = await loadQuery<RecordStub[]>(
+    RECORDS_QUERY,
+    {},
+    {
+      perspective: stegaEnabled ? 'previewDrafts' : 'published',
+    },
+  ).then((res) => ({
     ...res,
     data: res.data ? recordStubsZ.parse(res.data) : null,
   }))
