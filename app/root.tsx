@@ -23,7 +23,7 @@ import type {HomeDocument} from '~/types/home'
 import {homeZ} from '~/types/home'
 import {themePreference} from '~/types/themePreference'
 
-const VisualEditing = lazy(() => import('~/components/VisualEditing'))
+const LiveVisualEditing = lazy(() => import('~/components/LiveVisualEditing'))
 
 export const links: LinksFunction = () => {
   return [
@@ -121,7 +121,7 @@ export default function App() {
         <LiveReload />
         {!sanity.isStudioRoute && sanity.stegaEnabled ? (
           <Suspense>
-            <VisualEditing studioUrl={ENV.SANITY_STUDIO_URL} />
+            <LiveVisualEditing studioUrl={ENV.SANITY_STUDIO_URL} />
           </Suspense>
         ) : null}
       </body>
