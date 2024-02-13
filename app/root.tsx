@@ -80,13 +80,13 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
       stegaEnabled,
     },
     ENV: {
-      SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID!,
-      SANITY_STUDIO_DATASET: process.env.SANITY_STUDIO_DATASET!,
-      SANITY_STUDIO_API_VERSION: process.env.SANITY_STUDIO_API_VERSION!,
+      SANITY_PROJECT_ID: process.env.SANITY_PROJECT_ID!,
+      SANITY_DATASET: process.env.SANITY_DATASET!,
+      SANITY_API_VERSION: process.env.SANITY_API_VERSION!,
       // URL of the Frontend that will be loaded into Presentation
       SANITY_FRONTEND_URL: frontendUrl,
       // URL of the Studio to allow requests from Presentation
-      SANITY_STUDIO_URL: studioUrl,
+      SANITY_URL: studioUrl,
     },
   })
 }
@@ -128,7 +128,7 @@ export default function App() {
         <LiveReload />
         {!sanity.isStudioRoute && sanity.stegaEnabled ? (
           <Suspense>
-            <LiveVisualEditing studioUrl={ENV.SANITY_STUDIO_URL} />
+            <LiveVisualEditing studioUrl={ENV.SANITY_URL} />
           </Suspense>
         ) : null}
       </body>
