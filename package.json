@@ -25,6 +25,7 @@
     "@sanity/react-loader": "^1.7.4",
     "@sanity/ui": "^1.9.3",
     "@sanity/vision": "^3.24.1",
+    "@sanity/visual-editing": "^1.2.2",
     "add": "^2.0.6",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
