@@ -6,24 +6,21 @@
 declare global {
   interface Window {
     ENV: {
-      SANITY_STUDIO_PROJECT_ID: string
-      SANITY_STUDIO_DATASET: string
-      SANITY_STUDIO_API_VERSION: string
+      SANITY_PROJECT_ID: string
+      SANITY_DATASET: string
+      SANITY_API_VERSION: string
       SANITY_FRONTEND_URL: string
-      SANITY_STUDIO_URL: string
+      SANITY_URL: string
     }
   }
 }
 
-const {
-  SANITY_STUDIO_PROJECT_ID,
-  SANITY_STUDIO_DATASET,
-  SANITY_STUDIO_API_VERSION,
-} = typeof document === 'undefined' ? process.env : window.ENV
+const {SANITY_PROJECT_ID, SANITY_DATASET, SANITY_API_VERSION} =
+  typeof document === 'undefined' ? process.env : window.ENV
 
-export const projectId = SANITY_STUDIO_PROJECT_ID!
-export const dataset = SANITY_STUDIO_DATASET!
-export const apiVersion = SANITY_STUDIO_API_VERSION!
+export const projectId = SANITY_PROJECT_ID!
+export const dataset = SANITY_DATASET!
+export const apiVersion = SANITY_API_VERSION ?? `2024-02-13`
 
 export const projectDetails = () => ({
   projectId,
@@ -57,8 +54,8 @@ export const studioUrl =
       ? process.env.VERCEL_ENV !== 'production'
         ? `https://${process.env.VERCEL_URL}`
         : PRODUCTION_URL
-      : process.env.SANITY_STUDIO_URL!
-    : window.ENV.SANITY_STUDIO_URL!
+      : process.env.SANITY_URL!
+    : window.ENV.SANITY_URL!
 
 // With the logic below we enable stega only on the non-production domain
 export function isStegaEnabled(url: string) {
@@ -67,8 +64,8 @@ export function isStegaEnabled(url: string) {
 }
 
 // If any of these values are missing, throw errors as the app requires them
-if (!projectId) throw new Error('Missing SANITY_STUDIO_PROJECT_ID in .env')
-if (!dataset) throw new Error('Missing SANITY_STUDIO_DATASET in .env')
-if (!apiVersion) throw new Error('Missing SANITY_STUDIO_API_VERSION in .env')
+if (!projectId) throw new Error('Missing SANITY_PROJECT_ID in .env')
+if (!dataset) throw new Error('Missing SANITY_DATASET in .env')
+if (!apiVersion) throw new Error('Missing SANITY_API_VERSION in .env')
 if (!frontendUrl) throw new Error('Missing SANITY_FRONTEND_URL in .env')
-if (!studioUrl) throw new Error('Missing SANITY_STUDIO_URL in .env')
+if (!studioUrl) throw new Error('Missing SANITY_URL in .env')
