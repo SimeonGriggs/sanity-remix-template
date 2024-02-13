@@ -1,5 +1,8 @@
 import {Disc, Home, Tags, Users} from 'lucide-react'
-import type {DefaultDocumentNodeResolver, StructureResolver} from 'sanity/desk'
+import type {
+  DefaultDocumentNodeResolver,
+  StructureResolver,
+} from 'sanity/structure'
 
 import OGPreview from '~/sanity/components/OGPreview'
 import {resolveOGUrl} from '~/sanity/structure/resolveOGUrl'
