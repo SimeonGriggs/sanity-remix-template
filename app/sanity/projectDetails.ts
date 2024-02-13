@@ -40,15 +40,17 @@ export const projectDetails = () => ({
 export const PRODUCTION_URL = 'https://sanity-remix-template.sanity.build'
 
 // This is the front end URL that should display inside Presentation
-export const frontendUrl =
+export const getFrontendUrl =
   typeof document === 'undefined'
     ? process.env.VERCEL
       ? `https://${process.env.VERCEL_BRANCH_URL}`
       : process.env.SANITY_FRONTEND_URL!
     : window.ENV.SANITY_FRONTEND_URL!
 
+export const frontendUrl = getFrontendUrl ?? 'http://localhost:3000'
+
 // This is the Studio URL that will be allowed to access the front end URL
-export const studioUrl =
+export const getStudioUrl =
   typeof document === 'undefined'
     ? process.env.VERCEL
       ? process.env.VERCEL_ENV !== 'production'
@@ -56,6 +58,8 @@ export const studioUrl =
         : PRODUCTION_URL
       : process.env.SANITY_URL!
     : window.ENV.SANITY_URL!
+
+export const studioUrl = getStudioUrl ?? 'http://localhost:3000'
 
 // With the logic below we enable stega only on the non-production domain
 export function isStegaEnabled(url: string) {
