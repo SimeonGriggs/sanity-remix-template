@@ -61,12 +61,6 @@ export const getStudioUrl =
 
 export const studioUrl = getStudioUrl ?? 'http://localhost:3000'
 
-// With the logic below we enable stega only on the non-production domain
-export function isStegaEnabled(url: string) {
-  const {hostname} = new URL(url)
-  return hostname !== new URL(PRODUCTION_URL).hostname
-}
-
 // If any of these values are missing, throw errors as the app requires them
 if (!projectId) throw new Error('Missing SANITY_PROJECT_ID in .env')
 if (!dataset) throw new Error('Missing SANITY_DATASET in .env')
