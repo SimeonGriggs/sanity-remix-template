@@ -2,7 +2,6 @@ import type {LinksFunction, LoaderFunctionArgs} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -19,7 +18,7 @@ import {useQuery} from '~/sanity/loader'
 import {loadQuery} from '~/sanity/loader.server'
 import {frontendUrl, studioUrl} from '~/sanity/projectDetails'
 import {HOME_QUERY} from '~/sanity/queries'
-import styles from '~/tailwind.css'
+import styles from '~/tailwind.css?url'
 import type {HomeDocument} from '~/types/home'
 import {homeZ} from '~/types/home'
 import {themePreference} from '~/types/themePreference'
@@ -126,7 +125,6 @@ export default function App() {
           }}
         />
         <Scripts />
-        <LiveReload />
         {!sanity.isStudioRoute && sanity.stegaEnabled ? (
           <Suspense>
             <LiveVisualEditing studioUrl={ENV.SANITY_URL} />

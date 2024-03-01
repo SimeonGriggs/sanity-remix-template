@@ -57,7 +57,7 @@ async function createData() {
       _type: 'artist',
       _id: faker.string.uuid(),
       name,
-      slug: {current: faker.helpers.slugify(name)},
+      slug: {current: faker.helpers.slugify(name).toLowerCase()},
     })
   }
 
@@ -76,7 +76,7 @@ async function createData() {
       _type: 'genre',
       _id: faker.string.uuid(),
       title,
-      slug: {current: faker.helpers.slugify(title)},
+      slug: {current: faker.helpers.slugify(title).toLowerCase()},
     })
   }
 
@@ -96,7 +96,7 @@ async function createData() {
       _type: 'record',
       _id: faker.string.uuid(),
       title,
-      slug: {current: faker.helpers.slugify(title)},
+      slug: {current: faker.helpers.slugify(title).toLowerCase()},
       releaseDate: faker.date.past(),
       likes: Math.floor(Math.random() * 100),
       dislikes: Math.floor(Math.random() * 100),
