@@ -29,6 +29,7 @@
     "@sanity/ui": "^1.9.3",
     "@sanity/vision": "^3.30.1",
     "@sanity/visual-editing": "^1.5.2",
+    "@vercel/remix": "^2.8.0",
     "add": "^2.0.6",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
@@ -63,8 +64,7 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
     "vite": "^5.1.4",
-    "vite-tsconfig-paths": "^4.3.1",
-    "@resolid/remix-plugins": "^2.0.0"
+    "vite-tsconfig-paths": "^4.3.1"
   },
   "engines": {
     "node": "20.x"
