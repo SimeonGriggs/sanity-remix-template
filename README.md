@@ -1,6 +1,6 @@
-# Full-featured Sanity Studio + Remix Template
+# Full-featured Sanity Studio + Remix Vite Template
 
-Batteries-included [Remix](https://remix.run/) website template with [Visual Editing](https://www.sanity.io/docs/visual-editing) for interactive live-preview inside [Presentation](https://www.sanity.io/docs/presentation) powered by an embedded [Sanity Studio](https://www.sanity.io/studio).
+Batteries-included [Remix](https://remix.run/) website using Vite with [Vercel's deployment preset](https://vercel.com/docs/frameworks/remix) with [Visual Editing](https://www.sanity.io/docs/visual-editing) for interactive live-preview inside [Presentation](https://www.sanity.io/docs/presentation) powered by an embedded [Sanity Studio](https://www.sanity.io/studio).
 
 ![Presentation tool in Sanity Studio](./img/sanity-remix-presentation.png)
 
