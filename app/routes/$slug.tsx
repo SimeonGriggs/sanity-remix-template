@@ -98,9 +98,11 @@ export const action: ActionFunction = async ({request}) => {
 export const loader = async ({params, request}: LoaderFunctionArgs) => {
   const stegaEnabled = isStegaEnabled(request.url)
 
+  const query = RECORD_QUERY
   // Params from the loader uses the filename
   // $slug.tsx has the params { slug: 'hello-world' }
-  const initial = await loadQuery<RecordDocument>(RECORD_QUERY, params, {
+  const queryParams = params
+  const initial = await loadQuery<RecordDocument>(query, queryParams, {
     perspective: stegaEnabled ? 'previewDrafts' : 'published',
   }).then((res) => ({...res, data: res.data ? recordZ.parse(res.data) : null}))
 
@@ -114,21 +116,26 @@ export const loader = async ({params, request}: LoaderFunctionArgs) => {
 
   return json({
     initial,
-    query: RECORD_QUERY,
-    params,
+    query,
+    params: queryParams,
     ogImageUrl,
   })
 }
 
 export default function RecordPage() {
   const {initial, query, params} = useLoaderData<typeof loader>()
-  const {data, loading} = useQuery<typeof initial.data>(query, params, {
-    initial,
-  })
+  const {data, loading, encodeDataAttribute} = useQuery<typeof initial.data>(
+    query,
+    params,
+    {
+      // @ts-expect-error
+      initial,
+    },
+  )
 
   if (loading || !data) {
     return <div>Loading...</div>
   }
 
-  return <Record data={data} />
+  return <Record data={data} encodeDataAttribute={encodeDataAttribute} />
 }

@@ -6,7 +6,10 @@ import type {DocumentLocationResolver} from 'sanity/presentation'
 export const locate: DocumentLocationResolver = (params, context) => {
   if (params.type === 'record') {
     const doc$ = context.documentStore.listenQuery(
-      groq`*[_id == $id][0]{slug,title}`,
+      groq`*[_id == $id][0]{
+        "title": coalesce(title, "Untitled"),
+        "href": slug.current
+      }`,
       params,
       {perspective: 'previewDrafts'},
     )
@@ -14,19 +17,13 @@ export const locate: DocumentLocationResolver = (params, context) => {
     // Return a streaming list of locations
     return doc$.pipe(
       map((doc) => {
-        if (!doc || !doc.slug?.current) {
+        if (!doc || !doc.href) {
           return null
         }
         return {
           locations: [
-            {
-              title: doc.title || 'Untitled',
-              href: `/${doc.slug.current}`,
-            },
-            {
-              title: 'Home',
-              href: '/',
-            },
+            {title: doc.title, href: doc.href},
+            {title: 'Home', href: '/'},
           ],
         }
       }),
