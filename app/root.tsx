@@ -2,7 +2,6 @@ import type {LinksFunction, LoaderFunctionArgs} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -19,7 +18,7 @@ import {useQuery} from '~/sanity/loader'
 import {loadQuery} from '~/sanity/loader.server'
 import {frontendUrl, studioUrl} from '~/sanity/projectDetails'
 import {HOME_QUERY} from '~/sanity/queries'
-import styles from '~/tailwind.css'
+import styles from '~/tailwind.css?url'
 import type {HomeDocument} from '~/types/home'
 import {homeZ} from '~/types/home'
 import {themePreference} from '~/types/themePreference'
@@ -59,21 +58,19 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
   const bodyClassNames = getBodyClassNames(theme)
 
   // Sanity content reused throughout the site
-  const initial = await loadQuery<HomeDocument>(
-    HOME_QUERY,
-    {},
-    {
-      perspective: stegaEnabled ? 'previewDrafts' : 'published',
-    },
-  ).then((res) => ({
+  const query = HOME_QUERY
+  const queryParams = {}
+  const initial = await loadQuery<HomeDocument>(query, queryParams, {
+    perspective: stegaEnabled ? 'previewDrafts' : 'published',
+  }).then((res) => ({
     ...res,
     data: res.data ? homeZ.parse(res.data) : undefined,
   }))
 
   return json({
     initial,
-    query: HOME_QUERY,
-    params: {},
+    query,
+    params: queryParams,
     theme,
     bodyClassNames,
     sanity: {
@@ -81,13 +78,13 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
       stegaEnabled,
     },
     ENV: {
-      SANITY_PROJECT_ID: process.env.SANITY_PROJECT_ID!,
-      SANITY_DATASET: process.env.SANITY_DATASET!,
-      SANITY_API_VERSION: process.env.SANITY_API_VERSION!,
+      VITE_SANITY_PROJECT_ID: import.meta.env.VITE_SANITY_PROJECT_ID!,
+      VITE_SANITY_DATASET: import.meta.env.VITE_SANITY_DATASET!,
+      VITE_SANITY_API_VERSION: import.meta.env.VITE_SANITY_API_VERSION!,
       // URL of the Frontend that will be loaded into Presentation
-      SANITY_FRONTEND_URL: frontendUrl,
+      VITE_SANITY_FRONTEND_URL: frontendUrl,
       // URL of the Studio to allow requests from Presentation
-      SANITY_URL: studioUrl,
+      VITE_SANITY_URL: studioUrl,
     },
   })
 }
@@ -126,10 +123,9 @@ export default function App() {
           }}
         />
         <Scripts />
-        <LiveReload />
         {!sanity.isStudioRoute && sanity.stegaEnabled ? (
           <Suspense>
-            <LiveVisualEditing studioUrl={ENV.SANITY_URL} />
+            <LiveVisualEditing studioUrl={ENV.VITE_SANITY_URL} />
           </Suspense>
         ) : null}
       </body>

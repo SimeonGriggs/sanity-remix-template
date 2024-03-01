@@ -6,21 +6,21 @@
 declare global {
   interface Window {
     ENV: {
-      SANITY_PROJECT_ID: string
-      SANITY_DATASET: string
-      SANITY_API_VERSION: string
-      SANITY_FRONTEND_URL: string
-      SANITY_URL: string
+      VITE_SANITY_PROJECT_ID: string
+      VITE_SANITY_DATASET: string
+      VITE_SANITY_API_VERSION: string
+      VITE_SANITY_FRONTEND_URL: string
+      VITE_SANITY_URL: string
     }
   }
 }
 
-const {SANITY_PROJECT_ID, SANITY_DATASET, SANITY_API_VERSION} =
-  typeof document === 'undefined' ? process.env : window.ENV
+const {VITE_SANITY_PROJECT_ID, VITE_SANITY_DATASET, VITE_SANITY_API_VERSION} =
+  typeof document === 'undefined' ? import.meta.env : window.ENV
 
-export const projectId = SANITY_PROJECT_ID!
-export const dataset = SANITY_DATASET!
-export const apiVersion = SANITY_API_VERSION ?? `2024-02-13`
+export const projectId = VITE_SANITY_PROJECT_ID!
+export const dataset = VITE_SANITY_DATASET!
+export const apiVersion = VITE_SANITY_API_VERSION ?? `2024-02-13`
 
 export const projectDetails = () => ({
   projectId,
@@ -44,8 +44,8 @@ export const getFrontendUrl =
   typeof document === 'undefined'
     ? process.env.VERCEL
       ? `https://${process.env.VERCEL_BRANCH_URL}`
-      : process.env.SANITY_FRONTEND_URL!
-    : window.ENV.SANITY_FRONTEND_URL!
+      : import.meta.env.VITE_SANITY_FRONTEND_URL!
+    : window.ENV.VITE_SANITY_FRONTEND_URL!
 
 export const frontendUrl = getFrontendUrl ?? 'http://localhost:3000'
 
@@ -56,14 +56,14 @@ export const getStudioUrl =
       ? process.env.VERCEL_ENV !== 'production'
         ? `https://${process.env.VERCEL_URL}`
         : PRODUCTION_URL
-      : process.env.SANITY_URL!
-    : window.ENV.SANITY_URL!
+      : import.meta.env.VITE_SANITY_URL!
+    : window.ENV.VITE_SANITY_URL!
 
 export const studioUrl = getStudioUrl ?? 'http://localhost:3000'
 
 // If any of these values are missing, throw errors as the app requires them
-if (!projectId) throw new Error('Missing SANITY_PROJECT_ID in .env')
-if (!dataset) throw new Error('Missing SANITY_DATASET in .env')
-if (!apiVersion) throw new Error('Missing SANITY_API_VERSION in .env')
-if (!frontendUrl) throw new Error('Missing SANITY_FRONTEND_URL in .env')
-if (!studioUrl) throw new Error('Missing SANITY_URL in .env')
+if (!projectId) throw new Error('Missing VITE_SANITY_PROJECT_ID in .env')
+if (!dataset) throw new Error('Missing VITE_SANITY_DATASET in .env')
+if (!apiVersion) throw new Error('Missing VITE_SANITY_API_VERSION in .env')
+if (!frontendUrl) throw new Error('Missing VITE_SANITY_FRONTEND_URL in .env')
+if (!studioUrl) throw new Error('Missing VITE_SANITY_URL in .env')

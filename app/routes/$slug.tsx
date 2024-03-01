@@ -9,7 +9,7 @@ import {useLoaderData} from '@remix-run/react'
 import {Record} from '~/components/Record'
 import type {Loader as RootLoader} from '~/root'
 import {OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH} from '~/routes/resource.og'
-import {writeClient} from '~/sanity/client.server'
+import {client} from '~/sanity/client'
 import {isStegaEnabled} from '~/sanity/isStegaEnabled.server'
 import {useQuery} from '~/sanity/loader'
 import {loadQuery} from '~/sanity/loader.server'
@@ -47,6 +47,10 @@ export const action: ActionFunction = async ({request}) => {
     throw new Response('Method not allowed', {status: 405})
   }
 
+  const writeClient = client.withConfig({
+    useCdn: false,
+    token: process.env.SANITY_WRITE_TOKEN,
+  })
   const {token, projectId} = writeClient.config()
 
   if (!token) {
