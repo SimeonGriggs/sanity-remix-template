@@ -1,6 +1,7 @@
 {
   "name": "sanity-remix-template",
   "sideEffects": false,
+  "type": "module",
   "scripts": {
     "dev": "remix vite:dev",
     "build": "remix vite:build",
@@ -14,7 +15,6 @@
     "@remix-run/node": "^2.8.0",
     "@remix-run/react": "^2.8.0",
     "@remix-run/serve": "^2.8.0",
-    "@resolid/remix-plugins": "^2.0.0",
     "@resvg/resvg-js": "^2.6.0",
     "@sanity/asset-utils": "^1.3.0",
     "@sanity/block-tools": "^3.30.1",
@@ -63,7 +63,8 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3",
     "vite": "^5.1.4",
-    "vite-tsconfig-paths": "^4.3.1"
+    "vite-tsconfig-paths": "^4.3.1",
+    "@resolid/remix-plugins": "^2.0.0"
   },
   "engines": {
     "node": "20.x"
