@@ -5,5 +5,4 @@ node_modules
 /public/build
 .env
 !.env.template
-/.vercel
 .vercel
