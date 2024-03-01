@@ -26,13 +26,11 @@ export const meta: MetaFunction<
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
   const stegaEnabled = isStegaEnabled(request.url)
-  const initial = await loadQuery<RecordStub[]>(
-    RECORDS_QUERY,
-    {},
-    {
-      perspective: stegaEnabled ? 'previewDrafts' : 'published',
-    },
-  ).then((res) => ({
+  const query = RECORDS_QUERY
+  const queryParams = {}
+  const initial = await loadQuery<RecordStub[]>(query, queryParams, {
+    perspective: stegaEnabled ? 'previewDrafts' : 'published',
+  }).then((res) => ({
     ...res,
     data: res.data ? recordStubsZ.parse(res.data) : null,
   }))
@@ -43,16 +41,21 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
 
   return json({
     initial,
-    query: RECORDS_QUERY,
-    params: {},
+    query,
+    params: queryParams,
   })
 }
 
 export default function Index() {
   const {initial, query, params} = useLoaderData<typeof loader>()
-  const {data, loading} = useQuery<typeof initial.data>(query, params, {
-    initial,
-  })
+  const {data, loading, encodeDataAttribute} = useQuery<typeof initial.data>(
+    query,
+    params,
+    {
+      // @ts-expect-error
+      initial,
+    },
+  )
 
   if (loading || !data) {
     return <div>Loading...</div>
@@ -60,7 +63,7 @@ export default function Index() {
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:gap-12">
-      <Records records={data} />
+      <Records records={data} encodeDataAttribute={encodeDataAttribute} />
     </div>
   )
 }

@@ -1,3 +1,5 @@
+import type {EncodeDataAttributeCallback} from '@sanity/react-loader'
+
 import {LikeDislike} from '~/components/LikeDislike'
 import {RecordCover} from '~/components/RecordCover'
 import {SanityContent} from '~/components/SanityContent'
@@ -7,6 +9,7 @@ import type {RecordDocument} from '~/types/record'
 
 type RecordProps = {
   data: RecordDocument
+  encodeDataAttribute?: EncodeDataAttributeCallback
 }
 
 export function Record(props: RecordProps) {
@@ -16,7 +19,10 @@ export function Record(props: RecordProps) {
   return (
     <article className="flex flex-col items-start gap-4 lg:flex-row lg:gap-12">
       <div className="grid-gap-4 grid max-w-[70vw] grid-cols-1">
-        <div className="max-w-sm">
+        <div
+          className="max-w-sm"
+          data-sanity={props?.encodeDataAttribute?.('image')}
+        >
           <RecordCover image={image} />
         </div>
         <LikeDislike id={_id} likes={likes} dislikes={dislikes} />
