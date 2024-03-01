@@ -16,7 +16,7 @@ declare global {
 }
 
 const {VITE_SANITY_PROJECT_ID, VITE_SANITY_DATASET, VITE_SANITY_API_VERSION} =
-  typeof document === 'undefined' ? process.env : window.ENV
+  typeof document === 'undefined' ? import.meta.env : window.ENV
 
 export const projectId = VITE_SANITY_PROJECT_ID!
 export const dataset = VITE_SANITY_DATASET!
