@@ -33,10 +33,6 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
     }),
   )
 
-  if (!initial.data) {
-    throw new Response('Not found', {status: 404})
-  }
-
   return json({
     initial,
     query,
