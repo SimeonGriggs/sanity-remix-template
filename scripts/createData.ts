@@ -10,7 +10,7 @@ import {JSDOM} from 'jsdom'
 import type {FieldDefinition, SanityDocumentLike} from 'sanity'
 import {getCliClient} from 'sanity/cli'
 
-import schema from '~/sanity/schema'
+import schema from '~/sanity/schemaTypes'
 
 const client = getCliClient()
 const RECORD_COUNT = 6

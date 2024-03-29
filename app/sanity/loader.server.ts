@@ -2,18 +2,23 @@ import * as queryStore from '@sanity/react-loader'
 
 import {client} from '~/sanity/client'
 
-if (!process.env.SANITY_READ_TOKEN) {
-  throw new Error(
-    `Setup "SANITY_READ_TOKEN" with a token with "Viewer" permissions to your environment variables. Create one at
-      https://sanity.io/manage/project/${client.config().projectId}/api#tokens`,
-  )
-}
+import {STUDIO_BASEPATH} from './constants'
 
+// In a perfect world, these could be dynamic based on the Request
+// But because middleware hasn't landed in Remix
+// And server.ts's context is messy to configure (except in Hydrogen!)
+// We're overriding these in loadQueryOptions in every loader
 const clientWithToken = client.withConfig({
+  // Token required for when previewDrafts perspective is set in a loader
   token: process.env.SANITY_READ_TOKEN,
+  // You do not want this enabled in production
+  // This should be overridden when using loadQuery in a loader
+  stega: process.env.NODE_ENV === 'development' && {
+    enabled: true,
+    studioUrl: STUDIO_BASEPATH,
+  },
 })
 
-// We need to set the client used by `loadQuery` here, it only affects the server and ensures the browser bundle isn't bloated
 queryStore.setServerClient(clientWithToken)
 
 export const {loadQuery} = queryStore

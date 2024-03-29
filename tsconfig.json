@@ -1,5 +1,5 @@
 {
-  "include": ["env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["env.d.ts", "**/*.ts", "**/*.tsx", "scripts/createData.cjs"],
   "compilerOptions": {
     "skipLibCheck": true,
     "lib": ["DOM", "DOM.Iterable", "ES2019"],
@@ -9,7 +9,7 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,
-    "target": "ES2019",
+    "target": "ES2020",
     "strict": true,
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,

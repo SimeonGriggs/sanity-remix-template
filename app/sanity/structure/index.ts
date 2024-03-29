@@ -13,11 +13,12 @@ export const structure: StructureResolver = (S) =>
     .title('Content')
     .items([
       // Singleton, home page curation
-      S.documentListItem()
-        .schemaType('home')
+      S.listItem()
         .icon(Home)
         .id('home')
-        .title('Home'),
+        .schemaType('home')
+        .title('Home')
+        .child(S.editor().id('home').schemaType('home').documentId('home')),
       S.divider(),
       // Document lists
       S.documentTypeListItem('record').title('Records').icon(Disc),

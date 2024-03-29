@@ -1,12 +1,13 @@
 import type {LoaderFunctionArgs, MetaFunction} from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
+import {useQuery} from '@sanity/react-loader'
 
+import {Loading} from '~/components/Loading'
 import {Records} from '~/components/Records'
-import type {Loader as RootLoader} from '~/root'
-import {isStegaEnabled} from '~/sanity/isStegaEnabled.server'
-import {useQuery} from '~/sanity/loader'
+import type {loader as layoutLoader} from '~/routes/_website'
 import {loadQuery} from '~/sanity/loader.server'
+import {loadQueryOptions} from '~/sanity/loadQueryOptions.server'
 import {RECORDS_QUERY} from '~/sanity/queries'
 import type {RecordStub} from '~/types/record'
 import {recordStubsZ} from '~/types/record'
@@ -14,23 +15,27 @@ import {recordStubsZ} from '~/types/record'
 export const meta: MetaFunction<
   typeof loader,
   {
-    root: RootLoader
+    'routes/_website': typeof layoutLoader
   }
 > = ({matches}) => {
-  const rootData = matches.find((match) => match.id === `root`)?.data
-  const home = rootData ? rootData.initial.data : null
+  const layoutData = matches.find(
+    (match) => match.id === `routes/_website`,
+  )?.data
+  const home = layoutData ? layoutData.initial.data : null
   const title = [home?.title, home?.siteTitle].filter(Boolean).join(' | ')
 
   return [{title}]
 }
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
-  const stegaEnabled = isStegaEnabled(request.url)
+  const {options} = await loadQueryOptions(request.headers)
   const query = RECORDS_QUERY
   const queryParams = {}
-  const initial = await loadQuery<RecordStub[]>(query, queryParams, {
-    perspective: stegaEnabled ? 'previewDrafts' : 'published',
-  }).then((res) => ({
+  const initial = await loadQuery<RecordStub[]>(
+    query,
+    queryParams,
+    options,
+  ).then((res) => ({
     ...res,
     data: res.data ? recordStubsZ.parse(res.data) : null,
   }))
@@ -52,18 +57,15 @@ export default function Index() {
     query,
     params,
     {
+      // There's a TS issue with how initial comes over the wire
       // @ts-expect-error
       initial,
     },
   )
 
   if (loading || !data) {
-    return <div>Loading...</div>
+    return <Loading />
   }
 
-  return (
-    <div className="grid grid-cols-1 gap-6 lg:gap-12">
-      <Records records={data} encodeDataAttribute={encodeDataAttribute} />
-    </div>
-  )
+  return <Records records={data} encodeDataAttribute={encodeDataAttribute} />
 }

@@ -51,7 +51,9 @@ Access to Sanity Studio v3 from within the Remix application itself. Now the who
 
 Powered by [Presentation](https://www.sanity.io/docs/presentation) and [@sanity/react-loader](https://www.sanity.io/docs/react-loader)
 
-Authenticated users inside Sanity Studio can use the Presentation tool to browse through the website and target specific fields to edit - and see changes in real-time.
+Authenticated users inside Sanity Studio can use the Presentation tool to browse through the website and target specific fields to edit - and see changes in real time.
+
+The resource route (`/resource/preview`) used by Presentation will set a session token so that overlays will be visible even outside of Presentation.
 
 ### Pre-configured Studio
 

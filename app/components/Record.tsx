@@ -12,17 +12,13 @@ type RecordProps = {
   encodeDataAttribute?: EncodeDataAttributeCallback
 }
 
-export function Record(props: RecordProps) {
-  const {_id, title, artist, content, image, tracks, likes, dislikes} =
-    props.data
+export function Record({data, encodeDataAttribute}: RecordProps) {
+  const {_id, title, artist, content, image, tracks, likes, dislikes} = data
 
   return (
     <article className="flex flex-col items-start gap-4 lg:flex-row lg:gap-12">
       <div className="grid-gap-4 grid max-w-[70vw] grid-cols-1">
-        <div
-          className="max-w-sm"
-          data-sanity={props?.encodeDataAttribute?.('image')}
-        >
+        <div className="max-w-sm" data-sanity={encodeDataAttribute?.('image')}>
           <RecordCover image={image} />
         </div>
         <LikeDislike id={_id} likes={likes} dislikes={dislikes} />

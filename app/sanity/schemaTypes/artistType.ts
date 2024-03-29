@@ -14,9 +14,7 @@ export const artistType = defineType({
     defineField({
       name: 'slug',
       type: 'slug',
-      options: {
-        source: 'title',
-      },
+      options: {source: 'name'},
     }),
     defineField({
       name: 'image',

@@ -13,6 +13,7 @@ export const RECORDS_QUERY = groq`*[_type == "record"][0...12]|order(title asc){
   } | order(releaseDate desc)`
 
 export const RECORD_QUERY = groq`*[_type == "record" && slug.current == $slug][0]{
+  ...,
   _id,
   title,
   releaseDate,
