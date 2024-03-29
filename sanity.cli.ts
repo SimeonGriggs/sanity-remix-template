@@ -1,10 +1,9 @@
 import {defineCliConfig} from 'sanity/cli'
 
-import {dataset, projectId} from '~/sanity/projectDetails'
-
+// We can assume this file will only be read in a Node.js environment
 export default defineCliConfig({
   api: {
-    projectId,
-    dataset,
+    projectId: process.env.VITE_SANITY_PROJECT_ID,
+    dataset: process.env.VITE_SANITY_DATASET,
   },
 })
