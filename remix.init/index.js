@@ -8,11 +8,21 @@ const main = ({rootDirectory}) => {
     stdio: 'inherit',
   })
 
+  const envPath = `${rootDirectory}/.env`
+  const env = require('fs').readFileSync(envPath, 'utf8')
+  const sessionSecret = require('crypto').randomBytes(32).toString('hex')
+  require('fs').writeFileSync(
+    envPath,
+    `${env}SANITY_SESSION_SECRET="${sessionSecret}"\n`,
+  )
+
+  console.log(`\nWrote SANITY_SESSION_SECRET to ${envPath}`)
+
   console.log(
-    `Complete your ".env" file with values from ".env.template" to setup live preview and mutations.`,
+    `\nComplete your ".env" file to match ".env.template" with Sanity API tokens to setup live preview and mutations.`,
   )
   console.log(
-    `Visit /studio in your application to load Sanity Studio and begin creating content`,
+    `\nVisit /studio in your application to load Sanity Studio and begin creating content`,
   )
 }
 

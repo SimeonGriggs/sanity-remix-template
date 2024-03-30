@@ -43,12 +43,18 @@ export const projectDetails = () => ({
 })
 
 // If any of these values are missing, throw errors as the app requires them
-if (!projectId)
-  throw new Error(`Missing VITE_SANITY_PROJECT_ID in .env, run npx sanity@latest init --env
-`)
-if (!dataset)
-  throw new Error(`Missing VITE_SANITY_DATASET in .env, run npx sanity@latest init --env
-`)
-if (!apiVersion)
-  throw new Error(`Missing VITE_SANITY_API_VERSION in .env, run npx sanity@latest init --env
-`)
+if (!projectId) {
+  throw new Error(
+    `Missing VITE_SANITY_PROJECT_ID in .env, run npx sanity@latest init --env`,
+  )
+}
+if (!dataset) {
+  throw new Error(
+    `Missing VITE_SANITY_DATASET in .env, run npx sanity@latest init --env`,
+  )
+}
+if (!apiVersion) {
+  throw new Error(
+    `Missing VITE_SANITY_API_VERSION in .env, run npx sanity@latest init --env`,
+  )
+}
