@@ -20,16 +20,19 @@ const main = ({rootDirectory}) => {
   console.log(`\nWrote SANITY_SESSION_SECRET to ${envPath}`)
 
   // Create CORS origin for http://localhost:3000
-  execSync('npx sanity@latest exec ./createCorsOrigin.ts --with-user-token', {
-    cwd: rootDirectory,
-    stdio: 'inherit',
-  })
+  execSync(
+    'npx sanity@latest exec ./remix.init/createCorsOrigin.ts --with-user-token',
+    {
+      cwd: rootDirectory,
+      stdio: 'inherit',
+    },
+  )
 
   console.log(`\nAdded http://localhost:3000 to CORS origins`)
 
   // Create viewer token for live preview
   execSync(
-    `npx sanity@latest exec ./createViewerToken.ts --with-user-token -- --root=${rootDirectory}`,
+    `npx sanity@latest exec ./remix.init/createViewerToken.ts --with-user-token -- --root=${rootDirectory}`,
     {
       cwd: rootDirectory,
       stdio: 'inherit',

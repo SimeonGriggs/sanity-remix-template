@@ -3,22 +3,47 @@ import {getCliClient} from 'sanity/cli'
 const client = getCliClient()
 const {projectId} = client.config()
 const pathname = `projects/${projectId}/tokens`
+const tokenName = 'Preview'
+
+type TokenResponse = {
+  key: string
+  label: string
+  roleName: string
+  projectUserId: string
+  createdAt: string
+  roles: {
+    name: string
+    title: string
+  }[]
+}
 
 async function create() {
-  // Get from arguments passed to script
   const rootDirectory = process.argv
-    .find((arg) => arg.startsWith('root='))
+    .find((arg) => arg.startsWith('--root='))
     ?.split('=')[1]
 
   if (!rootDirectory) {
     throw new Error('rootDirectory not found')
   }
 
+  const currentTokens = await client.request<TokenResponse[]>({
+    uri: pathname,
+    method: 'get',
+  })
+
+  if (
+    currentTokens.length > 0 &&
+    currentTokens.find((t) => t.label === tokenName)
+  ) {
+    console.log('Token already exists')
+    return
+  }
+
   const {key: token} = await client.request<{key: string}>({
     uri: pathname,
     method: 'post',
     body: {
-      label: 'Preview',
+      label: tokenName,
       roleName: 'viewer',
     },
   })
