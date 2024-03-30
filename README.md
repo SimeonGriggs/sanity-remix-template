@@ -14,7 +14,13 @@ From the command line, install this project as a Remix template:
 npx create-remix@latest --template SimeonGriggs/sanity-remix-template
 ```
 
-After setup, populate your `.env` file with the details of a new or existing Sanity project's ID and dataset name with the following command:
+This template comes with an init script, if you choose not to run it, you can run it later with:
+
+```sh
+npx remix init
+```
+
+This script should populate your `.env` file with the details of a new or existing Sanity project's ID and dataset name, as well as create a session secret and an API Token with Viewer permissions. If the init script has already been deleted, you can easily reset your `.env` file by running the following command:
 
 ```sh
 npx sanity@latest init --env

@@ -35,7 +35,9 @@ async function create() {
     currentTokens.length > 0 &&
     currentTokens.find((t) => t.label === tokenName)
   ) {
-    console.log('Token already exists')
+    console.log(
+      'Token already exists. You will need to manually update the .env file to use it.',
+    )
     return
   }
 
