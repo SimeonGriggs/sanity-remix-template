@@ -1,8 +1,3 @@
-// ./scripts/createData.ts
-
-// Create 10 posts and 5 categories
-// Every post has a random category
-
 import {faker} from '@faker-js/faker'
 import {htmlToBlocks} from '@sanity/block-tools'
 import {Schema} from '@sanity/schema'
