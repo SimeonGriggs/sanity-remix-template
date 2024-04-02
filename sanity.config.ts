@@ -9,7 +9,7 @@ import {projectDetails} from '~/sanity/projectDetails'
 import schema from '~/sanity/schemaTypes'
 import {defaultDocumentNode, structure} from '~/sanity/structure'
 
-export const config = defineConfig({
+export default defineConfig({
   ...projectDetails(),
   name: 'sanity-remix',
   title: 'Sanity Remix',
