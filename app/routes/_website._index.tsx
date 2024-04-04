@@ -63,9 +63,16 @@ export default function Index() {
     },
   )
 
-  if (loading || !data) {
+  if (loading && !data) {
     return <Loading />
+  } else if (!data || !initial.data) {
+    return <div>Not found</div>
   }
 
-  return <Records records={data} encodeDataAttribute={encodeDataAttribute} />
+  return (
+    <Records
+      records={data || initial.data}
+      encodeDataAttribute={encodeDataAttribute}
+    />
+  )
 }

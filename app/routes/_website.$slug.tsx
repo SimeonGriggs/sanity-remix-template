@@ -136,9 +136,16 @@ export default function RecordPage() {
     },
   )
 
-  if (!data || loading) {
+  if (loading && !data) {
     return <Loading />
+  } else if (!data || !initial.data) {
+    return <div>Not found</div>
   }
 
-  return <Record data={data} encodeDataAttribute={encodeDataAttribute} />
+  return (
+    <Record
+      data={data || initial.data}
+      encodeDataAttribute={encodeDataAttribute}
+    />
+  )
 }
