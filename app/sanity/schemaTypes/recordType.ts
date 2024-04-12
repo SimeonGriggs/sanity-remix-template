@@ -1,6 +1,6 @@
-import {ComposeIcon, MenuIcon, ThListIcon} from '@sanity/icons'
+import {ComposeIcon, ImageIcon, MenuIcon, ThListIcon} from '@sanity/icons'
 import {Disc} from 'lucide-react'
-import {defineField, defineType} from 'sanity'
+import {defineArrayMember, defineField, defineType} from 'sanity'
 
 export const recordType = defineType({
   name: 'record',
@@ -77,7 +77,10 @@ export const recordType = defineType({
     defineField({
       name: 'content',
       type: 'array',
-      of: [{type: 'block'}, {type: 'image'}],
+      of: [
+        defineArrayMember({type: 'block'}),
+        defineArrayMember({type: 'image', icon: ImageIcon}),
+      ],
       group: 'editorial',
     }),
     defineField({
