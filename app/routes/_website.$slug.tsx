@@ -5,7 +5,6 @@ import type {
 } from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
-import {useQuery} from '@sanity/react-loader'
 
 import {Loading} from '~/components/Loading'
 import {Record} from '~/components/Record'
@@ -117,35 +116,13 @@ export const loader = async ({params, request}: LoaderFunctionArgs) => {
   const ogImageUrl = `${origin}/resource/og?id=${initial.data._id}`
 
   return {
-    initial,
-    query,
-    params,
+    data: initial.data,
     ogImageUrl,
   }
 }
 
 export default function RecordPage() {
-  const {initial, query, params} = useLoaderData<typeof loader>()
-  const {data, loading, encodeDataAttribute} = useQuery<typeof initial.data>(
-    query,
-    params,
-    {
-      // There's a TS issue with how initial comes over the wire
-      // @ts-expect-error
-      initial,
-    },
-  )
+  const {data} = useLoaderData<typeof loader>()
 
-  if (loading && !data) {
-    return <Loading />
-  } else if (!data || !initial.data) {
-    return <div>Not found</div>
-  }
-
-  return (
-    <Record
-      data={data || initial.data}
-      encodeDataAttribute={encodeDataAttribute}
-    />
-  )
+  return <Record data={data} />
 }
