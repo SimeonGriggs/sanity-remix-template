@@ -11,7 +11,7 @@ export function Footer(props: LogoProps) {
             className="hover:text-cyan-600 dark:hover:text-cyan-200"
             href="/studio"
           >
-            Log in to Sanity Studio v3
+            Log in to embedded Sanity Studio
           </a>
           <a
             className="hover:text-cyan-600 dark:hover:text-cyan-200"
@@ -23,7 +23,7 @@ export function Footer(props: LogoProps) {
             className="hover:text-cyan-600 dark:hover:text-cyan-200"
             href="https://github.com/SimeonGriggs/remix-sanity-studio-v3"
           >
-            Clone this project on GitHub
+            Star this project on GitHub
           </a>
         </div>
       </div>

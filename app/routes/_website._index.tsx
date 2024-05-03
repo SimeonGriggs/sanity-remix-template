@@ -1,9 +1,6 @@
 import type {LoaderFunctionArgs, MetaFunction} from '@remix-run/node'
-import {json} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
-import {useQuery} from '@sanity/react-loader'
 
-import {Loading} from '~/components/Loading'
 import {Records} from '~/components/Records'
 import type {loader as layoutLoader} from '~/routes/_website'
 import {loadQuery} from '~/sanity/loader.server'
@@ -44,35 +41,11 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
     throw new Response('Not found', {status: 404})
   }
 
-  return json({
-    initial,
-    query,
-    params: queryParams,
-  })
+  return {data: initial.data}
 }
 
 export default function Index() {
-  const {initial, query, params} = useLoaderData<typeof loader>()
-  const {data, loading, encodeDataAttribute} = useQuery<typeof initial.data>(
-    query,
-    params,
-    {
-      // There's a TS issue with how initial comes over the wire
-      // @ts-expect-error
-      initial,
-    },
-  )
+  const {data} = useLoaderData<typeof loader>()
 
-  if (loading && !data) {
-    return <Loading />
-  } else if (!data || !initial.data) {
-    return <div>Not found</div>
-  }
-
-  return (
-    <Records
-      records={data || initial.data}
-      encodeDataAttribute={encodeDataAttribute}
-    />
-  )
+  return <Records records={data} />
 }
