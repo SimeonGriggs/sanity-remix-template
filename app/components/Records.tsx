@@ -22,7 +22,7 @@ export function Records(props: RecordsProps) {
           >
             <div className="absolute z-0 h-48 w-[200%] translate-x-20 translate-y-20 -rotate-45 bg-gradient-to-b from-white to-transparent opacity-25 mix-blend-overlay transition-transform duration-500 ease-in-out group-hover:translate-x-10 group-hover:translate-y-10 group-hover:opacity-75" />
             {record?.slug ? (
-              <Link prefetch="intent" to={record?.slug}>
+              <Link prefetch="intent" to={`/records/${record?.slug}`}>
                 <RecordCover image={record.image} />
               </Link>
             ) : (
