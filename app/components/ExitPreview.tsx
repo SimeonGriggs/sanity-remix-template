@@ -1,6 +1,8 @@
 import {useEffect, useState} from 'react'
 
-export function ExitPreview() {
+// Default export required for lazy loading
+// eslint-disable-next-line import/no-default-export
+export default function ExitPreview() {
   const [inIframe, setInIframe] = useState(true)
   useEffect(() => {
     setInIframe(window.self !== window.top)

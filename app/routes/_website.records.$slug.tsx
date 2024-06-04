@@ -5,8 +5,8 @@ import type {
 } from '@remix-run/node'
 import {json} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
+import {useQuery} from '@sanity/react-loader'
 
-import {Loading} from '~/components/Loading'
 import {Record} from '~/components/Record'
 import type {loader as layoutLoader} from '~/routes/_website'
 import {OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH} from '~/routes/resource.og'
@@ -116,13 +116,20 @@ export const loader = async ({params, request}: LoaderFunctionArgs) => {
   const ogImageUrl = `${origin}/resource/og?id=${initial.data._id}`
 
   return {
-    data: initial.data,
+    initial,
+    query,
+    params,
     ogImageUrl,
   }
 }
 
 export default function RecordPage() {
-  const {data} = useLoaderData<typeof loader>()
+  const {initial, query, params} = useLoaderData<typeof loader>()
+  const {data} = useQuery<typeof initial.data>(query, params, {
+    // There's a TS issue with how initial comes over the wire
+    // @ts-expect-error
+    initial,
+  })
 
-  return <Record data={data} />
+  return data ? <Record data={data} /> : null
 }

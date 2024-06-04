@@ -1,5 +1,6 @@
 import type {LoaderFunctionArgs, MetaFunction} from '@remix-run/node'
 import {useLoaderData} from '@remix-run/react'
+import {useQuery} from '@sanity/react-loader'
 
 import {Records} from '~/components/Records'
 import type {loader as layoutLoader} from '~/routes/_website'
@@ -27,25 +28,28 @@ export const meta: MetaFunction<
 export const loader = async ({request}: LoaderFunctionArgs) => {
   const {options} = await loadQueryOptions(request.headers)
   const query = RECORDS_QUERY
-  const queryParams = {}
-  const initial = await loadQuery<RecordStub[]>(
-    query,
-    queryParams,
-    options,
-  ).then((res) => ({
-    ...res,
-    data: res.data ? recordStubsZ.parse(res.data) : null,
-  }))
+  const params = {}
+  const initial = await loadQuery<RecordStub[]>(query, params, options).then(
+    (res) => ({
+      ...res,
+      data: res.data ? recordStubsZ.parse(res.data) : null,
+    }),
+  )
 
   if (!initial.data) {
     throw new Response('Not found', {status: 404})
   }
 
-  return {data: initial.data}
+  return {initial, query, params}
 }
 
 export default function Index() {
-  const {data} = useLoaderData<typeof loader>()
+  const {initial, query, params} = useLoaderData<typeof loader>()
+  const {data} = useQuery<typeof initial.data>(query, params, {
+    // There's a TS issue with how initial comes over the wire
+    // @ts-expect-error
+    initial,
+  })
 
-  return <Records records={data} />
+  return data ? <Records records={data} /> : null
 }

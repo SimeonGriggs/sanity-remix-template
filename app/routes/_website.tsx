@@ -8,8 +8,8 @@ import {
 } from '@remix-run/react'
 import {useQuery} from '@sanity/react-loader'
 import {VisualEditing} from '@sanity/visual-editing/remix'
+import {lazy, Suspense} from 'react'
 
-import {ExitPreview} from '~/components/ExitPreview'
 import {Footer} from '~/components/Footer'
 import {Header} from '~/components/Header'
 import {Title} from '~/components/Title'
@@ -20,10 +20,13 @@ import type {HomeDocument} from '~/types/home'
 import {homeZ} from '~/types/home'
 import type {ThemePreference} from '~/types/themePreference'
 
+const SanityLiveMode = lazy(() => import('~/components/SanityLiveMode'))
+const ExitPreview = lazy(() => import('~/components/ExitPreview'))
+
 export const loader = async ({request}: LoaderFunctionArgs) => {
   const {preview, options} = await loadQueryOptions(request.headers)
 
-  // Sanity content reused throughout the site
+  // Content from Sanity used in the global layout
   const query = HOME_QUERY
   const params = {}
   const initial = await loadQuery<HomeDocument>(query, params, options).then(
@@ -60,10 +63,11 @@ export default function Website() {
       </div>
       <Footer home={home} />
       {sanity.preview ? (
-        <>
-          <VisualEditing />
+        <Suspense>
+          <SanityLiveMode />
           <ExitPreview />
-        </>
+          <VisualEditing />
+        </Suspense>
       ) : null}
     </>
   )
