@@ -2,7 +2,6 @@ import type {loadQuery} from '@sanity/react-loader'
 
 import {client} from '~/sanity/client'
 import {STUDIO_BASEPATH} from '~/sanity/constants'
-import {projectId} from '~/sanity/projectDetails'
 import {getSession} from '~/sessions'
 
 // I wish I could do this in middleware
@@ -12,7 +11,7 @@ export async function loadQueryOptions(
   headers: Headers,
 ): Promise<{preview: boolean; options: Parameters<typeof loadQuery>[2]}> {
   const previewSession = await getSession(headers.get('Cookie'))
-  const preview = previewSession.get('projectId') === projectId
+  const preview = previewSession.get('projectId') === client.config().projectId
 
   if (preview && !process.env.SANITY_READ_TOKEN) {
     throw new Error(

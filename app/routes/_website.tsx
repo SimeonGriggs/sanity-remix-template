@@ -22,6 +22,7 @@ import type {ThemePreference} from '~/types/themePreference'
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
   const {preview, options} = await loadQueryOptions(request.headers)
+  console.log({preview, options})
 
   // Sanity content reused throughout the site
   const query = HOME_QUERY

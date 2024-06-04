@@ -33,7 +33,7 @@ export function Records(props: RecordsProps) {
             {record?.slug ? (
               <Link
                 prefetch="intent"
-                to={record?.slug}
+                to={`/records/${record?.slug}`}
                 className="text-bold pt-4 text-xl font-bold tracking-tighter transition-colors duration-100 ease-in-out hover:bg-cyan-400 hover:text-white lg:text-3xl"
               >
                 {record.title}
