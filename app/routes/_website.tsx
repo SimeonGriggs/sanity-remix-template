@@ -44,6 +44,7 @@ export const loader = async ({request}: LoaderFunctionArgs) => {
 
 export default function Website() {
   const {initial, query, params, sanity} = useLoaderData<typeof loader>()
+  console.log(initial, sanity)
   const {data: home} = useQuery<typeof initial.data>(query, params, {
     // There's a TS issue with how initial comes over the wire
     // @ts-expect-error
