@@ -10,9 +10,7 @@ const liveClient = client.withConfig({
   },
 })
 
-// Default export required for lazy loading
-// eslint-disable-next-line import/no-default-export
-export default function SanityLiveMode() {
+export function SanityLiveMode() {
   useLiveMode({client: liveClient})
 
   return null
