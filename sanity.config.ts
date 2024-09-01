@@ -4,7 +4,6 @@ import {defineLocations, presentationTool} from 'sanity/presentation'
 import {structureTool} from 'sanity/structure'
 
 import {STUDIO_BASEPATH} from '~/sanity/constants'
-import {locate} from '~/sanity/presentation/locate'
 import {projectDetails} from '~/sanity/projectDetails'
 import schema from '~/sanity/schemaTypes'
 import {defaultDocumentNode, structure} from '~/sanity/structure'
