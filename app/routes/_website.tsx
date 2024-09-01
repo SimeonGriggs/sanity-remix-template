@@ -20,8 +20,16 @@ import type {HomeDocument} from '~/types/home'
 import {homeZ} from '~/types/home'
 import type {ThemePreference} from '~/types/themePreference'
 
-const SanityLiveMode = lazy(() => import('~/components/SanityLiveMode'))
-const ExitPreview = lazy(() => import('~/components/ExitPreview'))
+const SanityLiveMode = lazy(() =>
+  import('~/components/SanityLiveMode').then((module) => ({
+    default: module.SanityLiveMode,
+  })),
+)
+const ExitPreview = lazy(() =>
+  import('~/components/ExitPreview').then((module) => ({
+    default: module.ExitPreview,
+  })),
+)
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
   const {preview, options} = await loadQueryOptions(request.headers)
